@@ -1,0 +1,14 @@
+{
+  "name": "bitler",
+  "version": "1.0.0",
+  "description": "",
+  "packageManager": "pnpm@9.15.0",
+  "scripts": {
+    "build:dev": "tsc --build --watch",
+    "build": "turbo build"
+  },
+  "devDependencies": {
+    "turbo": "^2.3.3",
+    "typescript": "^5.7.2"
+  }
+}

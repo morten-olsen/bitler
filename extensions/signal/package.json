@@ -1,0 +1,24 @@
+{
+  "name": "@bitler/signal",
+  "version": "1.0.0",
+  "main": "dist/exports.js",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc --build",
+    "generate:types": "openapi-typescript https://bbernhard.github.io/signal-cli-rest-api/src/docs/swagger.json -o src/generated/api.ts"
+  },
+  "devDependencies": {
+    "@bitler/configs": "workspace:*",
+    "openapi-typescript": "^5.4.2",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "@bitler/core": "workspace:*",
+    "@bitler/json-documents": "workspace:*",
+    "nanoid": "^5.0.9",
+    "openapi-fetch": "^0.13.3"
+  }
+}

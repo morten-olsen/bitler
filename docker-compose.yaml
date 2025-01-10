@@ -1,0 +1,35 @@
+name: bitler
+services:
+  app:
+    image: ghcr.io/morten-olsen/bitler
+    build:
+      context: .
+      args:
+        - NODE_AUTH_TOKEN=${NODE_AUTH_TOKEN:-none}
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      HOMEASSISTANT_URL: ${HOMEASSISTANT_URL}
+      HOMEASSISTANT_TOKEN: ${HOMEASSISTANT_TOKEN}
+      LINEAR_API_KEY: ${LINEAR_API_KEY}
+      SIGNAL_HOST: ${SIGNAL_HOST}
+      SIGNAL_SECURE: ${SIGNAL_SECURE}
+    env_file: packages/server/.env
+    ports:
+      - 3000:3000
+    networks:
+      - loadbalancer
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.bitler.rule=Host(`bitler.$DOMAIN`)
+      - traefik.http.routers.bitler.tls=true
+      - traefik.http.routers.bitler.tls.domains[0].main=$DOMAIN
+      - traefik.http.routers.bitler.tls.domains[0].sans=*.$DOMAIN
+      - traefik.http.routers.bitler.tls.certresolver=letsencrypt
+      - traefik.http.routers.bitler.entrypoints=websecure
+      - traefik.http.services.bitler.loadbalancer.server.port=3000
+    volumes:
+      - "$STORAGE/bitler2/data:/data"
+networks:
+  loadbalancer:
+    name: loadbalancer
+    external: true

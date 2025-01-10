@@ -1,0 +1,27 @@
+{
+  "name": "@bitler/client-cli",
+  "version": "1.0.0",
+  "main": "dist/exports.js",
+  "type": "module",
+  "files": [
+    "dist",
+    "bin"
+  ],
+  "bin": {
+    "bitler-client": "bin/bin.js"
+  },
+  "scripts": {
+    "build": "tsc --build"
+  },
+  "devDependencies": {
+    "@bitler/configs": "workspace:*",
+    "@types/node": "^22.10.3",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "@sinclair/typebox": "^0.34.13",
+    "commander": "^13.0.0",
+    "json-schema-to-typescript": "^15.0.3"
+  }
+}

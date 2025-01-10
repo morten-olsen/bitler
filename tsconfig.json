@@ -1,0 +1,44 @@
+{
+  "include": [],
+  "references": [
+    {
+      "path": "./packages/core"
+    },
+    {
+      "path": "./extensions/agents"
+    },
+    {
+      "path": "./extensions/json-documents"
+    },
+    {
+      "path": "./extensions/homeassistant"
+    },
+    {
+      "path": "./extensions/music"
+    },
+    {
+      "path": "./extensions/timers"
+    },
+    {
+      "path": "./extensions/linear"
+    },
+    {
+      "path": "./extensions/game"
+    },
+    {
+      "path": "./extensions/signal"
+    },
+    {
+      "path": "./packages/server"
+    },
+    {
+      "path": "./packages/client-cli"
+    },
+    {
+      "path": "./packages/client"
+    },
+    {
+      "path": "./packages/react"
+    }
+  ]
+}
