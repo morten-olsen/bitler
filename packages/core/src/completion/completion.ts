@@ -11,6 +11,7 @@ import { Agent } from "../agents/agents.schemas.js";
 import { excludeUndefined } from "../utils/basic.js";
 import { ActionRequestInstance, ActionRequests } from "../action-requests/action-requests.js";
 import { agentSession, Session } from "../session/session.js";
+import { history } from "../history/history.js";
 
 const sanitizeString = (str: string) => {
   return str.replace(/[^a-zA-Z0-9_-]/g, "_");
@@ -211,6 +212,36 @@ class Completion {
     }
 
     const response = await getResponse();
+
+    if (options.conversationId) {
+      const capabilitiesService = this.#container.get(Capabilities);
+      await capabilitiesService.run({
+        capability: history.set,
+        session,
+        input: {
+          id: options.conversationId,
+          systemPrompt: options.systemPrompt || null,
+          agent: options.agent || null,
+          discoverAgents: options.discoverAgents || 0,
+          discoverCapabilies: options.discoverCapabilities || 0,
+          capabilities: capabilities.flatMap((capability) => capability ? [capability.kind] : []),
+          agents: agents.flatMap((agent) => agent ? [agent.kind] : []),
+        }
+      });
+      await capabilitiesService.run({
+        capability: history.addMessages,
+        session,
+        input: [{
+          conversationId: options.conversationId,
+          role: "user",
+          content: options.prompt,
+        }, {
+          conversationId: options.conversationId,
+          role: "assistant",
+          content: response,
+        }]
+      });
+    }
 
     return {
       response: response as any,

@@ -9,8 +9,8 @@ import { useOpenScreen } from "../screens/screens.hooks";
 import { DialogMessage } from "./dialog.message";
 
 type DialogProps = {
-  userIntro?: string,
-  initialAgentConfig?: AgentConfigValues
+  initialAgentConfig?: AgentConfigValues;
+  userIntro?: string;
 };
 const Dialog = ({ initialAgentConfig, userIntro }: DialogProps) => {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);

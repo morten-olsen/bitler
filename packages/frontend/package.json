@@ -2,9 +2,10 @@
   "name": "@bitler/frontend",
   "version": "0.0.0",
   "type": "module",
+  "main": "dist/exports.js",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc --build",
     "lint": "eslint .",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
@@ -26,9 +27,11 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-markdown": "^9.0.2",
+    "react-router": "^7.1.1",
     "yaml": "^2.7.0"
   },
   "devDependencies": {
+    "@bitler/configs": "workspace:*",
     "@chromatic-com/storybook": "^3.2.3",
     "@storybook/addon-essentials": "^8.4.7",
     "@storybook/addon-interactions": "^8.4.7",

@@ -1,57 +1,72 @@
 import { useCapabilities } from "@bitler/react"
 import { useOpenScreen } from "../screens/screens.hooks";
 import { Capability } from "../capability/capability";
-import { Button, Card, CardBody, CardFooter, CardHeader } from "@nextui-org/react";
-import { Play } from "lucide-react";
+import { Listbox, ListboxItem, ListboxSection } from "@nextui-org/react";
+import { Activity } from "lucide-react";
+import { useMemo } from "react";
+import clsx from "clsx";
+
+type IconWrapperProps = {
+  children: React.ReactNode;
+  className?: string;
+}
+const IconWrapper = ({ children, className }: IconWrapperProps) => (
+  <div className={clsx(className, "flex items-center rounded-small justify-center w-7 h-7")}>
+    {children}
+  </div>
+);
 
 const Capabilities = () => {
   const capabilities = useCapabilities();
   const open = useOpenScreen();
 
+  const grouped = useMemo(
+    () => capabilities.reduce((acc, capability) => {
+      if (!acc[capability.group]) {
+        acc[capability.group] = [];
+      }
+      acc[capability.group].push(capability);
+      return acc;
+    }, {} as Record<string, typeof capabilities>),
+    [capabilities]
+  )
+
+
   return (
     <div className="max-w-3xl mx-auto p-8">
-      <div className="flex flex-col gap-4">
-        {capabilities.map((capability) => (
-          <Card
-            key={capability.kind} className="flex flex-col p-4"
-            onPress={() => {
-              open(Capability, {
-                id: `capability-${capability.kind}`,
-                title: `${capability.group} - ${capability.name}`,
-                focus: true,
-                props: {
-                  kind: capability.kind,
-                },
-              });
-            }}
+      <Listbox
+        selectionMode="none"
+      >
+        {Object.entries(grouped).map(([group, capabilities]) => (
+          <ListboxSection
+            key={group}
+            title={group}
+            showDivider
           >
-            <CardHeader>
-              <div className="flex gap-2 justify-between">
-                <div className="font-semibold">{capability.name}</div>
-                <div className="text-default-500">{capability.group}</div>
-              </div>
-            </CardHeader>
-            <CardBody>
-              <div className="text-xs">{capability.description}</div>
-            </CardBody>
-            <CardFooter>
-              <Button
-                onPress={() => {
-                  open(Capability, {
-                    id: `capability-${capability.kind}`,
-                    title: `${capability.group} - ${capability.name}`,
-                    focus: true,
-                    props: {
-                      kind: capability.kind,
-                    },
-                  });
-                }}
-              ><Play />Run</Button>
-            </CardFooter>
-          </Card>
+            {capabilities.map((capability) => (
+              <ListboxItem
+                startContent={
+                  <IconWrapper className="bg-success/10 text-success">
+                    <Activity />
+                  </IconWrapper>
+                }
+                key={capability.kind}
+                description={capability.description}
+                onPress={() => open(Capability, {
+                  title: `${capability.name} - ${group}`,
+                  focus: true,
+                  props: {
+                    kind: capability.kind
+                  }
+                })}
+              >
+                {capability.name}
+              </ListboxItem>
+            ))}
+          </ListboxSection>
         ))}
-      </div>
-    </div>
+      </Listbox>
+    </div >
   )
 }
 

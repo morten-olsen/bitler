@@ -33,9 +33,9 @@ const Screens = () => {
           ))}
         </Tabs>
 
-        <div className="flex-1 overflow-auto">
+        <div className="flex-1 h-full">
           {screens.map((screen) => (
-            <div key={screen.id} className="h-full w-full" style={{ display: screen.id === selected ? 'block' : 'none' }}>
+            <div key={screen.id} className="h-full w-full overflow-y-auto" style={{ display: screen.id === selected ? 'block' : 'none' }}>
               <ScreenContext.Provider value={{ active: screen.id === selected, id: screen.id }}>
                 {screen.node}
               </ScreenContext.Provider>

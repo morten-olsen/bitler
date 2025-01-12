@@ -86,6 +86,7 @@ export interface BitlerServer {
           [k: string]: unknown;
         };
         maxTokens?: number;
+        conversationId?: string;
         prompt: string;
         dialog?: {
           role: "user" | "assistant" | "system";
@@ -102,6 +103,246 @@ export interface BitlerServer {
           description?: string;
           value?: unknown;
         }[];
+      };
+    };
+    "history.list": {
+      input: {
+        limit?: number;
+      };
+      output: {
+        conversations: {
+          id: string;
+          name?: string;
+          description?: string;
+          pinned: boolean;
+          createdAt: string;
+          updatedAt: string;
+        }[];
+      };
+    };
+    "history.get": {
+      input: {
+        id: string;
+      };
+      output: {
+        id: string;
+        name?: string;
+        description?: string;
+        pinned: boolean;
+        agent?: string;
+        systemPrompt?: string;
+        discoverCapabilies?: number;
+        discoverAgents?: number;
+        capabilities: string[];
+        agents: string[];
+        createdAt: string;
+        updatedAt: string;
+        messages: {
+          id: string;
+          role: string;
+          content: string;
+          createdAt: string;
+        }[];
+      };
+    };
+    "history.add-messages": {
+      input: {
+        conversationId: string;
+        role: string;
+        content: string;
+      }[];
+      output: {
+        success: boolean;
+      };
+    };
+    "history.set": {
+      input: {
+        id: string;
+        name?: string | null;
+        description?: string | null;
+        agent?: string | null;
+        systemPrompt?: string | null;
+        discoverCapabilies?: number;
+        discoverAgents?: number;
+        capabilities?: string[];
+        agents?: string[];
+      };
+      output: {
+        success: boolean;
+      };
+    };
+    "custom-agents.list": {
+      input: {};
+      output: {
+        agents: {
+          kind: string;
+          name: string;
+          group?: string;
+          description?: string;
+          model?: string;
+          systemPrompt?: string;
+          discoverTasks?: number;
+          discoverAgents?: number;
+          capabilities?: string[];
+          agents?: string[];
+        }[];
+      };
+    };
+    "custom-agents.capabilities": {
+      input: {};
+      output: {
+        capabilities: {
+          kind: string;
+          name: string;
+          group: string;
+          description?: string;
+        }[];
+      };
+    };
+    "custom-agents.set": {
+      input: {
+        kind: string;
+        name: string;
+        group?: string;
+        description?: string;
+        model?: string;
+        systemPrompt?: string;
+        discoverTasks?: number;
+        discoverAgents?: number;
+        capabilities?: string[];
+        agents?: string[];
+      };
+      output: {
+        success: boolean;
+      };
+    };
+    "custom-agents.remove": {
+      input: {
+        kinds: string[];
+      };
+      output: {
+        success: boolean;
+      };
+    };
+    "timers.add": {
+      input: {
+        /**
+         * Duration in seconds
+         */
+        duration: number;
+        /**
+         * Description of the timer
+         */
+        description?: string;
+      };
+      output: {
+        /**
+         * ID of the timer
+         */
+        id: string;
+      };
+    };
+    "timers.remove": {
+      input: {
+        /**
+         * ID of the timer
+         */
+        id: string;
+      };
+      output: {
+        /**
+         * True if the timer was removed
+         */
+        success: boolean;
+      };
+    };
+    "timers.list": {
+      input: {};
+      output: {
+        timers: {
+          /**
+           * ID of the timer
+           */
+          id: string;
+          /**
+           * Description of the timer
+           */
+          description?: string;
+          /**
+           * Duration in seconds
+           */
+          duration: number;
+          /**
+           * Start time of the timer
+           */
+          start: string;
+        }[];
+      };
+    };
+    "game.set-state": {
+      input: {
+        /**
+         * The JSON representation of the game state as a string.
+         */
+        json: string;
+      };
+      output: {
+        [k: string]: unknown;
+      };
+    };
+    "game.roll-dice": {
+      input: {
+        /**
+         * The number of sides on the dice.
+         */
+        sides: number;
+      };
+      /**
+       * The number rolled on the dice.
+       */
+      output: number;
+    };
+    "json-documents.add-document": {
+      input: {
+        source: string;
+        type: string;
+        data?: unknown;
+      };
+      output: {
+        id: string;
+      };
+    };
+    "json-documents.find-documents": {
+      input: {
+        sources?: string[];
+        types?: string[];
+        limit?: number;
+      };
+      output: {
+        id: string;
+        source: string;
+        type: string;
+        createdAt: string;
+        data?: unknown;
+      }[];
+    };
+    "json-documents.get-sources": {
+      input: {};
+      output: string[];
+    };
+    "json-documents.get-types": {
+      input: {};
+      output: string[];
+    };
+    "json-documents.remove-documents": {
+      input: {
+        ids: string[];
+        source?: string;
+        from?: string;
+        to?: string;
+      };
+      output: {
+        success: boolean;
       };
     };
     "homeassistant.lights.get": {
@@ -122,11 +363,13 @@ export interface BitlerServer {
             /**
              * The brightness of the light between 0 and 255
              */
-            brightness?: number;
-            color_temp?: number | null;
-            rgb_color?: number[];
+            brightness?: number | null;
+            color_temp_kelvin?: number | null;
+            rgb_color?: number[] | null;
             friendly_name: string;
-            lights?: string[];
+            lights?: string[] | null;
+            entity_id?: string[] | null;
+            icon?: string | null;
           };
         }[];
       };
@@ -210,61 +453,6 @@ export interface BitlerServer {
             id: string;
             name: string;
           }[];
-        }[];
-      };
-    };
-    "timers.add": {
-      input: {
-        /**
-         * Duration in seconds
-         */
-        duration: number;
-        /**
-         * Description of the timer
-         */
-        description?: string;
-      };
-      output: {
-        /**
-         * ID of the timer
-         */
-        id: string;
-      };
-    };
-    "timers.remove": {
-      input: {
-        /**
-         * ID of the timer
-         */
-        id: string;
-      };
-      output: {
-        /**
-         * True if the timer was removed
-         */
-        success: boolean;
-      };
-    };
-    "timers.list": {
-      input: {};
-      output: {
-        timers: {
-          /**
-           * ID of the timer
-           */
-          id: string;
-          /**
-           * Description of the timer
-           */
-          description?: string;
-          /**
-           * Duration in seconds
-           */
-          duration: number;
-          /**
-           * Start time of the timer
-           */
-          start: string;
         }[];
       };
     };
@@ -374,59 +562,6 @@ export interface BitlerServer {
         success: boolean;
       };
     };
-    "custom-agents.list": {
-      input: {};
-      output: {
-        agents: {
-          kind: string;
-          name: string;
-          group?: string;
-          description?: string;
-          model?: string;
-          systemPrompt?: string;
-          discoverTasks?: number;
-          discoverAgents?: number;
-          capabilities?: string[];
-          agents?: string[];
-        }[];
-      };
-    };
-    "custom-agents.capabilities": {
-      input: {};
-      output: {
-        capabilities: {
-          kind: string;
-          name: string;
-          group: string;
-          description?: string;
-        }[];
-      };
-    };
-    "custom-agents.set": {
-      input: {
-        kind: string;
-        name: string;
-        group?: string;
-        description?: string;
-        model?: string;
-        systemPrompt?: string;
-        discoverTasks?: number;
-        discoverAgents?: number;
-        capabilities?: string[];
-        agents?: string[];
-      };
-      output: {
-        success: boolean;
-      };
-    };
-    "custom-agents.remove": {
-      input: {
-        kinds: string[];
-      };
-      output: {
-        success: boolean;
-      };
-    };
     "linear.profile": {
       input: {};
       output: {
@@ -470,28 +605,40 @@ export interface BitlerServer {
         };
       };
     };
-    "game.set-state": {
-      input: {
-        /**
-         * The JSON representation of the game state as a string.
-         */
-        json: string;
-      };
+    "signal.get-contacts": {
+      input: {};
       output: {
-        [k: string]: unknown;
+        contacts: {
+          name: string;
+          phone: string;
+        }[];
       };
     };
-    "game.roll-dice": {
+    "signal.get-groups": {
+      input: {};
+      output: {
+        groups: {
+          name: string;
+          id: string;
+          internalId: string;
+        }[];
+      };
+    };
+    "signal.send": {
       input: {
         /**
-         * The number of sides on the dice.
+         * The recipient's phone number
          */
-        sides: number;
+        recipient: string;
+        message: string;
+        /**
+         * Base64 encoded attachments ("<BASE64 ENCODED DATA>", "data:<MIME-TYPE>;base64<comma><BASE64 ENCODED DATA>", "data:<MIME-TYPE>;filename=<FILENAME>;base64<comma><BASE64 ENCODED DATA>")
+         */
+        attachments?: string[];
       };
-      /**
-       * The number rolled on the dice.
-       */
-      output: number;
+      output: {
+        success: boolean;
+      };
     };
   };
   actionRequests: {
@@ -535,6 +682,14 @@ export interface BitlerServer {
         description: string;
       }[];
     };
+    "timers.current-time": {
+      schema: string;
+    };
+    "game.state": {
+      schema: {
+        [k: string]: unknown;
+      };
+    };
     "homeassistant.rooms": {
       schema: {
         id: string;
@@ -546,9 +701,6 @@ export interface BitlerServer {
           name: string;
         }[];
       }[];
-    };
-    "timers.current-time": {
-      schema: string;
     };
     "linear.user": {
       schema: {
@@ -576,23 +728,18 @@ export interface BitlerServer {
         description?: string;
       }[];
     };
-    "game.state": {
-      schema: {
-        [k: string]: unknown;
-      };
-    };
   };
   agents:
     | "builtin.receptionist"
+    | "agent-editor"
+    | "timers"
+    | "game.default"
+    | "json-documents"
     | "homeassistant"
     | "homeassistant.config"
-    | "timers"
     | "music.agent"
-    | "agent-editor"
-    | "music-agent"
-    | "my-agent"
     | "linear"
-    | "game.default"
+    | "signal"
     | string;
   events: {
     "timer.created": {

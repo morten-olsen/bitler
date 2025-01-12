@@ -32,13 +32,16 @@
       "path": "./packages/server"
     },
     {
-      "path": "./packages/client-cli"
+      "path": "./packages/cli"
     },
     {
       "path": "./packages/client"
     },
     {
       "path": "./packages/react"
+    },
+    {
+      "path": "./packages/frontend/tsconfig.build.json"
     }
   ]
 }

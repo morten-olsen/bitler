@@ -9,6 +9,10 @@ import { modelsPlugin } from "./routes/routes.models.js";
 import { capabilitiesPlugin } from "./routes/routes.capabilities.js";
 import { schemasPlugin } from "./routes/routes.schema.js";
 import { eventsPlugin } from "./routes/routes.events.js";
+import { Extension, Extensions } from "../exports.js";
+import { fileURLToPath } from "url";
+import { resolve } from "path";
+import fastifyStatic from "@fastify/static";
 
 type CreateOptions = {
   setup?: (app: fastify.FastifyInstance) => Promise<void>;
@@ -65,4 +69,33 @@ class Server {
   }
 }
 
-export { Server };
+type Configuration = {
+  extensions?: Extension[];
+  container?: Container;
+}
+
+const setupServer = async ({
+  extensions = [],
+  container = new Container(),
+}: Configuration) => {
+
+  const extensionsService = container.get(Extensions);
+  await extensionsService.register(extensions);
+  const server = container.get(Server);
+  const app = await server.create({
+    setup: async (app) => {
+      const root = resolve('./dist/frontend');
+      await app.register(fastifyStatic, {
+        root,
+        wildcard: false,
+      });
+    },
+  });
+
+  await app.listen({
+    port: 3000,
+    host: process.env.HOST,
+  })
+}
+
+export { Server, setupServer, type Configuration };

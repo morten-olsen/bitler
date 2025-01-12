@@ -21,6 +21,7 @@ const completionOptionsSchema = z.object({
   agents: z.array(z.string()).optional(),
   context: z.record(z.unknown()).optional(),
   maxTokens: z.number().optional(),
+  conversationId: z.string().optional(),
   prompt: z.string(),
   dialog: z.array(completionDialogSchema).optional(),
 });

@@ -8,10 +8,9 @@
   ],
   "scripts": {
     "build": "tsc --build",
-    "generate:types": "bitler-client build http://localhost:3000 ./src/generated/types.ts"
+    "generate:types": "bitler schema generate http://localhost:3000 ./src/generated/types.ts"
   },
   "devDependencies": {
-    "@bitler/client-cli": "workspace:*",
     "@bitler/configs": "workspace:*",
     "openapi-typescript": "^7.4.4",
     "typescript": "^5.7.2"

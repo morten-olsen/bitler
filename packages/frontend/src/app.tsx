@@ -1,4 +1,3 @@
-import './style.css';
 import { NextUIProvider } from "@nextui-org/react";
 import { BitlerProvider } from "@bitler/react";
 import { Sidebar } from './containers/sidebar/sidebar';

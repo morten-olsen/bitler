@@ -1,9 +1,9 @@
 import { createExtension } from '../extensions/extensions.js';
+import { history } from '../history/history.js';
 import { addCapabilitiesRequest, createDialog } from './action-requests.js';
 import { receptionistAgent } from './agents.js';
 import { addCapabilities, createNewDialog, listAgents, listCapabilities, prompt } from './capabilites.js';
 import { capabilitiesContext } from './contexts.js';
-
 
 const builtin = createExtension({
   agents: [
@@ -22,6 +22,7 @@ const builtin = createExtension({
     createNewDialog,
     addCapabilities,
     prompt,
+    ...Object.values(history),
   ]
 })
 export * from './action-requests.js';
