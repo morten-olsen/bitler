@@ -11,7 +11,7 @@ const capabilitiesPlugin: FastifyPluginAsyncZod = async (app) => {
     schema: {
       operationId: 'capabilities.list',
       summary: 'Get list of available tasks',
-      tags: ['capabilites'],
+      tags: ['capabilities'],
       response: {
         200: z.array(z.object({
           kind: z.string(),
@@ -34,82 +34,12 @@ const capabilitiesPlugin: FastifyPluginAsyncZod = async (app) => {
   });
 
   app.route({
-    method: 'get',
-    url: '/describe/:kind',
-    schema: {
-      operationId: 'tasks.describe',
-      summary: 'Get task schema',
-      tags: ['tasks'],
-      params: z.object({
-        kind: z.string(),
-      }),
-      response: {
-        200: z.object({
-          kind: z.string(),
-          name: z.string(),
-          group: z.string(),
-          description: z.string().optional(),
-          input: z.any(),
-          output: z.any(),
-        })
-      },
-    },
-    handler: async (request, reply) => {
-      const { kind } = request.params;
-      const capabilitiesService = request.container.get(Capabilities);
-      const [capability] = capabilitiesService.get([kind]);
-      if (!capability) {
-        throw httpErrors.notFound();
-      }
-      await reply.send({
-        ...capability,
-      });
-    }
-  });
-
-  app.route({
-    method: 'post',
-    url: '/search',
-    schema: {
-      operationId: 'tasks.search',
-      summary: 'Search for tasks',
-      tags: ['tasks'],
-      body: z.object({
-        query: z.string(),
-        limit: z.number().optional(),
-      }),
-      response: {
-        200: z.array(z.object({
-          kind: z.string(),
-          name: z.string(),
-          group: z.string(),
-          description: z.string().optional(),
-          similarity: z.number(),
-        }))
-      },
-    },
-    handler: async (request, reply) => {
-      const { query, limit } = request.body;
-      const capabilitiesService = request.container.get(Capabilities);
-
-      const result = await capabilitiesService.find(query, limit);
-      await reply.send(result.map(({ similarity, capability }) => ({
-        kind: capability.kind,
-        name: capability.name,
-        group: capability.group,
-        description: capability.description,
-        similarity,
-      })));
-    },
-  })
-
-  app.route({
     method: 'post',
     url: '/run',
     schema: {
-      operationId: 'tasks.run',
-      summary: 'Run a task',
-      tags: ['tasks'],
+      operationId: 'capabilities.run',
+      summary: 'Run a cpaability',
+      tags: ['capabilities'],
       body: z.object({
         kind: z.string(),
         input: z.any(),
@@ -124,7 +54,7 @@ const capabilitiesPlugin: FastifyPluginAsyncZod = async (app) => {
       const [capability] = capabilitiesService.get([kind]);
       const session = new Session();
       if (!capability) {
-        return httpErrors.notFound('Capabbility not found');
+        return httpErrors.notFound('Capability not found');
       }
       const params = capability.input.parse(input);
       const result = await capabilitiesService.run({

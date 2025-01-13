@@ -3,7 +3,7 @@ import React, { createContext, ReactNode, useEffect, useState } from "react";
 import { CapabilityInput, DefaultServer, useAgentConfigContext, useEventEffect, useRunCapabilityMutation, useRunCapabilityQuery } from "../exports.js";
 import { useClientContext } from "../client/client.context.js";
 
-type PromptInput = CapabilityInput<DefaultServer, 'builtin.prompt'>;
+type PromptInput = CapabilityInput<DefaultServer, 'dialog.prompt'>;
 type DialogMessage = Exclude<PromptInput['dialog'], undefined>[number]
 
 const useConversationHistory = () => {
@@ -60,7 +60,7 @@ const useDialog = (id: string, options: UseDialogOptiops) => {
   )
 
   const promptMutate = useMutation({
-    mutationFn: async (body: CapabilityInput<DefaultServer, 'builtin.prompt'>) => {
+    mutationFn: async (body: CapabilityInput<DefaultServer, 'dialog.prompt'>) => {
       const config: PromptInput = {
         agent: agentConfig.agent,
         model: agentConfig.model,
@@ -77,7 +77,7 @@ const useDialog = (id: string, options: UseDialogOptiops) => {
       setMessages((prev) => [...prev, { role: 'user', content: body.prompt }]);
       setMessages((prev) => [...prev, { role: 'assistant', content: '', isLoading: true }]);
       const { capabilities } = client;
-      const response = await capabilities.run('builtin.prompt', config);
+      const response = await capabilities.run('dialog.prompt', config);
       setMessages((prev) => {
         const clone = [...prev];
         const last = clone.pop();

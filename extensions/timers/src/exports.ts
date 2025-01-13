@@ -22,9 +22,6 @@ const timers = createExtension({
   contexts: [
     currentTimeContext,
   ],
-  agents: [
-    timerAgent,
-  ],
   capabilities: [
     addTimer,
     removeTimer,

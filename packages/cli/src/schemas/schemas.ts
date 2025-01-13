@@ -28,15 +28,6 @@ type SchemaResponse = {
       schema: any;
     }
   };
-  agents: {
-    [key: string]: {
-      kind: string;
-      name: string;
-      description?: string;
-      capabilities: string[];
-      agents: string[];
-    };
-  };
   events: {
     [key: string]: {
       kind: string;
@@ -88,10 +79,6 @@ const buildSchema = async (baseUrl: string) => {
         ]),
       )
     ),
-    agents: Type.Union([
-      ...Object.keys(schemas.agents).map((key) => Type.Literal(key)),
-      Type.String(),
-    ]),
     events: Type.Object(
       Object.fromEntries(
         Object.entries(schemas.events).map(([key, value]) => [

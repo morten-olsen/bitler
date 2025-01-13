@@ -11,9 +11,6 @@ const linear = createExtension({
     userContext,
     issuesContext,
   ],
-  agents: [
-    agent,
-  ],
   capabilities: [
     profile,
     myIssues,

@@ -14,8 +14,8 @@ const ClientProvider = ({ baseUrl, children }: ClientProviderProps) => {
     queryKey: ['setup', baseUrl],
     queryFn: async () => {
       const { capabilities } = client;
-      const { all: capabilitiesList } = await capabilities.run('builtin.list-capabilities', {});
-      const { agents: agentList } = await capabilities.run('builtin.list-agents', {});
+      const { capabilities: capabilitiesList } = await capabilities.run('capabilities.list', {});
+      const { agents: agentList } = await capabilities.run('agents.list', {});
       return {
         capabilities: capabilitiesList,
         agents: agentList,

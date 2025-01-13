@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@bitler/core": "workspace:*",
+    "@bitler/llm": "workspace:*",
     "home-assistant-js-websocket": "^9.4.0"
   }
 }

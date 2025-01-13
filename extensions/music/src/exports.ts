@@ -10,9 +10,6 @@ import { next } from "./capabilities/next.js";
 import { resume } from "./capabilities/resume.js";
 
 const music = createExtension({
-  agents: [
-    agent,
-  ],
   capabilities: [
     search,
     play,

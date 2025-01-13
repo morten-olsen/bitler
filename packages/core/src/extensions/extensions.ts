@@ -3,7 +3,7 @@ import { ActionRequests } from "../action-requests/action-requests.js";
 import { Capability } from "../capabilities/capabilities.capability.js"
 import { Capabilities } from "../capabilities/capabilities.js";
 import { Event, Events } from "../events/events.js";
-import { Agent, Agents, Container, ContextItem, ContextItems } from "../exports.js";
+import { Container, ContextItem, ContextItems } from "../exports.js";
 
 type ExtensionSetupOptions = {
   container: Container;
@@ -15,7 +15,6 @@ type Extension = {
   actionRequests?: ActionRequest<any>[];
   contexts?: ContextItem<any>[];
   capabilities?: Capability<any, any>[];
-  agents?: Agent[];
 }
 
 class Extensions {
@@ -28,7 +27,6 @@ class Extensions {
   public register = async (extensions: Extension[]) => {
     const contextItemService = this.#container.get(ContextItems);
     const capabilitesService = this.#container.get(Capabilities);
-    const agentsService = this.#container.get(Agents);
     const actionRequestService = this.#container.get(ActionRequests);
 
     for (const extension of extensions) {
@@ -37,9 +35,6 @@ class Extensions {
       }
       if (extension.capabilities) {
         capabilitesService.register(extension.capabilities);
-      }
-      if (extension.agents) {
-        agentsService.register(extension.agents);
       }
       if (extension.setup) {
         await extension.setup({ container: this.#container });

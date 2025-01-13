@@ -7,7 +7,18 @@
 
 export interface BitlerServer {
   capabilities: {
-    "builtin.list-agents": {
+    "capabilities.list": {
+      input: {};
+      output: {
+        capabilities: {
+          kind: string;
+          name: string;
+          group: string;
+          description: string;
+        }[];
+      };
+    };
+    "agents.list": {
       input: {};
       output: {
         agents: {
@@ -18,62 +29,7 @@ export interface BitlerServer {
         }[];
       };
     };
-    "builtin.list-capabilities": {
-      input: {};
-      output: {
-        included: {
-          kind: string;
-          name: string;
-          group: string;
-          description: string;
-        }[];
-        all: {
-          kind: string;
-          name: string;
-          group: string;
-          description: string;
-        }[];
-      };
-    };
-    "builtin.create-new-dialog": {
-      input: {
-        /**
-         * The title of the dialog
-         */
-        title: string;
-        /**
-         * The system prompt for the dialog
-         */
-        systemPrompt?: string;
-        /**
-         * The user prompt for the dialog
-         */
-        userPrompt?: string;
-        /**
-         * The capabilities that the agent will have access to
-         */
-        capabilities?: string[];
-        /**
-         * An intro shown to the user before the dialog starts
-         */
-        userIntro: string;
-      };
-      output: {
-        success: boolean;
-      };
-    };
-    "builtin.add-capabilities": {
-      input: {
-        /**
-         * The capabilities to add to the conversation (kind). These will become available the next time the user makes a request.
-         */
-        capabilities: string[];
-      };
-      output: {
-        success: boolean;
-      };
-    };
-    "builtin.prompt": {
+    "dialog.prompt": {
       input: {
         agent?: string;
         model?: string;
@@ -103,6 +59,33 @@ export interface BitlerServer {
           description?: string;
           value?: unknown;
         }[];
+      };
+    };
+    "dialog.create-new": {
+      input: {
+        /**
+         * The title of the dialog
+         */
+        title: string;
+        /**
+         * The system prompt for the dialog
+         */
+        systemPrompt?: string;
+        /**
+         * The user prompt for the dialog
+         */
+        userPrompt?: string;
+        /**
+         * The capabilities that the agent will have access to
+         */
+        capabilities?: string[];
+        /**
+         * An intro shown to the user before the dialog starts
+         */
+        userIntro: string;
+      };
+      output: {
+        success: boolean;
       };
     };
     "history.list": {
@@ -145,16 +128,6 @@ export interface BitlerServer {
         }[];
       };
     };
-    "history.add-messages": {
-      input: {
-        conversationId: string;
-        role: string;
-        content: string;
-      }[];
-      output: {
-        success: boolean;
-      };
-    };
     "history.set": {
       input: {
         id: string;
@@ -171,43 +144,22 @@ export interface BitlerServer {
         success: boolean;
       };
     };
-    "custom-agents.list": {
-      input: {};
-      output: {
-        agents: {
-          kind: string;
-          name: string;
-          group?: string;
-          description?: string;
-          model?: string;
-          systemPrompt?: string;
-          discoverTasks?: number;
-          discoverAgents?: number;
-          capabilities?: string[];
-          agents?: string[];
-        }[];
-      };
-    };
-    "custom-agents.set": {
+    "history.add-messages": {
       input: {
-        kind: string;
-        name: string;
-        group?: string;
-        description?: string;
-        model?: string;
-        systemPrompt?: string;
-        discoverTasks?: number;
-        discoverAgents?: number;
-        capabilities?: string[];
-        agents?: string[];
-      };
+        conversationId: string;
+        role: string;
+        content: string;
+      }[];
       output: {
         success: boolean;
       };
     };
-    "custom-agents.remove": {
+    "history.add-capabilities": {
       input: {
-        kinds: string[];
+        /**
+         * The capabilities to add to the conversation (kind). These will become available the next time the user makes a request.
+         */
+        capabilities: string[];
       };
       output: {
         success: boolean;
@@ -718,18 +670,6 @@ export interface BitlerServer {
       }[];
     };
   };
-  agents:
-    | "builtin.receptionist"
-    | "agent-editor"
-    | "timers"
-    | "game.default"
-    | "json-documents"
-    | "homeassistant"
-    | "homeassistant.config"
-    | "music.agent"
-    | "linear"
-    | "signal"
-    | string;
   events: {
     "history.updated": {
       input: {};

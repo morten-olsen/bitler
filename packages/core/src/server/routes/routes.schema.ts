@@ -1,5 +1,5 @@
 import { FastifyPluginAsyncZod } from "fastify-type-provider-zod"
-import { Agents, Capabilities, ContextItems, z } from "../../exports.js";
+import { Capabilities, ContextItems, z } from "../../exports.js";
 import { ActionRequests } from "../../action-requests/action-requests.js";
 import { getJsonSchema } from "../../utils/zod.js";
 import { Events } from "../../events/events.js";
@@ -25,13 +25,6 @@ const schemasSchema = z.object({
     description: z.string(),
     schema: z.any(),
   })),
-  agents: z.record(z.object({
-    kind: z.string(),
-    name: z.string(),
-    description: z.string().optional(),
-    capabilities: z.array(z.string()),
-    agents: z.array(z.string()),
-  })),
   events: z.record(z.object({
     kind: z.string(),
     name: z.string(),
@@ -56,13 +49,11 @@ const schemasPlugin: FastifyPluginAsyncZod = async (app) => {
       const capabilitesService = container.get(Capabilities);
       const actionRequestsService = container.get(ActionRequests);
       const contextItemsService = container.get(ContextItems);
-      const agentsService = container.get(Agents);
       const eventsService = container.get(Events);
 
       const capabilities = capabilitesService.list();
       const actionRequests = actionRequestsService.list();
       const contextItems = contextItemsService.list();
-      const agents = agentsService.list();
       const events = eventsService.list();
 
 
@@ -91,15 +82,6 @@ const schemasPlugin: FastifyPluginAsyncZod = async (app) => {
             name: contextItem.name,
             description: contextItem.description,
             schema: getJsonSchema(contextItem.schema),
-          }])),
-        ),
-        agents: Object.fromEntries(
-          agents.map((agent) => ([agent.kind, {
-            kind: agent.kind,
-            name: agent.name,
-            description: agent.description,
-            capabilities: agent.capabilities || [],
-            agents: agent.agents || [],
           }])),
         ),
         events: Object.fromEntries(

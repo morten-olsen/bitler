@@ -16,7 +16,7 @@
     "typescript": "^5.7.2"
   },
   "dependencies": {
-    "@bitler/agents": "workspace:*",
+    "@bitler/llm": "workspace:*",
     "@bitler/cli": "workspace:*",
     "@bitler/core": "workspace:*",
     "@bitler/frontend": "workspace:*",

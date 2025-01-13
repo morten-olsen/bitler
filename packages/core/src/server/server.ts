@@ -4,15 +4,13 @@ import swagger from "@fastify/swagger";
 import swaggerUi from "@fastify/swagger-ui";
 import { jsonSchemaTransform, serializerCompiler, validatorCompiler, ZodTypeProvider } from "fastify-type-provider-zod";
 import { Container } from "../container/container.js";
-import { agentsPlugin } from "./routes/routes.agents.js";
-import { modelsPlugin } from "./routes/routes.models.js";
 import { capabilitiesPlugin } from "./routes/routes.capabilities.js";
 import { schemasPlugin } from "./routes/routes.schema.js";
 import { eventsPlugin } from "./routes/routes.events.js";
-import { Extension, Extensions } from "../exports.js";
-import { fileURLToPath } from "url";
+import { Capabilities, Extension, Extensions } from "../exports.js";
 import { resolve } from "path";
 import fastifyStatic from "@fastify/static";
+import { listCapabilities } from "../built-in/capabilites.js";
 
 type CreateOptions = {
   setup?: (app: fastify.FastifyInstance) => Promise<void>;
@@ -53,9 +51,7 @@ class Server {
       routePrefix: '/api/docs',
     });
 
-    await app.register(agentsPlugin, { prefix: 'api/agents' });
     await app.register(capabilitiesPlugin, { prefix: '/api/capabilities' });
-    await app.register(modelsPlugin, { prefix: '/api/models' });
     await app.register(schemasPlugin, { prefix: '/api/schemas' });
     await app.register(eventsPlugin, { prefix: '/api/events' });
 
@@ -79,6 +75,10 @@ const setupServer = async ({
   container = new Container(),
 }: Configuration) => {
 
+  const capabilitiesService = container.get(Capabilities);
+  capabilitiesService.register([
+    listCapabilities,
+  ]);
   const extensionsService = container.get(Extensions);
   await extensionsService.register(extensions);
   const server = container.get(Server);

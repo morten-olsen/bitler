@@ -15,19 +15,6 @@ importers:
         specifier: ^5.7.2
         version: 5.7.2
 
-  extensions/agents:
-    dependencies:
-      '@bitler/core':
-        specifier: workspace:*
-        version: link:../../packages/core
-    devDependencies:
-      '@bitler/configs':
-        specifier: workspace:*
-        version: link:../../packages/configs
-      typescript:
-        specifier: ^5.7.2
-        version: 5.7.2
-
   extensions/game:
     dependencies:
       '@bitler/core':
@@ -46,6 +33,9 @@ importers:
       '@bitler/core':
         specifier: workspace:*
         version: link:../../packages/core
+      '@bitler/llm':
+        specifier: workspace:*
+        version: link:../llm
       home-assistant-js-websocket:
         specifier: ^9.4.0
         version: 9.4.0
@@ -78,9 +68,31 @@ importers:
       '@bitler/core':
         specifier: workspace:*
         version: link:../../packages/core
+      '@bitler/llm':
+        specifier: workspace:*
+        version: link:../llm
       '@linear/sdk':
         specifier: ^37.0.0
         version: 37.0.0
+    devDependencies:
+      '@bitler/configs':
+        specifier: workspace:*
+        version: link:../../packages/configs
+      typescript:
+        specifier: ^5.7.2
+        version: 5.7.2
+
+  extensions/llm:
+    dependencies:
+      '@bitler/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@huggingface/transformers':
+        specifier: ^3.2.4
+        version: 3.2.4
+      openai:
+        specifier: ^4.77.0
+        version: 4.77.0(zod@3.24.1)
     devDependencies:
       '@bitler/configs':
         specifier: workspace:*
@@ -97,6 +109,9 @@ importers:
       '@bitler/homeassistant':
         specifier: workspace:*
         version: link:../homeassistant
+      '@bitler/llm':
+        specifier: workspace:*
+        version: link:../llm
       '@spotify/web-api-ts-sdk':
         specifier: ^1.2.0
         version: 1.2.0
@@ -138,6 +153,9 @@ importers:
       '@bitler/core':
         specifier: workspace:*
         version: link:../../packages/core
+      '@bitler/llm':
+        specifier: workspace:*
+        version: link:../llm
       home-assistant-js-websocket:
         specifier: ^9.4.0
         version: 9.4.0
@@ -288,9 +306,6 @@ importers:
 
   packages/demo:
     dependencies:
-      '@bitler/agents':
-        specifier: workspace:*
-        version: link:../../extensions/agents
       '@bitler/cli':
         specifier: workspace:*
         version: link:../cli
@@ -312,6 +327,9 @@ importers:
       '@bitler/linear':
         specifier: workspace:*
         version: link:../../extensions/linear
+      '@bitler/llm':
+        specifier: workspace:*
+        version: link:../../extensions/llm
       '@bitler/music':
         specifier: workspace:*
         version: link:../../extensions/music
@@ -471,55 +489,6 @@ importers:
       react:
         specifier: ^18.3.1
         version: 18.3.1
-      typescript:
-        specifier: ^5.7.2
-        version: 5.7.2
-
-  packages/server:
-    dependencies:
-      '@bitler/agents':
-        specifier: workspace:*
-        version: link:../../extensions/agents
-      '@bitler/core':
-        specifier: workspace:*
-        version: link:../core
-      '@bitler/frontend':
-        specifier: workspace:*
-        version: link:../frontend
-      '@bitler/game':
-        specifier: workspace:*
-        version: link:../../extensions/game
-      '@bitler/homeassistant':
-        specifier: workspace:*
-        version: link:../../extensions/homeassistant
-      '@bitler/json-documents':
-        specifier: workspace:*
-        version: link:../../extensions/json-documents
-      '@bitler/linear':
-        specifier: workspace:*
-        version: link:../../extensions/linear
-      '@bitler/music':
-        specifier: workspace:*
-        version: link:../../extensions/music
-      '@bitler/signal':
-        specifier: workspace:*
-        version: link:../../extensions/signal
-      '@bitler/timers':
-        specifier: workspace:*
-        version: link:../../extensions/timers
-      '@fastify/static':
-        specifier: ^8.0.3
-        version: 8.0.3
-    devDependencies:
-      '@bitler/configs':
-        specifier: workspace:*
-        version: link:../configs
-      dotenv:
-        specifier: ^16.4.7
-        version: 16.4.7
-      tsx:
-        specifier: ^4.19.2
-        version: 4.19.2
       typescript:
         specifier: ^5.7.2
         version: 5.7.2

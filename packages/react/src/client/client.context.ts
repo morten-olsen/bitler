@@ -5,8 +5,8 @@ type ClientContextValue<
   TServerSchema extends ServerSchema = DefaultServer
 > = {
   client: Client<TServerSchema>;
-  capabilities: CapabilityOutput<DefaultServer, 'builtin.list-capabilities'>['all'];
-  agents: CapabilityOutput<DefaultServer, 'builtin.list-agents'>['agents']
+  capabilities: CapabilityOutput<DefaultServer, 'capabilities.list'>['capabilities'];
+  agents: CapabilityOutput<DefaultServer, 'agents.list'>['agents']
   models: any[];
 }
 

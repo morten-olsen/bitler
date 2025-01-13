@@ -5,7 +5,7 @@ import { Capability } from "./capabilities.capability.js";
 import { Container } from '../container/container.js';
 import { z, ZodSchema } from "zod";
 import { Context } from "../contexts/contexts.context.js";
-import { Contexts } from "../exports.js";
+import { Contexts } from "../contexts/contexts.js";
 import { ActionRequestInstance } from "../action-requests/action-requests.instance.js";
 import { ActionRequests } from "../action-requests/action-requests.js";
 import { Session } from '../session/session.js';
@@ -23,7 +23,7 @@ type CapabilityRunOptions<TInput extends ZodSchema, TOutput extends ZodSchema> =
 }
 class Capabilities extends EventEmitter<CapabilitiesEvents> {
   #container: Container;
-  #capabilities: Capability<any, any>[] = [];
+  #capabilities: Set<Capability<any, any>> = new Set([]);
   #capabilitiesVector: Map<Capability<any, any>, Vector> = new Map();
 
   constructor(container: Container) {
@@ -52,16 +52,18 @@ class Capabilities extends EventEmitter<CapabilitiesEvents> {
   }
 
   public register = (capabilities: Capability<any, any>[]) => {
-    this.#capabilities.push(...capabilities);
+    capabilities.forEach((capability) => {
+      this.#capabilities.add(capability);
+    });
     this.emit('registered', capabilities);
   }
 
   public get = (kinds: string[]) => {
-    return kinds.map((kind) => this.#capabilities.find((capability) => capability.kind === kind));
+    return kinds.map((kind) => Array.from(this.#capabilities).find((capability) => capability.kind === kind));
   }
 
   public list = () => {
-    return this.#capabilities;
+    return Array.from(this.#capabilities);
   }
 
   public run = async <
@@ -93,7 +95,7 @@ class Capabilities extends EventEmitter<CapabilitiesEvents> {
     const extractor = this.#container.get(FeatureExtractor);
     const [queryVector] = await extractor.extract([query]);
     const results = await Promise.all(
-      this.#capabilities.map(async (capability) => {
+      Array.from(this.#capabilities).map(async (capability) => {
         await this.#getVector(capability);
         const vector = await this.#getVector(capability);
         const similarity = cos_sim(queryVector.value, vector.value);

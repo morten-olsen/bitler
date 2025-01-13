@@ -5,7 +5,7 @@
       "path": "./packages/core"
     },
     {
-      "path": "./extensions/agents"
+      "path": "./extensions/llm"
     },
     {
       "path": "./extensions/json-documents"

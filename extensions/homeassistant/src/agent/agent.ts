@@ -1,4 +1,4 @@
-import { createAgent } from "@bitler/core";
+import { createAgent } from '@bitler/llm';
 import { capabilities } from "../capabilities/capabilities.js";
 
 
