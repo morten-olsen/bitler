@@ -1,16 +1,16 @@
-import { createExtension } from "@bitler/core";
+import { Capabilities, ContextItems, createExtension } from "@bitler/core";
 import { setState } from "./capabilities/set-state.js";
 import { gameStateContext } from "./contexts/game-state.js";
 import { rollDice } from "./capabilities/roll-dice.js";
 
 const game = createExtension({
-  contexts: [
-    gameStateContext,
-  ],
-  capabilities: [
-    setState,
-    rollDice,
-  ],
+  setup: async ({ container }) => {
+    const contextItemsService = container.get(ContextItems);
+    contextItemsService.register([gameStateContext]);
+
+    const capabilitiesService = container.get(Capabilities);
+    capabilitiesService.register([setState, rollDice]);
+  },
 });
 
 export { game };

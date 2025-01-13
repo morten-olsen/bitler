@@ -1,4 +1,4 @@
-import { createExtension } from '@bitler/core';
+import { ActionRequests, Capabilities, ContextItems, createExtension, Events } from '@bitler/core';
 import { addCapabilitiesRequest } from './action-requests/capabilities.js';
 import { createDialogRequest } from './action-requests/create-dialog.js';
 import { historySetCapability } from './capabilities/history/history.set.js';
@@ -13,27 +13,36 @@ import { historyUpdatedEvent } from './events/history/history.updated.js';
 import { capabilitiesContext } from './contexts/capabilites.js';
 
 const llm = createExtension({
-  actionRequests: [
-    addCapabilitiesRequest,
-    createDialogRequest,
-  ],
-  contexts: [
-    capabilitiesContext,
-  ],
-  events: [
-    historyUpdatedEvent,
-  ],
-  capabilities: [
-    agentsList,
-    completionPromptDialog,
-    dialogCreateNewCapability,
-    historyListCapability,
-    historyGetCapability,
-    historySetCapability,
-    historyAddMessagesCapability,
-    historyAddCapabilitiesCapability,
-  ]
+  setup: async ({ container }) => {
+    const contextItemsService = container.get(ContextItems);
+    contextItemsService.register([
+      capabilitiesContext,
+    ]);
+
+    const capabilitiesService = container.get(Capabilities);
+    capabilitiesService.register([
+      agentsList,
+      completionPromptDialog,
+      dialogCreateNewCapability,
+      historyListCapability,
+      historyGetCapability,
+      historySetCapability,
+      historyAddMessagesCapability,
+      historyAddCapabilitiesCapability,
+    ]);
+
+    const eventsService = container.get(Events);
+    eventsService.register([
+      historyUpdatedEvent,
+    ]);
+
+    const actionRequestsService = container.get(ActionRequests);
+    actionRequestsService.register([
+      addCapabilitiesRequest,
+      createDialogRequest,
+    ]);
+  },
 })
 
-export { createAgent } from './services/agents/agents.js';
+export { createAgent, Agents } from './services/agents/agents.js';
 export { llm };
