@@ -2,6 +2,8 @@ import { z } from "zod";
 import { createCapability } from "../../capabilities/capabilities.js";
 import { Databases } from "../../databases/databases.js";
 import { dbConfig } from "../database/database.js";
+import { Events } from "../../exports.js";
+import { historyUpdatedEvent } from "../events/updated.js";
 
 const stringOrNull = z.union([z.string(), z.null()]);
 const set = createCapability({
@@ -46,7 +48,7 @@ const set = createCapability({
         if (input.capabilities.length > 0) {
           await trx('conversationCapabilities').insert(input.capabilities.map((capability) => ({
             conversationId: input.id,
-            capabilityId: capability,
+            capability: capability,
           })));
         }
       }
@@ -61,6 +63,11 @@ const set = createCapability({
         }
       }
     })
+
+    const events = container.get(Events);
+    events.publish(historyUpdatedEvent, {
+      id: input.id,
+    });
 
     return { success: true };
   },

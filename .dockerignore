@@ -3,5 +3,5 @@ node_modules/
 dist/
 .env
 .gitignore
-packages/server/data/
+packages/demo/data/
 /docker-compose.yaml

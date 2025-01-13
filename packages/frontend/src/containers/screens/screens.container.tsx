@@ -8,30 +8,32 @@ const Screens = () => {
 
   return (
     <div className="h-full">
-      <div className="p-2 h-full flex flex-col">
-        <Tabs
-          size="sm"
-          selectedKey={selected}
-          onSelectionChange={(key) => setSelected(key.toString())}
-        >
-          {screens.map((screen) => (
-            <Tab
-              key={screen.id}
-              title={(
-                <div className="flex gap-2">
-                  {screen.title}
-                  <X
-                    size={16}
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      close(screen.id)
-                    }}
-                  />
-                </div>
-              )}
-            />
-          ))}
-        </Tabs>
+      <div className="p-2 h-full flex flex-col w-full">
+        <div className="flex justify-center w-full flex-shrink-0">
+          <Tabs
+            size="sm"
+            selectedKey={selected}
+            onSelectionChange={(key) => setSelected(key.toString())}
+          >
+            {screens.map((screen) => (
+              <Tab
+                key={screen.id}
+                title={(
+                  <div className="flex gap-2">
+                    {screen.title}
+                    <X
+                      size={16}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        close(screen.id)
+                      }}
+                    />
+                  </div>
+                )}
+              />
+            ))}
+          </Tabs>
+        </div>
 
         <div className="flex-1 h-full">
           {screens.map((screen) => (

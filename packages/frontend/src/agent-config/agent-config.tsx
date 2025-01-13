@@ -1,4 +1,4 @@
-import { AgentConfig as AgentConfigContextValue, AgentConfigProvider, useAgents, useCapabilities, useModels } from "@bitler/react";
+import { AgentConfigProvider, useAgentConfigContext, useAgents, useCapabilities, useModels } from "@bitler/react";
 import {
   Drawer,
   DrawerContent,
@@ -18,16 +18,21 @@ import { AgentConfigContext } from "./agent-config.context";
 import { useKeyboard } from "../hooks/hooks";
 import { Label } from "../components/base/label/label";
 
-type AgentConfigProps = AgentConfigContextValue & {
+type AgentConfigContextValue = ReturnType<typeof useAgentConfigContext>;
+
+type AgentConfigProps = {
   children?: ReactNode;
   disclosure: ReturnType<typeof useDisclosure>
+  context: AgentConfigContextValue;
 };
 
-const AgentConfig = ({ children, disclosure, ...agentConfig }: AgentConfigProps) => {
+const AgentConfigContainer = ({ children, disclosure, context }: AgentConfigProps) => {
   const { isOpen, onOpenChange, onOpen } = disclosure;
   const capabilities = useCapabilities();
   const agents = useAgents();
   const models = useModels();
+  const [agentConfig, setAgentConfig] = context;
+
 
   useKeyboard({
     key: 'p',
@@ -37,7 +42,7 @@ const AgentConfig = ({ children, disclosure, ...agentConfig }: AgentConfigProps)
 
   return (
     <AgentConfigContext.Provider value={disclosure}>
-      <AgentConfigProvider {...agentConfig}>
+      <AgentConfigProvider context={context}>
         {children}
         <Drawer isOpen={isOpen} onOpenChange={onOpenChange}>
           <DrawerContent>
@@ -48,7 +53,9 @@ const AgentConfig = ({ children, disclosure, ...agentConfig }: AgentConfigProps)
                   <Label title="Agent">
                     <Autocomplete
                       selectedKey={agentConfig.agent}
-                      onSelectionChange={agentConfig.setAgent as any}
+                      onSelectionChange={(value) => {
+                        setAgentConfig((prev) => ({ ...prev, agent: value?.toString() }))
+                      }}
                       items={agents}
                     >
                       {(item) => (
@@ -62,13 +69,17 @@ const AgentConfig = ({ children, disclosure, ...agentConfig }: AgentConfigProps)
                     <Textarea
                       minRows={1}
                       value={agentConfig.systemPrompt || ''}
-                      onChange={(e) => agentConfig.setSystemPrompt(e.target.value || undefined)}
+                      onChange={(e) => {
+                        setAgentConfig((prev) => ({ ...prev, systemPrompt: e.target.value }))
+                      }}
                     />
                   </Label>
                   <Label title="Model">
                     <Autocomplete
                       selectedKey={agentConfig.model}
-                      onSelectionChange={agentConfig.setModel as any}
+                      onSelectionChange={(value) => {
+                        setAgentConfig((prev) => ({ ...prev, model: value?.toString() }))
+                      }}
                       items={models}
                     >
                       {(item) => (
@@ -84,7 +95,7 @@ const AgentConfig = ({ children, disclosure, ...agentConfig }: AgentConfigProps)
                       getKey={(capability) => capability.kind}
                       selected={agentConfig.capabilities}
                       onSelectedChange={(capabilities) => {
-                        agentConfig.setCapabilities(capabilities)
+                        setAgentConfig((prev) => ({ ...prev, capabilities }));
                       }}
                     >
                       {(task) => (
@@ -100,7 +111,9 @@ const AgentConfig = ({ children, disclosure, ...agentConfig }: AgentConfigProps)
                       items={agents}
                       getKey={(agent) => agent.kind}
                       selected={agentConfig.agents}
-                      onSelectedChange={(agents) => agentConfig.setAgents(agents)}
+                      onSelectedChange={(agents) => {
+                        setAgentConfig((prev) => ({ ...prev, agents }));
+                      }}
                     >
                       {(agent) => (
                         <div>
@@ -112,15 +125,29 @@ const AgentConfig = ({ children, disclosure, ...agentConfig }: AgentConfigProps)
                   </Label>
                   <div className="flex">
                     <Label title="Discover capabilities">
-                      <Input type="number" value={agentConfig.discoverCapabilites?.toString() || '0'} onChange={(e) => agentConfig.setDiscoverCapabilities(parseInt(e.target.value))} />
+                      <Input
+                        type="number"
+                        value={agentConfig.discoverCapabilites?.toString() || '0'}
+                        onChange={(e) => {
+                          setAgentConfig((prev) => ({ ...prev, discoverCapabilites: parseInt(e.target.value) }))
+                        }}
+                      />
                     </Label>
                     <Label title="Discover agents">
-                      <Input type="number" value={agentConfig.discoverAgents?.toString() || '0'} onChange={(e) => agentConfig.setDiscoverAgents(parseInt(e.target.value))} />
+                      <Input
+                        type="number"
+                        value={agentConfig.discoverAgents?.toString() || '0'}
+                        onChange={(e) => {
+                          setAgentConfig((prev) => ({ ...prev, discoverAgents: parseInt(e.target.value) }))
+                        }}
+                      />
                     </Label>
                   </div>
                 </DrawerBody>
                 <DrawerFooter>
-                  <Button color="danger" variant="light" onPress={agentConfig.clear}>
+                  <Button color="danger" variant="light" onPress={() => {
+                    setAgentConfig({});
+                  }}>
                     Clear
                   </Button>
                 </DrawerFooter>
@@ -141,4 +168,4 @@ const useAgentConfigControls = () => {
   return context;
 };
 
-export { AgentConfig, useAgentConfigControls };
+export { AgentConfigContainer, useAgentConfigControls };

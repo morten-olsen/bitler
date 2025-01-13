@@ -5,7 +5,7 @@ import { dbConfig } from "../database/database.js";
 
 const list = createCapability({
   kind: 'history.list',
-  name: 'List conversaionts',
+  name: 'List conversations',
   group: 'History',
   description: 'List all conversations',
   input: z.object({

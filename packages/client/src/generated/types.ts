@@ -188,17 +188,6 @@ export interface BitlerServer {
         }[];
       };
     };
-    "custom-agents.capabilities": {
-      input: {};
-      output: {
-        capabilities: {
-          kind: string;
-          name: string;
-          group: string;
-          description?: string;
-        }[];
-      };
-    };
     "custom-agents.set": {
       input: {
         kind: string;
@@ -742,6 +731,12 @@ export interface BitlerServer {
     | "signal"
     | string;
   events: {
+    "history.updated": {
+      input: {};
+      output: {
+        id: string;
+      };
+    };
     "timer.created": {
       input: {};
       output: {

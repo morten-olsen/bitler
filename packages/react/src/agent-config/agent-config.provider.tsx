@@ -1,13 +1,14 @@
 import React, { ReactNode } from "react";
-import { AgentConfigContext, AgentConfig } from "./agent-config.hooks.js";
+import { AgentConfigContext, AgentConfigType } from "./agent-config.hooks.js";
 
-type AgentConfigProviderProps = AgentConfig & {
+type AgentConfigProviderProps = {
   children: ReactNode;
+  context: AgentConfigType;
 }
 
-const AgentConfigProvider = ({ children, ...rest }: AgentConfigProviderProps) => {
+const AgentConfigProvider = ({ children, context }: AgentConfigProviderProps) => {
   return (
-    <AgentConfigContext.Provider value={rest}>
+    <AgentConfigContext.Provider value={context}>
       {children}
     </AgentConfigContext.Provider>
   );

@@ -29,9 +29,6 @@
       "path": "./extensions/signal"
     },
     {
-      "path": "./packages/server"
-    },
-    {
       "path": "./packages/cli"
     },
     {

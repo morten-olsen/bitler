@@ -1,17 +1,63 @@
-import { useMutation } from "@tanstack/react-query";
-import React, { createContext, ReactNode, useState } from "react";
-import { nanoid } from "nanoid";
-import { CapabilityInput, DefaultServer, useAgentConfigContext } from "../exports.js";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import React, { createContext, ReactNode, useEffect, useState } from "react";
+import { CapabilityInput, DefaultServer, useAgentConfigContext, useEventEffect, useRunCapabilityMutation, useRunCapabilityQuery } from "../exports.js";
 import { useClientContext } from "../client/client.context.js";
 
 type PromptInput = CapabilityInput<DefaultServer, 'builtin.prompt'>;
 type DialogMessage = Exclude<PromptInput['dialog'], undefined>[number]
 
-const useDialog = (agentConfig: ReturnType<typeof useAgentConfigContext>) => {
-  const [id, setId] = useState(nanoid());
+const useConversationHistory = () => {
+  const queryClient = useQueryClient();
+  const conversations = useRunCapabilityQuery('history.list', {}, {
+    queryKey: ['history.list'],
+  });
+
+  useEventEffect(
+    'history.updated',
+    {},
+    () => {
+      queryClient.invalidateQueries({
+        queryKey: ['history.list'],
+      });
+    },
+    []
+  );
+
+  return conversations;
+}
+
+type UseDialogOptiops = {
+  agentContext?: ReturnType<typeof useAgentConfigContext>;
+}
+const useDialog = (id: string, options: UseDialogOptiops) => {
   const { client } = useClientContext();
+  const parentContent = useAgentConfigContext();
+  const [agentConfig, setAgentConfig] = options?.agentContext || parentContent;
   const [messages, setMessages] = useState<(DialogMessage & { isLoading?: boolean })[]>([]);
   const [context, setContext] = useState<Record<string, unknown>>({});
+
+  const getHistory = useRunCapabilityMutation('history.get', {});
+
+  useEffect(
+    () => {
+      if (!id) return;
+      getHistory.mutate({ id }, {
+        onSuccess: (data) => {
+          console.log('data', data);
+          setMessages(data.messages as any);
+          setAgentConfig({
+            agent: data.agent,
+            systemPrompt: data.systemPrompt,
+            capabilities: data.capabilities,
+            agents: data.agents,
+            discoverAgents: data.discoverAgents,
+            discoverCapabilites: data.discoverCapabilies,
+          })
+        },
+      });
+    },
+    []
+  )
 
   const promptMutate = useMutation({
     mutationFn: async (body: CapabilityInput<DefaultServer, 'builtin.prompt'>) => {
@@ -27,6 +73,7 @@ const useDialog = (agentConfig: ReturnType<typeof useAgentConfigContext>) => {
         conversationId: id,
         ...body,
       };
+      console.log('config', config);
       setMessages((prev) => [...prev, { role: 'user', content: body.prompt }]);
       setMessages((prev) => [...prev, { role: 'assistant', content: '', isLoading: true }]);
       const { capabilities } = client;
@@ -68,4 +115,4 @@ const DialogProvider = ({ children, ...context }: DialogProviderProps) => {
   );
 }
 
-export { useDialog, DialogProvider };
+export { useDialog, useConversationHistory, DialogProvider };

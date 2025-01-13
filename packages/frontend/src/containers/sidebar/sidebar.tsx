@@ -1,98 +1,88 @@
-import { ChevronRight, ChevronLeft, ListVideo, Library, Signpost, Database, MessagesSquare, Plus } from 'lucide-react';
-import { motion } from 'framer-motion';
-import { SidebarItem } from "./sidebar.item";
-import { useState } from 'react';
+import { ListVideo, Library, Signpost, Database, MessagesSquare, Plus } from 'lucide-react';
 import { useOpenScreen } from '../screens/screens.hooks';
 import { Dialog } from '../dialog/dialog';
 import { Timers } from '../timers/timers';
 import { Capabilities } from '../capbilites/capabilites';
+import { Listbox, ListboxItem, ListboxSection } from '@nextui-org/react';
+import { nanoid } from 'nanoid';
+import { Conversations } from '../conversations/conversations';
 
 const Sidebar = () => {
-  const [expanded, setExpanded] = useState(false);
   const openScreen = useOpenScreen();
-  const ExpandIcon = expanded ? ChevronLeft : ChevronRight;
   return (
-    <motion.div
-      className="h-full border-default-100 border-r-1 px-4 pt-10 pb-4"
-      animate={{
-        width: expanded ? 250 : 74
-      }}
+    <div
+      className="h-full flex flex-col border-default-100 border-r-1 px-4 pt-10 pb-4"
     >
-      <motion.div
-        className="h-full flex flex-col items-start gap-6"
-        animate={{
-          alignItems: expanded ? 'flex-start' : 'center'
-        }}
-      >
-        <SidebarItem
-          expanded={expanded}
-          title="New conversation"
-          description="Start a new conversation"
-          icon={Plus}
-          onPress={() => openScreen(Dialog, {
-            title: 'New conversation',
-            focus: true,
-            props: {},
-          })}
-        />
-        <div className="h-4" />
-        <SidebarItem
-          expanded={expanded}
-          title="Receptionist"
-          description="Find the expert you need"
-          icon={Signpost}
-          onPress={() => openScreen(Dialog, {
-            title: 'Receptionist',
-            focus: true,
-            props: {
-              userIntro: 'Hi there! I\'m your digital assistant. I can connect you with specialized experts for different topics. Please describe what you need help with, and I\'ll create a new conversation with the right expert.',
-              initialAgentConfig: {
-                agent: 'builtin.receptionist',
+      <Listbox>
+        <ListboxSection title="Conversations" showDivider>
+          <ListboxItem
+            description="Start a new conversation"
+            startContent={<Plus />}
+            onPress={() => openScreen(Dialog, {
+              title: 'New conversation',
+              focus: true,
+              props: {
+                id: nanoid(),
               },
-            },
-          })}
-        />
-        <div className="h-4" />
-        <SidebarItem
-          expanded={expanded}
-          title="Capabilities"
-          description="Run you capabilities"
-          icon={ListVideo}
-          onPress={() => openScreen(Capabilities, {
-            id: 'capabilities',
-            title: 'Capabilities',
-            focus: true,
-            props: {},
-          })}
-        />
-        <SidebarItem
-          expanded={expanded}
-          title="Knowledge bases"
-          description="Manage your knowledge bases"
-          icon={Library}
-        />
-        <SidebarItem
-          expanded={expanded}
-          title="Databases"
-          description="Manage your databases"
-          icon={Database}
-        />
-        <SidebarItem
-          expanded={expanded}
-          title="History"
-          description="Manage your conversations"
-          icon={MessagesSquare}
-        />
-        <div className="flex-1" />
-        <Timers />
-        <div>
-          <ExpandIcon
-            className="w-8 h-8 cursor-pointer"
-            onClick={() => setExpanded(!expanded)}
+            })}
+          >
+            New conversation
+          </ListboxItem>
+          <ListboxItem
+            title="Receptionist"
+            description="Find the expert you need"
+            startContent={<Signpost />}
+            onPress={() => openScreen(Dialog, {
+              title: 'Receptionist',
+              focus: true,
+              props: {
+                id: nanoid(),
+                userIntro: 'Hi there! I\'m your digital assistant. I can connect you with specialized experts for different topics. Please describe what you need help with, and I\'ll create a new conversation with the right expert.',
+                initialAgentConfig: {
+                  agent: 'builtin.receptionist',
+                },
+              },
+            })}
           />
-        </div>
-      </motion.div>
-    </motion.div>
+          <ListboxItem
+            title="History"
+            description="Manage your conversations"
+            startContent={<MessagesSquare />}
+            onPress={() => openScreen(Conversations, {
+              id: 'conversations',
+              title: 'Conversations',
+              focus: true,
+              props: {},
+            })}
+          />
+        </ListboxSection>
+        <ListboxSection title="Tools" showDivider>
+          <ListboxItem
+            title="Capabilities"
+            description="Run you capabilities"
+            startContent={<ListVideo />}
+            onPress={() => openScreen(Capabilities, {
+              id: 'capabilities',
+              title: 'Capabilities',
+              focus: true,
+              props: {},
+            })}
+          />
+          <ListboxItem
+            title="Knowledge bases"
+            description="Manage your knowledge bases"
+            startContent={<Library />}
+          />
+          <ListboxItem
+            title="Databases"
+            description="Manage your databases"
+            startContent={<Database />}
+          />
+        </ListboxSection>
+      </Listbox>
+      <div className="flex-1" />
+      <Timers />
+    </div >
   )
 }
 

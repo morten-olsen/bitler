@@ -1,22 +1,27 @@
-import { AgentConfigValues, useAgentConfig, useDialog } from "@bitler/react"
+import { AgentConfig, useAgentConfig, useDialog } from "@bitler/react"
 import { Button, Textarea, useDisclosure } from "@nextui-org/react";
 import { Cog, Send } from 'lucide-react';
 import { AnimatePresence } from 'framer-motion';
 import { useCallback, useRef, useState } from "react";
-import { AgentConfig } from "../../agent-config/agent-config";
 import { useKeyboard } from "../../hooks/hooks";
 import { useOpenScreen } from "../screens/screens.hooks";
 import { DialogMessage } from "./dialog.message";
+import { nanoid } from "nanoid";
+import { AgentConfigContainer } from "../../agent-config/agent-config";
 
 type DialogProps = {
-  initialAgentConfig?: AgentConfigValues;
+  initialAgentConfig?: AgentConfig;
   userIntro?: string;
+  id: string;
 };
-const Dialog = ({ initialAgentConfig, userIntro }: DialogProps) => {
+const Dialog = ({ initialAgentConfig, userIntro, id }: DialogProps) => {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const contentAreaRef = useRef<HTMLDivElement>(null);
-  const agentConfig = useAgentConfig(initialAgentConfig);
-  const dialog = useDialog(agentConfig);
+  const agentConfigContext = useAgentConfig(initialAgentConfig);
+  const [agentConfig, setAgentConfig] = agentConfigContext;
+  const dialog = useDialog(id, {
+    agentContext: agentConfigContext,
+  });
   const [input, setInput] = useState<string>('');
   const disclosure = useDisclosure();
   const openScreen = useOpenScreen();
@@ -37,13 +42,19 @@ const Dialog = ({ initialAgentConfig, userIntro }: DialogProps) => {
           const { actionRequests = [] } = result || {};
           for (const { kind, value } of actionRequests) {
             if (kind === 'builtin.add-capabilities') {
-              agentConfig.setCapabilities([...agentConfig.capabilities, ...value as any]);
+              setAgentConfig((agentConfig) => {
+                return {
+                  ...agentConfig,
+                  capabilities: [...(agentConfig.capabilities || []), ...value as any],
+                }
+              });
             }
             if (kind === 'builtin.create-dialog') {
               const { title, capabilities, systemPrompt, userIntro } = value as any;
               openScreen(Dialog, {
                 title,
                 props: {
+                  id: nanoid(),
                   userIntro,
                   initialAgentConfig: {
                     capabilities,
@@ -61,7 +72,7 @@ const Dialog = ({ initialAgentConfig, userIntro }: DialogProps) => {
         }
       });
     },
-    [agentConfig]
+    [agentConfig, input]
   )
 
   useKeyboard({
@@ -78,7 +89,7 @@ const Dialog = ({ initialAgentConfig, userIntro }: DialogProps) => {
   return (
     <div className="h-full">
       <div className="p-2 max-w-4xl mx-auto h-full flex flex-col">
-        <AgentConfig disclosure={disclosure} {...agentConfig}>
+        <AgentConfigContainer disclosure={disclosure} context={agentConfigContext}>
           <div className="flex-1 bg-slate-00 p-12 overflow-y-scroll" ref={contentAreaRef}>
             <div className="flex flex-col gap-4">
               <AnimatePresence>
@@ -102,7 +113,7 @@ const Dialog = ({ initialAgentConfig, userIntro }: DialogProps) => {
               ref={textAreaRef}
               isDisabled={dialog.isLoading}
               placeholder="Type a message..."
-              className="flex-1" minRows={1} value={input} onChange={(e) => setInput(e.target.value)} />
+              className="flex-1" minRows={1} value={input} onValueChange={setInput} />
             <Button
               isLoading={dialog.isLoading}
               isIconOnly
@@ -115,7 +126,7 @@ const Dialog = ({ initialAgentConfig, userIntro }: DialogProps) => {
               <Cog />
             </Button>
           </div>
-        </AgentConfig>
+        </AgentConfigContainer>
       </div>
     </div>
   );

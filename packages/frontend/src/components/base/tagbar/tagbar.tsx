@@ -1,7 +1,5 @@
-import { Combobox, ComboboxInput, ComboboxOption, ComboboxOptions } from '@headlessui/react'
 import { useCallback, useMemo, useState } from "react";
-import clsx from 'clsx'
-import { Chip } from '@nextui-org/react';
+import { Autocomplete, AutocompleteItem, Chip } from '@nextui-org/react';
 
 type TagbarProps<T> = {
   selected?: string[];
@@ -12,7 +10,7 @@ type TagbarProps<T> = {
   children: (item: T) => React.ReactNode;
 };
 
-function Tagbar<T>({ selected, onSelectedChange, filter, items, getKey, children }: TagbarProps<T>) {
+function Tagbar<T extends object>({ selected, onSelectedChange, filter, items, getKey, children }: TagbarProps<T>) {
   const [inputValue, setInputValue] = useState('');
 
   const selectedItems = useMemo(
@@ -45,18 +43,22 @@ function Tagbar<T>({ selected, onSelectedChange, filter, items, getKey, children
   );
 
   const onSelect = useCallback(
-    (key: T | null) => {
+    (key: string | null) => {
       if (!key) {
         return;
       }
       setInputValue('');
-      onSelectedChange?.([...new Set([...(selected || []), getKey(key)])])
+      onSelectedChange?.([...new Set([...(selected || []), key])])
     },
     [onSelectedChange, selected],
   );
 
   return (
-    <div className="flex flex-wrap gap-1">
+    <div className="flex flex-wrap gap-1"
+      onPointerDown={(evt) => evt.stopPropagation()}
+      onMouseDown={(evt) => evt.stopPropagation()}
+      onClick={(evt) => evt.stopPropagation()}
+    >
       {selectedItems.map((item) => (
         <Chip
           className="h-12 rounded-lg"
@@ -69,37 +71,23 @@ function Tagbar<T>({ selected, onSelectedChange, filter, items, getKey, children
           {children(item)}
         </Chip>
       ))}
-      <Combobox value={selected} onChange={onSelect as any} immediate onClose={() => setInputValue('')}>
-        <div className="relative">
-          <ComboboxInput
-            className={clsx(
-              'w-full rounded-lg border-none bg-default-50 py-1.5 pr-8 pl-3 text-sm/6',
-              'focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25'
-            )}
-            placeholder="Select..."
-            displayValue={() => ''}
-            onChange={(event) => setInputValue(event.target.value)}
-          />
-        </div>
-        <ComboboxOptions
-          anchor="bottom"
-          transition
-          className={clsx(
-            'rounded-xl border border-black/5 bg-default-100 p-1 z-[10000]',
-            // 'transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0'
-          )}
-        >
-          {filtered.map((item) => (
-            <ComboboxOption
-              key={getKey(item)}
-              value={item}
-              className="group flex cursor-default items-center gap-2 rounded-lg py-1.5 px-3 select-none data-[focus]:bg-primary-100"
-            >
-              <div>{children(item)}</div>
-            </ComboboxOption>
-          ))}
-        </ComboboxOptions>
-      </Combobox >
+      <Autocomplete
+        className="max-w-xs"
+        value={inputValue}
+        onValueChange={(value) => setInputValue(value)}
+        items={filtered}
+        onSelectionChange={(item) => {
+          onSelect(item as any);
+        }}
+      >
+        {(item) => (
+          <AutocompleteItem
+            key={getKey(item)}
+          >
+            {children(item)}
+          </AutocompleteItem>
+        )}
+      </Autocomplete>
     </div >
   );
 }
