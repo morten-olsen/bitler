@@ -12,7 +12,7 @@ const knowledgeBases = createExtension({
       createKnowledgeBaseCapability,
       addDocumentCapability,
       searchDocuments,
-    ])
+    ]);
   },
 });
 

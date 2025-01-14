@@ -11,6 +11,7 @@ export * from './action-requests/action-requests.js';
 export * from './capabilities/capabilities.js';
 export * from './session/session.js';
 export * from './events/events.js';
+export * from './files/files.js';
 export * from 'zod';
 export * from './configs/configs.js';
 export { excludeUndefined } from './utils/basic.js'

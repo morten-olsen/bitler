@@ -35,7 +35,6 @@ class Databases {
     const dataLocation = resolve(process.env.DATA_DIR || './data');
     const location = join(dataLocation, 'databases', options.name);
     await mkdir(location, { recursive: true });
-    const schemaSafeName = options.name.replace(/[^a-zA-Z0-9]/g, '_');
 
     const pglite =
       new PGlite({

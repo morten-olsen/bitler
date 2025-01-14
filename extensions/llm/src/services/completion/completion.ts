@@ -107,7 +107,10 @@ class Completion {
     const capabilities = capabilityService.get([
       ...(options.capabilities || []),
       ...(agent?.capabilities || []),
-      ...(await capabilityService.find(options.prompt, options.discoverCapabilities || 0)).map((result) => result.capability.kind),
+      ...(await capabilityService.find({
+        query: options.prompt,
+        limit: options.discoverCapabilities || 0
+      })).map((result) => result.capability.kind),
     ]);
     return capabilities;
   }

@@ -7,15 +7,14 @@ type SearchSpecificDocumentsInput = {
   name: string;
 };
 
-const searchDocuments = createCapability({
-  kind: `knowledge-base.search-documents`,
+const searchSpecificDocuments = (options: SearchSpecificDocumentsInput) => createCapability({
+  kind: `knowledge-base.search-documents.${options.id}`,
   name: 'Search documents',
-  group: `Knowledge Base`,
+  group: `${options.name} Knowledge Base`,
   description: 'Search documents',
   input: z.object({
     query: z.string(),
     limit: z.number().optional(),
-    knowledgeBaseIds: z.array(z.string()),
   }),
   output: z.object({
     documents: z.array(z.object({
@@ -45,12 +44,9 @@ const searchDocuments = createCapability({
         'chunks.*',
         db.raw(`embedding <-> '${vector.toSql()}' as distance`),
       ])
+      .where('knowledgeBaseId', options.id)
       .limit(limit)
       .orderByRaw(`embedding <-> '${vector.toSql()}'`);
-
-    if (input.knowledgeBaseIds) {
-      query = query.where('knowledgeBaseId', input.knowledgeBaseIds)
-    }
 
     const chunks = await query;
 
@@ -79,4 +75,4 @@ const searchDocuments = createCapability({
   }
 })
 
-export { searchDocuments };
+export { searchSpecificDocuments };

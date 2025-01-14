@@ -10,6 +10,7 @@ import { eventsPlugin } from "./routes/routes.events.js";
 import { builtIn, Extension, Extensions } from "../exports.js";
 import { resolve } from "path";
 import fastifyStatic from "@fastify/static";
+import { filesPlugin } from "./routes/routes.files.js";
 
 type CreateOptions = {
   setup?: (app: fastify.FastifyInstance) => Promise<void>;
@@ -53,6 +54,7 @@ class Server {
     await app.register(capabilitiesPlugin, { prefix: '/api/capabilities' });
     await app.register(schemasPlugin, { prefix: '/api/schemas' });
     await app.register(eventsPlugin, { prefix: '/api/events' });
+    await app.register(filesPlugin, { prefix: '/api/files' });
 
     if (setup) {
       await setup(app);

@@ -26,7 +26,9 @@ class Agents extends EventEmitter<AgentsEvents> {
         'Description:',
         agent.description,
       ].join('\n');
-      const [vector] = await extractor.extract([description]);
+      const [vector] = await extractor.extract({
+        input: [description]
+      });
       this.#agentsVectors.set(agent, vector);
     }
     const vector = this.#agentsVectors.get(agent);
@@ -63,7 +65,9 @@ class Agents extends EventEmitter<AgentsEvents> {
       return [];
     }
     const extractor = this.#container.get(FeatureExtractor);
-    const [queryVector] = await extractor.extract([query]);
+    const [queryVector] = await extractor.extract({
+      input: [query]
+    });
     const results = await Promise.all(
       Array.from(this.#agents).map(async (agent) => {
         await this.#getVector(agent);
