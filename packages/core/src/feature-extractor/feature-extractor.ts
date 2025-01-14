@@ -31,43 +31,59 @@ class Vector {
   }
 }
 
-class FeatureExtractor {
-  #extratorPromise?: Promise<FeatureExtractionPipeline>;
+type ExtractOptions = {
+  input: string[];
+  model?: string;
+}
 
-  #setupExctractor = async () => {
-    const extractor = await pipeline('feature-extraction', 'Xenova/all-MiniLM-L6-v2', {
-      dtype: 'q8',
+type Extractor = {
+  extractor: FeatureExtractionPipeline;
+  dimensions: number;
+}
+
+class FeatureExtractor {
+  #extractors: Map<string, Promise<Extractor>> = new Map();
+
+  #setupExctractor = async (model: string) => {
+    const extractor = await pipeline('feature-extraction', model, {
     });
+    const { config } = extractor.model;
+    if (!('hidden_size' in config) || typeof config.hidden_size !== 'number') {
+      throw new Error('Invalid model configuration');
+    }
+    return {
+      extractor,
+      dimensions: config.hidden_size,
+    }
+  };
+
+  #getExtractor = async (name: string) => {
+    if (!this.#extractors.has(name)) {
+      this.#extractors.set(name, this.#setupExctractor(name));
+    }
+    const extractor = await this.#extractors.get(name);
+    if (!extractor) {
+      throw new Error('Extractor not found');
+    }
+
     return extractor;
   };
 
-  #getExtractor = async () => {
-    if (!this.#extratorPromise) {
-      this.#extratorPromise = this.#setupExctractor();
-    }
-    return this.#extratorPromise;
-  };
-
-  public extract = async (input: string[]) => {
-    const extractor = await this.#getExtractor();
+  public extract = async (options: ExtractOptions) => {
+    const { input, model = 'mixedbread-ai/mxbai-embed-large-v1' } = options;
+    const { extractor, dimensions } = await this.#getExtractor(model);
     const output = await extractor(input, { pooling: 'cls' });
-    return output.tolist().map((v: any) => new Vector(v, FeatureExtractor.dimentions));
+    return output.tolist().map((v: any) => new Vector(v, dimensions));
   };
 
-  public get dimentions() {
-    return FeatureExtractor.dimentions;
+  public getDimensions = async (model: string) => {
+    const { dimensions } = await this.#getExtractor(model);
+    return dimensions;
   }
 
-  public get FieldType() {
-    return FeatureExtractor.FieldType;
-  }
-
-  static get dimentions() {
-    return 384;
-  }
-
-  static get FieldType() {
-    return `vector(FeatureExtractor, ${FeatureExtractor.dimentions})`;
+  public getFieldType = async (model: string) => {
+    const dimensions = await this.getDimensions(model);
+    return `vector(${dimensions})`;
   }
 }
 

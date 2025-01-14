@@ -4,11 +4,15 @@ import { vector } from '@electric-sql/pglite/vector';
 import ClientPgLite from 'knex-pglite';
 import { join, resolve } from "path";
 import { mkdir } from 'fs/promises';
+import { Container } from "../container/container.js";
 
+type MigrationOptions = {
+  container: Container;
+}
 type DatabaseMigration = {
   name: string;
-  up: (knex: Knex) => Promise<void>;
-  down: (knex: Knex) => Promise<void>;
+  up: (knex: Knex, options: MigrationOptions) => Promise<void>;
+  down: (knex: Knex, options: MigrationOptions) => Promise<void>;
 }
 
 type DatabaseOptions = {
@@ -20,12 +24,18 @@ const createDatabase = (options: DatabaseOptions) => options;
 const createMigration = (options: DatabaseMigration) => options;
 
 class Databases {
+  #container: Container;
   #dbs: Map<string, Promise<Knex>> = new Map();
+
+  constructor(container: Container) {
+    this.#container = container;
+  }
 
   #setup = async (options: DatabaseOptions) => {
     const dataLocation = resolve(process.env.DATA_DIR || './data');
     const location = join(dataLocation, 'databases', options.name);
     await mkdir(location, { recursive: true });
+    const schemaSafeName = options.name.replace(/[^a-zA-Z0-9]/g, '_');
 
     const pglite =
       new PGlite({
@@ -38,16 +48,25 @@ class Databases {
     const migrationSource: Knex.MigrationSource<DatabaseMigration> = {
       getMigrations: async () => options.migrations,
       getMigrationName: (migration) => migration.name,
-      getMigration: async (migration) => migration,
+      getMigration: async (migration) => ({
+        name: migration.name,
+        up: async (knex: Knex) => {
+          await migration.up(knex, { container: this.#container });
+        },
+        down: async (knex: Knex) => {
+          await migration.down(knex, { container: this.#container });
+        }
+      }),
     };
 
     const db = knex({
       client: ClientPgLite,
       dialect: 'postgres',
+      //searchPath: [schemaSafeName],
       connection: { pglite } as any,
     });
 
-    await db.raw(`CREATE EXTENSION IF NOT EXISTS vector;`);
+    await db.raw(`CREATE EXTENSION IF NOT EXISTS vector`);
     await db.migrate.latest({
       migrationSource,
     });

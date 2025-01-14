@@ -8,6 +8,9 @@
       "path": "./extensions/llm"
     },
     {
+      "path": "./extensions/knowledge-bases"
+    },
+    {
       "path": "./extensions/json-documents"
     },
     {

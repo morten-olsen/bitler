@@ -1,4 +1,5 @@
 import { ActionRequests, Capabilities, ContextItems, createExtension, Events } from '@bitler/core';
+import { Agents } from './services/agents/agents.js';
 import { addCapabilitiesRequest } from './action-requests/capabilities.js';
 import { createDialogRequest } from './action-requests/create-dialog.js';
 import { historySetCapability } from './capabilities/history/history.set.js';
@@ -11,6 +12,7 @@ import { completionPromptDialog } from './capabilities/completion/prompt.js';
 import { agentsList } from './capabilities/agents/agents.list.js';
 import { historyUpdatedEvent } from './events/history/history.updated.js';
 import { capabilitiesContext } from './contexts/capabilites.js';
+import { receptionistAgent } from './agents/recepionist.js';
 
 const llm = createExtension({
   setup: async ({ container }) => {
@@ -40,6 +42,11 @@ const llm = createExtension({
     actionRequestsService.register([
       addCapabilitiesRequest,
       createDialogRequest,
+    ]);
+
+    const agentsService = container.get(Agents);
+    agentsService.register([
+      receptionistAgent,
     ]);
   },
 })

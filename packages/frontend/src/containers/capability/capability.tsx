@@ -1,8 +1,8 @@
 import { useCapability } from "@bitler/react";
-import Editor from '@monaco-editor/react';
 import { Button } from "@nextui-org/react";
 import { useCallback, useState } from "react";
 import YAML from 'yaml';
+import { Editor } from "../../components/editor/editor";
 
 type CapabilityProps = {
   kind: string;

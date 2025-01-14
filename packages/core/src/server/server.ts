@@ -7,10 +7,9 @@ import { Container } from "../container/container.js";
 import { capabilitiesPlugin } from "./routes/routes.capabilities.js";
 import { schemasPlugin } from "./routes/routes.schema.js";
 import { eventsPlugin } from "./routes/routes.events.js";
-import { Capabilities, Extension, Extensions } from "../exports.js";
+import { builtIn, Extension, Extensions } from "../exports.js";
 import { resolve } from "path";
 import fastifyStatic from "@fastify/static";
-import { listCapabilities } from "../built-in/capabilites.js";
 
 type CreateOptions = {
   setup?: (app: fastify.FastifyInstance) => Promise<void>;
@@ -75,12 +74,11 @@ const setupServer = async ({
   container = new Container(),
 }: Configuration) => {
 
-  const capabilitiesService = container.get(Capabilities);
-  capabilitiesService.register([
-    listCapabilities,
-  ]);
   const extensionsService = container.get(Extensions);
-  await extensionsService.register(extensions);
+  await extensionsService.register([
+    builtIn,
+    ...extensions
+  ]);
   const server = container.get(Server);
   const app = await server.create({
     setup: async (app) => {

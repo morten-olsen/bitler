@@ -27,9 +27,10 @@ const useConversationHistory = () => {
 }
 
 type UseDialogOptiops = {
+  id?: string;
   agentContext?: ReturnType<typeof useAgentConfigContext>;
 }
-const useDialog = (id: string, options: UseDialogOptiops) => {
+const useDialog = (options: UseDialogOptiops) => {
   const { client } = useClientContext();
   const parentContent = useAgentConfigContext();
   const [agentConfig, setAgentConfig] = options?.agentContext || parentContent;
@@ -40,8 +41,8 @@ const useDialog = (id: string, options: UseDialogOptiops) => {
 
   useEffect(
     () => {
-      if (!id) return;
-      getHistory.mutate({ id }, {
+      if (!options.id) return;
+      getHistory.mutate({ id: options.id }, {
         onSuccess: (data) => {
           console.log('data', data);
           setMessages(data.messages as any);
@@ -56,7 +57,7 @@ const useDialog = (id: string, options: UseDialogOptiops) => {
         },
       });
     },
-    []
+    [options.id]
   )
 
   const promptMutate = useMutation({
@@ -70,7 +71,7 @@ const useDialog = (id: string, options: UseDialogOptiops) => {
         discoverAgents: agentConfig.discoverAgents,
         systemPrompt: agentConfig.systemPrompt,
         context,
-        conversationId: id,
+        conversationId: options.id,
         ...body,
       };
       console.log('config', config);

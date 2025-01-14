@@ -8,10 +8,12 @@ import { game } from '@bitler/game';
 import { signal } from '@bitler/signal';
 import { jsonDocuments } from '@bitler/json-documents';
 import { llm } from '@bitler/llm';
+import { knowledgeBases } from '@bitler/knowledge-bases';
 
 const config: Configuration = {
   extensions: [
     llm,
+    knowledgeBases,
     timers,
     game,
     jsonDocuments,

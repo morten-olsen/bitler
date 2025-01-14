@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@bitler/llm": "workspace:*",
+    "@bitler/knowledge-bases": "workspace:*",
     "@bitler/cli": "workspace:*",
     "@bitler/core": "workspace:*",
     "@bitler/frontend": "workspace:*",

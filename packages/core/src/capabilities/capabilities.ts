@@ -14,6 +14,11 @@ type CapabilitiesEvents = {
   registered: (capabilites: Capability<any, any>[]) => void;
 }
 
+type FindCapabilityOptions = {
+  query: string;
+  limit?: number;
+}
+
 type CapabilityRunOptions<TInput extends ZodSchema, TOutput extends ZodSchema> = {
   capability: Capability<TInput, TOutput>;
   input: z.infer<TInput>;
@@ -41,7 +46,9 @@ class Capabilities extends EventEmitter<CapabilitiesEvents> {
         'Description:',
         capability.description,
       ].join('\n');
-      const [vector] = await extractor.extract([description]);
+      const [vector] = await extractor.extract({
+        input: [description]
+      });
       this.#capabilitiesVector.set(capability, vector);
     }
     const vector = this.#capabilitiesVector.get(capability);
@@ -88,12 +95,15 @@ class Capabilities extends EventEmitter<CapabilitiesEvents> {
     return parsed.success ? parsed.data : result;
   }
 
-  public find = async (query: string, limit: number = 5) => {
+  public find = async (options: FindCapabilityOptions) => {
+    const { query, limit = 5 } = options;
     if (limit === 0) {
       return [];
     }
     const extractor = this.#container.get(FeatureExtractor);
-    const [queryVector] = await extractor.extract([query]);
+    const [queryVector] = await extractor.extract({
+      input: [query],
+    });
     const results = await Promise.all(
       Array.from(this.#capabilities).map(async (capability) => {
         await this.#getVector(capability);

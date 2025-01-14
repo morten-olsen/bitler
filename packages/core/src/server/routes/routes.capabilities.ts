@@ -57,12 +57,17 @@ const capabilitiesPlugin: FastifyPluginAsyncZod = async (app) => {
         return httpErrors.notFound('Capability not found');
       }
       const params = capability.input.parse(input);
-      const result = await capabilitiesService.run({
-        capability,
-        input: params,
-        session,
-      });
-      await reply.send(result);
+      try {
+        const result = await capabilitiesService.run({
+          capability,
+          input: params,
+          session,
+        });
+        await reply.send(result);
+      } catch (error) {
+        console.error(error);
+        throw error;
+      }
     },
   })
 };

@@ -36,7 +36,6 @@ const Sidebar = () => {
               title: 'Receptionist',
               focus: true,
               props: {
-                id: nanoid(),
                 userIntro: 'Hi there! I\'m your digital assistant. I can connect you with specialized experts for different topics. Please describe what you need help with, and I\'ll create a new conversation with the right expert.',
                 initialAgentConfig: {
                   agent: 'builtin.receptionist',

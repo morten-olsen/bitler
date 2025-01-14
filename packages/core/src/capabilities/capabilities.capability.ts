@@ -4,6 +4,7 @@ import { ContextSetup } from "../contexts/contexts.setup.js";
 import { Context } from "../contexts/contexts.context.js";
 import { ActionRequestInstance } from "../action-requests/action-requests.instance.js";
 import { Session } from "../session/session.js";
+import { ConfigItem } from "../exports.js";
 
 type CapabilityHandlerOptions<TInput extends ZodSchema> = {
   input: z.infer<TInput>;
@@ -24,6 +25,7 @@ type Capability<
   kind: string;
   name: string;
   group: string;
+  configs?: ConfigItem<any>[];
   description: string;
   agentDescription?: string;
   setup?: ContextSetup[];

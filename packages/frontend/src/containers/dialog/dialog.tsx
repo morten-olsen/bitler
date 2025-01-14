@@ -12,14 +12,15 @@ import { AgentConfigContainer } from "../../agent-config/agent-config";
 type DialogProps = {
   initialAgentConfig?: AgentConfig;
   userIntro?: string;
-  id: string;
+  id?: string;
 };
 const Dialog = ({ initialAgentConfig, userIntro, id }: DialogProps) => {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const contentAreaRef = useRef<HTMLDivElement>(null);
   const agentConfigContext = useAgentConfig(initialAgentConfig);
   const [agentConfig, setAgentConfig] = agentConfigContext;
-  const dialog = useDialog(id, {
+  const dialog = useDialog({
+    id,
     agentContext: agentConfigContext,
   });
   const [input, setInput] = useState<string>('');
@@ -54,7 +55,6 @@ const Dialog = ({ initialAgentConfig, userIntro, id }: DialogProps) => {
               openScreen(Dialog, {
                 title,
                 props: {
-                  id: nanoid(),
                   userIntro,
                   initialAgentConfig: {
                     capabilities,

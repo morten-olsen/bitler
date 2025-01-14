@@ -10,6 +10,10 @@ class ActionRequests {
     });
   }
 
+  public get = (kind: string) => {
+    return Array.from(this.#actionRequests).find((actionRequest) => actionRequest.kind === kind);
+  }
+
   public create = () => {
     return new ActionRequestInstance();
   }
