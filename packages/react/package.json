@@ -1,0 +1,24 @@
+{
+  "name": "@bitlerjs/react",
+  "version": "1.0.0",
+  "main": "dist/exports.js",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc --build",
+    "dev": "tsc --build --watch"
+  },
+  "devDependencies": {
+    "@bitlerjs/configs": "workspace:*",
+    "@types/react": "^18.3.18",
+    "react": "^18.3.1",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "@bitlerjs/client": "workspace:*",
+    "@tanstack/react-query": "4",
+    "nanoid": "^5.0.9"
+  }
+}

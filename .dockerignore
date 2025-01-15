@@ -1,0 +1,7 @@
+.turbo/
+node_modules/
+dist/
+.env
+.gitignore
+packages/demo/data/
+/docker-compose.yaml

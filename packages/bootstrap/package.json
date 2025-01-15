@@ -1,0 +1,26 @@
+{
+  "name": "@bitlerjs/bootstrap",
+  "version": "1.0.0",
+  "main": "dist/exports.js",
+  "type": "module",
+  "files": [
+    "dist",
+    "bin"
+  ],
+  "bin": {
+    "bitler-bootstrap": "bin/bin.js"
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "dev": "tsc --build --watch"
+  },
+  "devDependencies": {
+    "@bitlerjs/configs": "workspace:*",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "@bitlerjs/core": "workspace:*",
+    "@swc/core": "^1.10.7",
+    "@swc/register": "^0.1.10"
+  }
+}

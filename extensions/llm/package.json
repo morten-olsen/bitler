@@ -1,0 +1,22 @@
+{
+  "name": "@bitlerjs/llm",
+  "version": "1.0.0",
+  "main": "dist/exports.js",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc --build",
+    "dev": "tsc --build --watch"
+  },
+  "devDependencies": {
+    "@bitlerjs/configs": "workspace:*",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "@bitlerjs/core": "workspace:*",
+    "@huggingface/transformers": "^3.2.4",
+    "openai": "^4.77.0"
+  }
+}

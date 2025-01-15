@@ -1,0 +1,10 @@
+{
+  "extends": "@bitlerjs/configs/tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "jsx": "react"
+  },
+  "include": [
+    "src/**/*"
+  ]
+}

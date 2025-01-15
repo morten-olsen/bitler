@@ -1,0 +1,9 @@
+{
+  "extends": "@bitlerjs/configs/tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist"
+  },
+  "include": [
+    "src/**/*"
+  ]
+}

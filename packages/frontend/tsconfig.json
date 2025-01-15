@@ -1,0 +1,12 @@
+{
+  "extends": "@bitlerjs/configs/tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "moduleResolution": "bundler",
+    "module": "ES2020",
+    "jsx": "react"
+  },
+  "include": [
+    "src/**/*"
+  ]
+}
