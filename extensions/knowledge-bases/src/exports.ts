@@ -1,4 +1,4 @@
-import { Capabilities, createExtension } from '@bitler/core';
+import { Capabilities, createExtension } from '@bitlerjs/core';
 
 import { listKnowledgeBasesCapability } from './capabilities/capabilities.list.js';
 import { createKnowledgeBaseCapability } from './capabilities/capabilities.create.js';

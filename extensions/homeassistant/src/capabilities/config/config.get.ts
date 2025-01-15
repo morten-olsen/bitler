@@ -1,4 +1,4 @@
-import { createCapability, z } from '@bitler/core';
+import { createCapability, z } from '@bitlerjs/core';
 
 import { roomsContext, roomsContextSetup } from '../../context/rooms.js';
 

@@ -1,4 +1,4 @@
-import { createActionRequest, z } from '@bitler/core';
+import { createActionRequest, z } from '@bitlerjs/core';
 
 const createDialogOptionsSchema = z.object({
   title: z.string().describe('The title of the dialog'),

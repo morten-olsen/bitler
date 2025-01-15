@@ -1,4 +1,4 @@
-import { Databases, FeatureExtractor, createCapability, createId, z } from '@bitler/core';
+import { Databases, FeatureExtractor, createCapability, createId, z } from '@bitlerjs/core';
 import { chunk } from 'llm-chunk';
 
 import { dbConfig } from '../databases/databases.js';

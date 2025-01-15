@@ -1,5 +1,5 @@
-import { createCapability, z } from '@bitler/core';
-import { HomeAssistantContext, HomeassistantService, roomsContext, roomsContextSetup } from '@bitler/homeassistant';
+import { createCapability, z } from '@bitlerjs/core';
+import { HomeAssistantContext, HomeassistantService, roomsContext, roomsContextSetup } from '@bitlerjs/homeassistant';
 
 const play = createCapability({
   kind: 'music.play',

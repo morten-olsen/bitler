@@ -1,5 +1,5 @@
 {
-  "name": "@bitler/game",
+  "name": "@bitlerjs/game",
   "version": "1.0.0",
   "main": "dist/exports.js",
   "type": "module",
@@ -11,10 +11,10 @@
     "dev": "tsc --build --watch"
   },
   "devDependencies": {
-    "@bitler/configs": "workspace:*",
+    "@bitlerjs/configs": "workspace:*",
     "typescript": "^5.7.2"
   },
   "dependencies": {
-    "@bitler/core": "workspace:*"
+    "@bitlerjs/core": "workspace:*"
   }
 }

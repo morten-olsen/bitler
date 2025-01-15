@@ -12,7 +12,7 @@ import {
   excludeUndefined,
   getJsonSchema,
   z,
-} from '@bitler/core';
+} from '@bitlerjs/core';
 
 import { Agent } from '../agents/agents.schemas.js';
 import { Agents } from '../agents/agents.js';

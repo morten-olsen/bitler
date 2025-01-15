@@ -1,4 +1,4 @@
-import { DatabaseMigration } from '@bitler/core';
+import { DatabaseMigration } from '@bitlerjs/core';
 const init: DatabaseMigration = {
   name: 'init',
   up: async (knex) => {

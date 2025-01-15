@@ -1,4 +1,4 @@
-import { createAgent } from '@bitler/llm';
+import { createAgent } from '@bitlerjs/llm';
 
 import { addTimer } from '../capabilities/add-timer.js';
 import { listTimers } from '../capabilities/list-timers.js';

@@ -1,4 +1,4 @@
-import { Databases, Events, createCapability, createId, z } from '@bitler/core';
+import { Databases, Events, createCapability, createId, z } from '@bitlerjs/core';
 
 import { dbConfig } from '../databases/databases.js';
 import { notificationCreatedEvent } from '../events/events.created.js';

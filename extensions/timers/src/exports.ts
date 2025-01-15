@@ -1,5 +1,5 @@
-import { Capabilities, ContextItems, Events, createExtension } from '@bitler/core';
-import { Agents } from '@bitler/llm';
+import { Capabilities, ContextItems, Events, createExtension } from '@bitlerjs/core';
+import { Agents } from '@bitlerjs/llm';
 
 import { timerAgent } from './agents/agents.main.js';
 import { addTimer } from './capabilities/add-timer.js';

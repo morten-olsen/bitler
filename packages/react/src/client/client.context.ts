@@ -1,4 +1,4 @@
-import { CapabilityOutput, Client, DefaultServer, ServerSchema } from '@bitler/client';
+import { CapabilityOutput, Client, DefaultServer, ServerSchema } from '@bitlerjs/client';
 import { createContext, useContext } from 'react';
 
 type ClientContextValue<TServerSchema extends ServerSchema = DefaultServer> = {

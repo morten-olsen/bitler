@@ -1,4 +1,4 @@
-import { Capabilities, createContextItem, createContextSetup, z } from '@bitler/core';
+import { Capabilities, createContextItem, createContextSetup, z } from '@bitlerjs/core';
 
 const capabilitiesContext = createContextItem({
   kind: 'builtin.capabilities',

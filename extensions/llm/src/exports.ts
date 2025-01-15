@@ -1,4 +1,4 @@
-import { ActionRequests, Capabilities, ContextItems, Events, createExtension } from '@bitler/core';
+import { ActionRequests, Capabilities, ContextItems, Events, createExtension } from '@bitlerjs/core';
 
 import { Agents } from './services/agents/agents.js';
 import { addCapabilitiesRequest } from './action-requests/capabilities.js';

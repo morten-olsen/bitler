@@ -1,4 +1,4 @@
-import { createAgent } from '@bitler/llm';
+import { createAgent } from '@bitlerjs/llm';
 
 import { search } from '../capabilities/search.js';
 import { play } from '../capabilities/play.js';

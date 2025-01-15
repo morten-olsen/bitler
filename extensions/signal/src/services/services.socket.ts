@@ -1,6 +1,6 @@
-import { Capabilities, Container, Databases, Session } from '@bitler/core';
-import { addDocument } from '@bitler/json-documents';
-import { addNotificationCapability, removeNotificationsCapability } from '@bitler/notifications';
+import { Capabilities, Container, Databases, Session } from '@bitlerjs/core';
+import { addDocument } from '@bitlerjs/json-documents';
+import { addNotificationCapability, removeNotificationsCapability } from '@bitlerjs/notifications';
 
 import { Message } from '../types/message.js';
 

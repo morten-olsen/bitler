@@ -1,4 +1,4 @@
-import { createDatabase, createMigration } from '@bitler/core';
+import { createDatabase, createMigration } from '@bitlerjs/core';
 
 const addNotificationsTable = createMigration({
   name: 'add-notifications-table',

@@ -1,4 +1,4 @@
-import { Databases, createCapability, createId, z } from '@bitler/core';
+import { Databases, createCapability, createId, z } from '@bitlerjs/core';
 
 import { dbConfig } from '../../databases/databases.history.js';
 

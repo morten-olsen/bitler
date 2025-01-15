@@ -1,4 +1,4 @@
-import { FeatureExtractor, createDatabase, createMigration } from '@bitler/core';
+import { FeatureExtractor, createDatabase, createMigration } from '@bitlerjs/core';
 
 import { MODEL } from '../consts.js';
 

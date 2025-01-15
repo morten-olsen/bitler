@@ -1,5 +1,5 @@
 {
-  "name": "@bitler/demo",
+  "name": "@bitlerjs/demo",
   "private": true,
   "version": "1.0.0",
   "main": "dist/exports.js",
@@ -12,24 +12,24 @@
     "start": "bitler-bootstrap"
   },
   "devDependencies": {
-    "@bitler/configs": "workspace:*",
+    "@bitlerjs/configs": "workspace:*",
     "typescript": "^5.7.2"
   },
   "dependencies": {
-    "@bitler/bootstrap": "workspace:*",
-    "@bitler/llm": "workspace:*",
-    "@bitler/notifications": "workspace:*",
-    "@bitler/knowledge-bases": "workspace:*",
-    "@bitler/cli": "workspace:*",
-    "@bitler/core": "workspace:*",
-    "@bitler/frontend": "workspace:*",
-    "@bitler/game": "workspace:*",
-    "@bitler/homeassistant": "workspace:*",
-    "@bitler/json-documents": "workspace:*",
-    "@bitler/linear": "workspace:*",
-    "@bitler/music": "workspace:*",
-    "@bitler/signal": "workspace:*",
-    "@bitler/timers": "workspace:*",
+    "@bitlerjs/bootstrap": "workspace:*",
+    "@bitlerjs/llm": "workspace:*",
+    "@bitlerjs/notifications": "workspace:*",
+    "@bitlerjs/knowledge-bases": "workspace:*",
+    "@bitlerjs/cli": "workspace:*",
+    "@bitlerjs/core": "workspace:*",
+    "@bitlerjs/frontend": "workspace:*",
+    "@bitlerjs/game": "workspace:*",
+    "@bitlerjs/homeassistant": "workspace:*",
+    "@bitlerjs/json-documents": "workspace:*",
+    "@bitlerjs/linear": "workspace:*",
+    "@bitlerjs/music": "workspace:*",
+    "@bitlerjs/signal": "workspace:*",
+    "@bitlerjs/timers": "workspace:*",
     "@fastify/static": "^8.0.3",
     "dotenv": "^16.4.7"
   }

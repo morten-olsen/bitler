@@ -53,11 +53,11 @@ importers:
 
   extensions/game:
     dependencies:
-      '@bitler/core':
+      '@bitlerjs/core':
         specifier: workspace:*
         version: link:../../packages/core
     devDependencies:
-      '@bitler/configs':
+      '@bitlerjs/configs':
         specifier: workspace:*
         version: link:../../packages/configs
       typescript:
@@ -66,17 +66,17 @@ importers:
 
   extensions/homeassistant:
     dependencies:
-      '@bitler/core':
+      '@bitlerjs/core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@bitler/llm':
+      '@bitlerjs/llm':
         specifier: workspace:*
         version: link:../llm
       home-assistant-js-websocket:
         specifier: ^9.4.0
         version: 9.4.0
     devDependencies:
-      '@bitler/configs':
+      '@bitlerjs/configs':
         specifier: workspace:*
         version: link:../../packages/configs
       typescript:
@@ -85,14 +85,14 @@ importers:
 
   extensions/json-documents:
     dependencies:
-      '@bitler/core':
+      '@bitlerjs/core':
         specifier: workspace:*
         version: link:../../packages/core
       nanoid:
         specifier: ^5.0.9
         version: 5.0.9
     devDependencies:
-      '@bitler/configs':
+      '@bitlerjs/configs':
         specifier: workspace:*
         version: link:../../packages/configs
       typescript:
@@ -101,14 +101,14 @@ importers:
 
   extensions/knowledge-bases:
     dependencies:
-      '@bitler/core':
+      '@bitlerjs/core':
         specifier: workspace:*
         version: link:../../packages/core
       llm-chunk:
         specifier: ^0.0.1
         version: 0.0.1
     devDependencies:
-      '@bitler/configs':
+      '@bitlerjs/configs':
         specifier: workspace:*
         version: link:../../packages/configs
       typescript:
@@ -117,17 +117,17 @@ importers:
 
   extensions/linear:
     dependencies:
-      '@bitler/core':
+      '@bitlerjs/core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@bitler/llm':
+      '@bitlerjs/llm':
         specifier: workspace:*
         version: link:../llm
       '@linear/sdk':
         specifier: ^37.0.0
         version: 37.0.0
     devDependencies:
-      '@bitler/configs':
+      '@bitlerjs/configs':
         specifier: workspace:*
         version: link:../../packages/configs
       typescript:
@@ -136,7 +136,7 @@ importers:
 
   extensions/llm:
     dependencies:
-      '@bitler/core':
+      '@bitlerjs/core':
         specifier: workspace:*
         version: link:../../packages/core
       '@huggingface/transformers':
@@ -146,7 +146,7 @@ importers:
         specifier: ^4.77.0
         version: 4.77.0(zod@3.24.1)
     devDependencies:
-      '@bitler/configs':
+      '@bitlerjs/configs':
         specifier: workspace:*
         version: link:../../packages/configs
       typescript:
@@ -155,20 +155,20 @@ importers:
 
   extensions/music:
     dependencies:
-      '@bitler/core':
+      '@bitlerjs/core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@bitler/homeassistant':
+      '@bitlerjs/homeassistant':
         specifier: workspace:*
         version: link:../homeassistant
-      '@bitler/llm':
+      '@bitlerjs/llm':
         specifier: workspace:*
         version: link:../llm
       '@spotify/web-api-ts-sdk':
         specifier: ^1.2.0
         version: 1.2.0
     devDependencies:
-      '@bitler/configs':
+      '@bitlerjs/configs':
         specifier: workspace:*
         version: link:../../packages/configs
       typescript:
@@ -177,11 +177,11 @@ importers:
 
   extensions/notifications:
     dependencies:
-      '@bitler/core':
+      '@bitlerjs/core':
         specifier: workspace:*
         version: link:../../packages/core
     devDependencies:
-      '@bitler/configs':
+      '@bitlerjs/configs':
         specifier: workspace:*
         version: link:../../packages/configs
       typescript:
@@ -190,13 +190,13 @@ importers:
 
   extensions/signal:
     dependencies:
-      '@bitler/core':
+      '@bitlerjs/core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@bitler/json-documents':
+      '@bitlerjs/json-documents':
         specifier: workspace:*
         version: link:../json-documents
-      '@bitler/notifications':
+      '@bitlerjs/notifications':
         specifier: workspace:*
         version: link:../notifications
       nanoid:
@@ -206,7 +206,7 @@ importers:
         specifier: ^0.13.3
         version: 0.13.3
     devDependencies:
-      '@bitler/configs':
+      '@bitlerjs/configs':
         specifier: workspace:*
         version: link:../../packages/configs
       openapi-typescript:
@@ -218,17 +218,17 @@ importers:
 
   extensions/timers:
     dependencies:
-      '@bitler/core':
+      '@bitlerjs/core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@bitler/llm':
+      '@bitlerjs/llm':
         specifier: workspace:*
         version: link:../llm
       home-assistant-js-websocket:
         specifier: ^9.4.0
         version: 9.4.0
     devDependencies:
-      '@bitler/configs':
+      '@bitlerjs/configs':
         specifier: workspace:*
         version: link:../../packages/configs
       typescript:
@@ -237,7 +237,7 @@ importers:
 
   packages/bootstrap:
     dependencies:
-      '@bitler/core':
+      '@bitlerjs/core':
         specifier: workspace:*
         version: link:../core
       '@swc/core':
@@ -247,7 +247,7 @@ importers:
         specifier: ^0.1.10
         version: 0.1.10(@swc/core@1.10.7(@swc/helpers@0.5.15))
     devDependencies:
-      '@bitler/configs':
+      '@bitlerjs/configs':
         specifier: workspace:*
         version: link:../configs
       typescript:
@@ -256,13 +256,13 @@ importers:
 
   packages/cli:
     dependencies:
-      '@bitler/core':
+      '@bitlerjs/core':
         specifier: workspace:*
         version: link:../core
-      '@bitler/frontend':
+      '@bitlerjs/frontend':
         specifier: workspace:*
         version: link:../frontend
-      '@bitler/frontend-config':
+      '@bitlerjs/frontend-config':
         specifier: workspace:*
         version: link:../frontend-config
       '@sinclair/typebox':
@@ -296,7 +296,7 @@ importers:
         specifier: ^6.0.5
         version: 6.0.7(@types/node@22.10.3)(jiti@1.21.7)(tsx@4.19.2)(yaml@2.7.0)
     devDependencies:
-      '@bitler/configs':
+      '@bitlerjs/configs':
         specifier: workspace:*
         version: link:../configs
       '@types/node':
@@ -318,7 +318,7 @@ importers:
         specifier: ^0.13.3
         version: 0.13.3
     devDependencies:
-      '@bitler/configs':
+      '@bitlerjs/configs':
         specifier: workspace:*
         version: link:../configs
       openapi-typescript:
@@ -353,9 +353,6 @@ importers:
       '@huggingface/transformers':
         specifier: ^3.2.4
         version: 3.2.4
-      '@sindresorhus/slugify':
-        specifier: ^2.2.1
-        version: 2.2.1
       fastify:
         specifier: ^5.2.0
         version: 5.2.0
@@ -384,7 +381,7 @@ importers:
         specifier: ^3.24.1
         version: 3.24.1(zod@3.24.1)
     devDependencies:
-      '@bitler/configs':
+      '@bitlerjs/configs':
         specifier: workspace:*
         version: link:../configs
       '@types/node':
@@ -396,46 +393,46 @@ importers:
 
   packages/demo:
     dependencies:
-      '@bitler/bootstrap':
+      '@bitlerjs/bootstrap':
         specifier: workspace:*
         version: link:../bootstrap
-      '@bitler/cli':
+      '@bitlerjs/cli':
         specifier: workspace:*
         version: link:../cli
-      '@bitler/core':
+      '@bitlerjs/core':
         specifier: workspace:*
         version: link:../core
-      '@bitler/frontend':
+      '@bitlerjs/frontend':
         specifier: workspace:*
         version: link:../frontend
-      '@bitler/game':
+      '@bitlerjs/game':
         specifier: workspace:*
         version: link:../../extensions/game
-      '@bitler/homeassistant':
+      '@bitlerjs/homeassistant':
         specifier: workspace:*
         version: link:../../extensions/homeassistant
-      '@bitler/json-documents':
+      '@bitlerjs/json-documents':
         specifier: workspace:*
         version: link:../../extensions/json-documents
-      '@bitler/knowledge-bases':
+      '@bitlerjs/knowledge-bases':
         specifier: workspace:*
         version: link:../../extensions/knowledge-bases
-      '@bitler/linear':
+      '@bitlerjs/linear':
         specifier: workspace:*
         version: link:../../extensions/linear
-      '@bitler/llm':
+      '@bitlerjs/llm':
         specifier: workspace:*
         version: link:../../extensions/llm
-      '@bitler/music':
+      '@bitlerjs/music':
         specifier: workspace:*
         version: link:../../extensions/music
-      '@bitler/notifications':
+      '@bitlerjs/notifications':
         specifier: workspace:*
         version: link:../../extensions/notifications
-      '@bitler/signal':
+      '@bitlerjs/signal':
         specifier: workspace:*
         version: link:../../extensions/signal
-      '@bitler/timers':
+      '@bitlerjs/timers':
         specifier: workspace:*
         version: link:../../extensions/timers
       '@fastify/static':
@@ -445,7 +442,7 @@ importers:
         specifier: ^16.4.7
         version: 16.4.7
     devDependencies:
-      '@bitler/configs':
+      '@bitlerjs/configs':
         specifier: workspace:*
         version: link:../configs
       typescript:
@@ -454,7 +451,7 @@ importers:
 
   packages/frontend:
     dependencies:
-      '@bitler/react':
+      '@bitlerjs/react':
         specifier: workspace:*
         version: link:../react
       '@headlessui/react':
@@ -506,10 +503,10 @@ importers:
         specifier: ^2.7.0
         version: 2.7.0
     devDependencies:
-      '@bitler/configs':
+      '@bitlerjs/configs':
         specifier: workspace:*
         version: link:../configs
-      '@bitler/frontend-config':
+      '@bitlerjs/frontend-config':
         specifier: workspace:*
         version: link:../frontend-config
       '@chromatic-com/storybook':
@@ -581,9 +578,6 @@ importers:
 
   packages/frontend-config:
     dependencies:
-      .D:
-        specifier: link:.D
-        version: link:.D
       '@tailwindcss/typography':
         specifier: ^0.5.16
         version: 0.5.16(tailwindcss@3.4.17)
@@ -609,7 +603,7 @@ importers:
         specifier: ^6.0.5
         version: 6.0.7(@types/node@22.10.3)(jiti@1.21.7)(tsx@4.19.2)(yaml@2.7.0)
     devDependencies:
-      '@bitler/configs':
+      '@bitlerjs/configs':
         specifier: workspace:*
         version: link:../configs
       typescript:
@@ -618,7 +612,7 @@ importers:
 
   packages/react:
     dependencies:
-      '@bitler/client':
+      '@bitlerjs/client':
         specifier: workspace:*
         version: link:../client
       '@tanstack/react-query':
@@ -628,7 +622,7 @@ importers:
         specifier: ^5.0.9
         version: 5.0.9
     devDependencies:
-      '@bitler/configs':
+      '@bitlerjs/configs':
         specifier: workspace:*
         version: link:../configs
       '@types/react':
@@ -2818,14 +2812,6 @@ packages:
     resolution: {integrity: sha512-tlqY9xq5ukxTUZBmoOp+m61cqwQD5pHJtFY3Mn8CA8ps6yghLH/Hw8UPdqg4OLmFW3IFlcXnQNmo/dh8HzXYIQ==}
     engines: {node: '>=18'}
 
-  '@sindresorhus/slugify@2.2.1':
-    resolution: {integrity: sha512-MkngSCRZ8JdSOCHRaYd+D01XhvU3Hjy6MGl06zhOk614hp9EOAp5gIkBeQg7wtmxpitU6eAL4kdiRMcJa2dlrw==}
-    engines: {node: '>=12'}
-
-  '@sindresorhus/transliterate@1.6.0':
-    resolution: {integrity: sha512-doH1gimEu3A46VX6aVxpHTeHrytJAG6HgdxntYnCFiIFHEM/ZGpG8KiZGBChchjQmG0XFIBL552kBTjVcMZXwQ==}
-    engines: {node: '>=12'}
-
   '@spotify/web-api-ts-sdk@1.2.0':
     resolution: {integrity: sha512-JUaebva3Ohwo5I5tuTqyW/FKGOMbb40YevJMySAOINRxP7qQ/AMjBzfJx0zeO6yS+wAPfQSoGNsZaUggHw8vsA==}
 
@@ -3963,10 +3949,6 @@ packages:
   escape-string-regexp@4.0.0:
     resolution: {integrity: sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==}
     engines: {node: '>=10'}
-
-  escape-string-regexp@5.0.0:
-    resolution: {integrity: sha512-/veY75JbMK4j1yjvuUxuVsiS/hr/4iHs9FTT6cgTexxdE0Ly/glccBAkloH/DofkjRbZU3bnoj38mOmhkZ0lHw==}
-    engines: {node: '>=12'}
 
   eslint-config-prettier@9.1.0:
     resolution: {integrity: sha512-NSWl5BFQWEPi1j4TjVNItzYV7dZXZ+wP6I6ZhrBGpChQhZRUaElihE9uRRkcbRnNb76UMKDF3r+WTmNcGPKsqw==}
@@ -9301,15 +9283,6 @@ snapshots:
 
   '@sindresorhus/merge-streams@4.0.0': {}
 
-  '@sindresorhus/slugify@2.2.1':
-    dependencies:
-      '@sindresorhus/transliterate': 1.6.0
-      escape-string-regexp: 5.0.0
-
-  '@sindresorhus/transliterate@1.6.0':
-    dependencies:
-      escape-string-regexp: 5.0.0
-
   '@spotify/web-api-ts-sdk@1.2.0': {}
 
   '@storybook/addon-actions@8.4.7(storybook@8.4.7(prettier@3.4.2))':
@@ -10575,8 +10548,6 @@ snapshots:
   escape-html@1.0.3: {}
 
   escape-string-regexp@4.0.0: {}
-
-  escape-string-regexp@5.0.0: {}
 
   eslint-config-prettier@9.1.0(eslint@9.18.0(jiti@1.21.7)):
     dependencies:
