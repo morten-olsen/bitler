@@ -1,4 +1,4 @@
-import { createContextItem, createContextSetup, z } from '@bitler/core';
+import { createContextItem, createContextSetup, z } from '@bitlerjs/core';
 
 import { LinearService } from '../servies/services.linear.js';
 

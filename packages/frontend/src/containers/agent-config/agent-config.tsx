@@ -1,4 +1,4 @@
-import { AgentConfigProvider, useAgentConfigContext, useAgents, useCapabilities, useModels } from '@bitler/react';
+import { AgentConfigProvider, useAgentConfigContext, useAgents, useCapabilities, useModels } from '@bitlerjs/react';
 import {
   Autocomplete,
   AutocompleteItem,

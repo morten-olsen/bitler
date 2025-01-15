@@ -1,12 +1,13 @@
 import path, { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
 
 import type { StorybookConfig } from '@storybook/react-vite';
-import { createViteCss } from '@bitler/frontend-config';
+import { createViteCss } from '@bitlerjs/frontend-config';
 
 const frontendPath = path.resolve('./src/**/*.{js,ts,jsx,tsx}');
 
 function getAbsolutePath(value: string): any {
-  return dirname(require.resolve(join(value, 'package.json')));
+  return dirname(fileURLToPath(import.meta.resolve(join(value, 'package.json'))));
 }
 const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],

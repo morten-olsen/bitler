@@ -1,4 +1,4 @@
-import { z } from '@bitler/core';
+import { z } from '@bitlerjs/core';
 
 const completionDialogSchema = z.object({
   role: z.union([z.literal('user'), z.literal('assistant'), z.literal('system')]),

@@ -1,4 +1,4 @@
-import { Databases, createCapability, z } from '@bitler/core';
+import { Databases, createCapability, z } from '@bitlerjs/core';
 
 import { roomsContext, roomsContextSetup } from '../../context/rooms.js';
 import { databaseConfig } from '../../database/database.js';

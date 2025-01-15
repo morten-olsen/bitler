@@ -1,4 +1,4 @@
-import { Databases, FeatureExtractor, createCapability, z } from '@bitler/core';
+import { Databases, FeatureExtractor, createCapability, z } from '@bitlerjs/core';
 
 import { dbConfig } from '../databases/databases.js';
 import { MODEL } from '../consts.js';

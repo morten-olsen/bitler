@@ -1,5 +1,5 @@
 {
-  "name": "@bitler/music",
+  "name": "@bitlerjs/music",
   "version": "1.0.0",
   "main": "dist/exports.js",
   "type": "module",
@@ -11,13 +11,13 @@
     "dev": "tsc --build --watch"
   },
   "devDependencies": {
-    "@bitler/configs": "workspace:*",
+    "@bitlerjs/configs": "workspace:*",
     "typescript": "^5.7.2"
   },
   "dependencies": {
-    "@bitler/core": "workspace:*",
-    "@bitler/llm": "workspace:*",
-    "@bitler/homeassistant": "workspace:*",
+    "@bitlerjs/core": "workspace:*",
+    "@bitlerjs/llm": "workspace:*",
+    "@bitlerjs/homeassistant": "workspace:*",
     "@spotify/web-api-ts-sdk": "^1.2.0"
   }
 }

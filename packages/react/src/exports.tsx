@@ -19,6 +19,6 @@ const BitlerProvider = ({ baseUrl, children }: BitlerProviderProps) => {
 export * from './client/client.hooks.js';
 export * from './agent-config/agent-config.js';
 export * from './dialog/dialog.js';
-export * from '@bitler/client';
+export * from '@bitlerjs/client';
 
 export { BitlerProvider };

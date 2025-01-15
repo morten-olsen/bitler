@@ -1,4 +1,4 @@
-import { DatabaseOptions } from '@bitler/core';
+import { DatabaseOptions } from '@bitlerjs/core';
 
 import { init } from './migrations/migrations.001-init.js';
 

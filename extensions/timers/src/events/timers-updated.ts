@@ -1,4 +1,4 @@
-import { createEvent, z } from '@bitler/core';
+import { createEvent, z } from '@bitlerjs/core';
 
 const timerUpdatedEvent = createEvent({
   kind: 'timer.updated',

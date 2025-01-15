@@ -1,4 +1,4 @@
-import { Capabilities, createExtension } from '@bitler/core';
+import { Capabilities, createExtension } from '@bitlerjs/core';
 
 import { SignalService } from './services/services.signal.js';
 import { getContactsCapability } from './capabilities/get-contacts.js';

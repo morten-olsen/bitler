@@ -1,5 +1,5 @@
-import { createCapability, z } from '@bitler/core';
-import { HomeAssistantContext, HomeassistantService, roomsContextSetup } from '@bitler/homeassistant';
+import { createCapability, z } from '@bitlerjs/core';
+import { HomeAssistantContext, HomeassistantService, roomsContextSetup } from '@bitlerjs/homeassistant';
 
 const setVolume = createCapability({
   kind: 'music.set-volume',
