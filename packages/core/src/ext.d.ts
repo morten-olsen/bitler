@@ -1,16 +1,18 @@
 import 'fastify';
 import type { FastifyZod } from 'fastify-zod';
 
-import { Container } from '../container/container.ts';
+import type { Container } from './container/container.ts';
+
+/* eslint-disable @typescript-eslint/consistent-type-definitions */
 
 // Global augmentation, as suggested by
 // https://www.fastify.io/docs/latest/Reference/TypeScript/#creating-a-typescript-fastify-plugin
 declare module 'fastify' {
-  type FastifyInstance = {
+  interface FastifyInstance {
     readonly zod: FastifyZod<typeof models>;
-  };
+  }
 
-  type FastifyRequest = {
+  interface FastifyRequest {
     container: Container;
-  };
+  }
 }

@@ -5,7 +5,8 @@
   "packageManager": "pnpm@9.15.0",
   "scripts": {
     "build:dev": "tsc --build --watch",
-    "build": "turbo build"
+    "build": "turbo build",
+    "dev": "turbo dev --concurrency 25"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.1.0",

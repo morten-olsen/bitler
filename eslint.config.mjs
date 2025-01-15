@@ -37,6 +37,13 @@ export default tseslint.config(
       '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
     },
   },
+  {
+    files: ['**.d.ts'],
+    rules: {
+      '@typescript-eslint/triple-slash-reference': 'off',
+      '@typescript-eslint/consistent-type-definitions': 'off',
+    },
+  },
   ...compat.extends('plugin:prettier/recommended'),
   {
     ignores: ['**/node_modules/', '**/dist/', '**/.turbo/', '**/generated/'],
