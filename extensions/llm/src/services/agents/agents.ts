@@ -1,5 +1,5 @@
 import { cos_sim } from '@huggingface/transformers';
-import { Container, EventEmitter, FeatureExtractor, Vector } from '@bitler/core';
+import { Container, EventEmitter, FeatureExtractor, Vector } from '@bitlerjs/core';
 
 import { Agent } from './agents.schemas.js';
 

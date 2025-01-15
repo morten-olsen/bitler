@@ -1,4 +1,4 @@
-import { Container, Databases, EventEmitter, Events, createId, z } from '@bitler/core';
+import { Container, Databases, EventEmitter, Events, createId, z } from '@bitlerjs/core';
 
 import { dbConfig } from '../database/database.js';
 import { timerTriggeredEvent } from '../events/timer-triggered.js';

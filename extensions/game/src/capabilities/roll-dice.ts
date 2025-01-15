@@ -1,4 +1,4 @@
-import { createCapability, z } from '@bitler/core';
+import { createCapability, z } from '@bitlerjs/core';
 
 const rollDice = createCapability({
   kind: 'game.roll-dice',

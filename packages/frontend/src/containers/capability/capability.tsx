@@ -1,4 +1,4 @@
-import { useCapability } from '@bitler/react';
+import { useCapability } from '@bitlerjs/react';
 import { Button } from '@nextui-org/react';
 import React, { useCallback, useState } from 'react';
 import YAML from 'yaml';

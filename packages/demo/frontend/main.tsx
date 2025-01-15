@@ -1,4 +1,4 @@
 import './style.css';
-import { start } from '@bitler/frontend';
+import { start } from '@bitlerjs/frontend';
 
 start();

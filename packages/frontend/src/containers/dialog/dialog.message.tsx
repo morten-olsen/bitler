@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDialog } from '@bitler/react';
+import { useDialog } from '@bitlerjs/react';
 import { Card, CardBody, Skeleton } from '@nextui-org/react';
 import clsx from 'clsx';
 import { motion } from 'framer-motion';

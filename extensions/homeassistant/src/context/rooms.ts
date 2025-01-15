@@ -1,4 +1,4 @@
-import { Context, Databases, createContextItem, createContextSetup, z } from '@bitler/core';
+import { Context, Databases, createContextItem, createContextSetup, z } from '@bitlerjs/core';
 
 import { databaseConfig } from '../database/database.js';
 

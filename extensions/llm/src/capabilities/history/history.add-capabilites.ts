@@ -1,4 +1,4 @@
-import { createCapability, z } from '@bitler/core';
+import { createCapability, z } from '@bitlerjs/core';
 
 import { capabilitiesContextSetup } from '../../contexts/capabilites.js';
 import { addCapabilitiesRequest } from '../../action-requests/capabilities.js';

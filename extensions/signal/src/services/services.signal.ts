@@ -1,4 +1,4 @@
-import { Container } from '@bitler/core';
+import { Container } from '@bitlerjs/core';
 
 import { Client, createClient } from '../client/client.js';
 import { paths } from '../generated/api.js';

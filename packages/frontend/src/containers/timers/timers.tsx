@@ -1,4 +1,4 @@
-import { useEventEffect, useRunCapabilityQuery } from '@bitler/react';
+import { useEventEffect, useRunCapabilityQuery } from '@bitlerjs/react';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Clock } from 'lucide-react';
 import { Badge } from '@nextui-org/react';

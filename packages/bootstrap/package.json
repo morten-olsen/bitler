@@ -1,5 +1,5 @@
 {
-  "name": "@bitler/bootstrap",
+  "name": "@bitlerjs/bootstrap",
   "version": "1.0.0",
   "main": "dist/exports.js",
   "type": "module",
@@ -15,11 +15,11 @@
     "dev": "tsc --build --watch"
   },
   "devDependencies": {
-    "@bitler/configs": "workspace:*",
+    "@bitlerjs/configs": "workspace:*",
     "typescript": "^5.7.2"
   },
   "dependencies": {
-    "@bitler/core": "workspace:*",
+    "@bitlerjs/core": "workspace:*",
     "@swc/core": "^1.10.7",
     "@swc/register": "^0.1.10"
   }

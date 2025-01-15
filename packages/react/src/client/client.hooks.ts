@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { CapabilityInput, DefaultServer, ServerSchema } from '@bitler/client';
-import { EventInput, EventOutput } from '@bitler/client/dist/events/events.js';
+import { CapabilityInput, DefaultServer, ServerSchema } from '@bitlerjs/client';
+import { EventInput, EventOutput } from '@bitlerjs/client/dist/events/events.js';
 import { useEffect, useState } from 'react';
 
 import { useClientContext } from './client.context.js';

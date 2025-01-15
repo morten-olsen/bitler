@@ -1,7 +1,7 @@
 import type { Meta, StoryFn } from '@storybook/react';
 import { Tagbar } from './tagbar.js';
 import React, { useState } from 'react';
-import { useCapabilities } from '@bitler/react';
+import { useCapabilities } from '@bitlerjs/react';
 
 const meta = {
   title: 'Components/Base/Autocomplete',

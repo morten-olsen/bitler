@@ -2,7 +2,7 @@ import '../src/style.css';
 import React from 'react';
 import type { Preview } from '@storybook/react';
 import { NextUIProvider } from '@nextui-org/react';
-import { BitlerProvider } from '@bitler/react';
+import { BitlerProvider } from '@bitlerjs/react';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import { ScreensProvider } from '../src/containers/screens/screens.provider';
 

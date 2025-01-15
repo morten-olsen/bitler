@@ -1,4 +1,4 @@
-import { Capabilities, createExtension } from '@bitler/core';
+import { Capabilities, createExtension } from '@bitlerjs/core';
 
 import { addDocument } from './capabilites/add-document.js';
 import { findDocuments } from './capabilites/find-documents.js';

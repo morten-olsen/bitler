@@ -1,5 +1,5 @@
 {
-  "name": "@bitler/timers",
+  "name": "@bitlerjs/timers",
   "version": "1.0.0",
   "main": "dist/exports.js",
   "type": "module",
@@ -11,12 +11,12 @@
     "dev": "tsc --build --watch"
   },
   "devDependencies": {
-    "@bitler/configs": "workspace:*",
+    "@bitlerjs/configs": "workspace:*",
     "typescript": "^5.7.2"
   },
   "dependencies": {
-    "@bitler/core": "workspace:*",
-    "@bitler/llm": "workspace:*",
+    "@bitlerjs/core": "workspace:*",
+    "@bitlerjs/llm": "workspace:*",
     "home-assistant-js-websocket": "^9.4.0"
   }
 }

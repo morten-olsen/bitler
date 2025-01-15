@@ -1,5 +1,5 @@
-import { Capabilities, ContextItems, createExtension } from '@bitler/core';
-import { Agents } from '@bitler/llm';
+import { Capabilities, ContextItems, createExtension } from '@bitlerjs/core';
+import { Agents } from '@bitlerjs/llm';
 
 import { profile } from './capabilities/profile.js';
 import { agent } from './agents/agent.js';

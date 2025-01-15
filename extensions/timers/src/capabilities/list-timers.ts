@@ -1,4 +1,4 @@
-import { createCapability, z } from '@bitler/core';
+import { createCapability, z } from '@bitlerjs/core';
 
 import { TimerService, timerSchema } from '../service/service.js';
 import { currentTimeContextSetup } from '../context/context.js';

@@ -1,4 +1,4 @@
-import { createSessionItem, z } from '@bitler/core';
+import { createSessionItem, z } from '@bitlerjs/core';
 
 const agentSession = createSessionItem({
   kind: 'agent',

@@ -1,4 +1,4 @@
-import { z } from '@bitler/core';
+import { z } from '@bitlerjs/core';
 
 const date = z.union([z.string(), z.date()]);
 const issueSchema = z.object({
