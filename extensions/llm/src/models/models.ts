@@ -1,4 +1,4 @@
-import { z } from '@bitler/core';
+import { z } from '@bitlerjs/core';
 
 const DEFAULT_MODEL = 'openai-gpt-4o-mini';
 

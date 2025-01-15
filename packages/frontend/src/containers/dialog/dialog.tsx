@@ -1,4 +1,4 @@
-import { AgentConfig, useAgentConfig, useDialog } from '@bitler/react';
+import { AgentConfig, useAgentConfig, useDialog } from '@bitlerjs/react';
 import { Button, Textarea, useDisclosure } from '@nextui-org/react';
 import { Cog, Send } from 'lucide-react';
 import { AnimatePresence } from 'framer-motion';

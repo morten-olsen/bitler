@@ -1,5 +1,5 @@
 import React from 'react';
-import { useConversationHistory } from '@bitler/react';
+import { useConversationHistory } from '@bitlerjs/react';
 import { useOpenScreen } from '../screens/screens.hooks.js';
 import { Listbox, ListboxItem } from '@nextui-org/react';
 import { Activity } from 'lucide-react';

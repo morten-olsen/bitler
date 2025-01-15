@@ -1,7 +1,7 @@
 import React, { type ReactNode, useMemo } from 'react';
 import { ClientContext } from './client.context.js';
 import { useQuery } from '@tanstack/react-query';
-import { Client } from '@bitler/client';
+import { Client } from '@bitlerjs/client';
 
 type ClientProviderProps = {
   baseUrl: string;

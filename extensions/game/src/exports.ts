@@ -1,4 +1,4 @@
-import { Capabilities, ContextItems, createExtension } from '@bitler/core';
+import { Capabilities, ContextItems, createExtension } from '@bitlerjs/core';
 
 import { setState } from './capabilities/set-state.js';
 import { gameStateContext } from './contexts/game-state.js';

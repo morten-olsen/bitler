@@ -1,4 +1,4 @@
-import { createActionRequest, z } from '@bitler/core';
+import { createActionRequest, z } from '@bitlerjs/core';
 
 const addCapabilitiesRequest = createActionRequest({
   kind: 'builtin.add-capabilities',

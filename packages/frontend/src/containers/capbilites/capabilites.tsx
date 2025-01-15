@@ -1,4 +1,4 @@
-import { useCapabilities } from '@bitler/react';
+import { useCapabilities } from '@bitlerjs/react';
 import { useOpenScreen } from '../screens/screens.hooks.js';
 import { Capability } from '../capability/capability.js';
 import { Input, Listbox, ListboxItem, ListboxSection } from '@nextui-org/react';

@@ -1,4 +1,4 @@
-import { createCapability, z } from '@bitler/core';
+import { createCapability, z } from '@bitlerjs/core';
 
 import { completionOptionsSchema } from '../../services/completion/completion.schemas.js';
 import { Completion } from '../../services/completion/completion.js';

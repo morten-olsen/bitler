@@ -1,5 +1,5 @@
 {
-  "name": "@bitler/client",
+  "name": "@bitlerjs/client",
   "version": "1.0.0",
   "main": "dist/exports.js",
   "type": "module",
@@ -12,7 +12,7 @@
     "generate:types": "bitler schema generate http://localhost:3000 ./src/generated/types.ts"
   },
   "devDependencies": {
-    "@bitler/configs": "workspace:*",
+    "@bitlerjs/configs": "workspace:*",
     "openapi-typescript": "^7.4.4",
     "typescript": "^5.7.2"
   },

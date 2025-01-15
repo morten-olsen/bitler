@@ -1,4 +1,4 @@
-import { createCapability, z } from '@bitler/core';
+import { createCapability, z } from '@bitlerjs/core';
 
 import { LinearService } from '../servies/services.linear.js';
 import { issueSchema } from '../schemas/schemas.js';

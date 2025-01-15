@@ -1,4 +1,4 @@
-import { Capabilities, Events, createExtension } from '@bitler/core';
+import { Capabilities, Events, createExtension } from '@bitlerjs/core';
 
 import { addNotificationCapability } from './capabilities/capabilities.add.js';
 import { listNotificationCapability } from './capabilities/capabilities.list.js';

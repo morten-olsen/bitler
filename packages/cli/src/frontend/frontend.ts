@@ -3,10 +3,10 @@ import { fileURLToPath } from 'url';
 
 import { InlineConfig, build, createServer } from 'vite';
 import react from '@vitejs/plugin-react-swc';
-import { createViteCss } from '@bitler/frontend-config';
+import { createViteCss } from '@bitlerjs/frontend-config';
 
 const frontendPath = resolve(
-  fileURLToPath(new URL('..dist/**/*.{js,ts,jsx,tsx}', import.meta.resolve('@bitler/frontend/package.json'))),
+  fileURLToPath(new URL('..dist/**/*.{js,ts,jsx,tsx}', import.meta.resolve('@bitlerjs/frontend/package.json'))),
 );
 const baseConfig = (root: string): InlineConfig => ({
   root,

@@ -1,5 +1,5 @@
-import { Capabilities, createExtension } from '@bitler/core';
-import { Agents } from '@bitler/llm';
+import { Capabilities, createExtension } from '@bitlerjs/core';
+import { Agents } from '@bitlerjs/llm';
 
 import { search } from './capabilities/search.js';
 import { agent } from './agents/agent.js';

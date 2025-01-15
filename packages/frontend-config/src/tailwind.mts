@@ -10,7 +10,7 @@ const getThemePath = () => {
 };
 
 const getFrontendPath = () => {
-  const pkg = fileURLToPath(import.meta.resolve('@bitler/frontend/package.json'));
+  const pkg = fileURLToPath(import.meta.resolve('@bitlerjs/frontend/package.json'));
   return path.resolve(pkg, '..', 'dist/**/*.{js,ts,jsx,tsx}');
 };
 

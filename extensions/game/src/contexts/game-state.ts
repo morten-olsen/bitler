@@ -1,4 +1,4 @@
-import { createContextItem, z } from '@bitler/core';
+import { createContextItem, z } from '@bitlerjs/core';
 
 const gameStateContext = createContextItem({
   kind: 'game.state',

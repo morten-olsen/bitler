@@ -1,5 +1,5 @@
 {
-  "name": "@bitler/frontend-config",
+  "name": "@bitlerjs/frontend-config",
   "version": "1.0.0",
   "main": "dist/exports.mjs",
   "type": "module",
@@ -12,7 +12,7 @@
     "dev": "tsc --build --watch"
   },
   "devDependencies": {
-    "@bitler/configs": "workspace:*",
+    "@bitlerjs/configs": "workspace:*",
     "typescript": "^5.7.2"
   },
   "dependencies": {

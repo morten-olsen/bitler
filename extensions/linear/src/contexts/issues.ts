@@ -1,4 +1,4 @@
-import { createContextItem, z } from '@bitler/core';
+import { createContextItem, z } from '@bitlerjs/core';
 
 import { issueSchema } from '../schemas/schemas.js';
 

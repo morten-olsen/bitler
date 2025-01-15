@@ -1,4 +1,4 @@
-import { Container } from '@bitler/core';
+import { Container } from '@bitlerjs/core';
 import { LinearClient, User } from '@linear/sdk';
 
 class LinearService {

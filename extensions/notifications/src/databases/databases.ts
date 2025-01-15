@@ -1,4 +1,4 @@
-import { createDatabase, createMigration } from '@bitler/core';
+import { createDatabase, createMigration } from '@bitlerjs/core';
 
 const init = createMigration({
   name: 'init',
