@@ -1,23 +1,25 @@
-import { cos_sim } from "@huggingface/transformers";
-import { EventEmitter } from '../utils/eventemitter.js';
-import { Vector, FeatureExtractor } from '../feature-extractor/feature-extractor.js';
-import { Capability } from "./capabilities.capability.js";
+import { cos_sim } from '@huggingface/transformers';
+import { ZodSchema, z } from 'zod';
+
 import { Container } from '../container/container.js';
-import { z, ZodSchema } from "zod";
-import { Context } from "../contexts/contexts.context.js";
-import { Contexts } from "../contexts/contexts.js";
-import { ActionRequestInstance } from "../action-requests/action-requests.instance.js";
-import { ActionRequests } from "../action-requests/action-requests.js";
+import { FeatureExtractor, Vector } from '../feature-extractor/feature-extractor.js';
+import { EventEmitter } from '../utils/eventemitter.js';
+import { Context } from '../contexts/contexts.context.js';
+import { Contexts } from '../contexts/contexts.js';
+import { ActionRequestInstance } from '../action-requests/action-requests.instance.js';
+import { ActionRequests } from '../action-requests/action-requests.js';
 import { Session } from '../session/session.js';
+
+import { Capability } from './capabilities.capability.js';
 
 type CapabilitiesEvents = {
   registered: (capabilites: Capability<any, any>[]) => void;
-}
+};
 
 type FindCapabilityOptions = {
   query: string;
   limit?: number;
-}
+};
 
 type CapabilityRunOptions<TInput extends ZodSchema, TOutput extends ZodSchema> = {
   capability: Capability<TInput, TOutput>;
@@ -25,11 +27,11 @@ type CapabilityRunOptions<TInput extends ZodSchema, TOutput extends ZodSchema> =
   context?: Context;
   actionRequests?: ActionRequestInstance;
   session: Session;
-}
+};
 class Capabilities extends EventEmitter<CapabilitiesEvents> {
   #container: Container;
-  #capabilities: Set<Capability<any, any>> = new Set([]);
-  #capabilitiesVector: Map<Capability<any, any>, Vector> = new Map();
+  #capabilities = new Set<Capability<any, any>>([]);
+  #capabilitiesVector = new Map<Capability<any, any>, Vector>();
 
   constructor(container: Container) {
     super();
@@ -47,7 +49,7 @@ class Capabilities extends EventEmitter<CapabilitiesEvents> {
         capability.description,
       ].join('\n');
       const [vector] = await extractor.extract({
-        input: [description]
+        input: [description],
       });
       this.#capabilitiesVector.set(capability, vector);
     }
@@ -56,34 +58,37 @@ class Capabilities extends EventEmitter<CapabilitiesEvents> {
       throw new Error('Vector not found');
     }
     return vector;
-  }
+  };
 
   public register = (capabilities: Capability<any, any>[]) => {
     capabilities.forEach((capability) => {
       this.#capabilities.add(capability);
     });
     this.emit('registered', capabilities);
-  }
+  };
 
   public get = (kinds: string[]): Capability<ZodSchema, ZodSchema>[] => {
-    return kinds.map((kind) => Array.from(this.#capabilities).find((capability) => capability.kind === kind)) as Capability<ZodSchema, ZodSchema>[];
-  }
+    return kinds.map((kind) =>
+      Array.from(this.#capabilities).find((capability) => capability.kind === kind),
+    ) as Capability<ZodSchema, ZodSchema>[];
+  };
 
   public list = () => {
     return Array.from(this.#capabilities);
-  }
+  };
 
-  public run = async <
-    TInput extends ZodSchema,
-    TOutput extends ZodSchema,
-  >(options: CapabilityRunOptions<TInput, TOutput>): Promise<z.infer<TOutput>> => {
+  public run = async <TInput extends ZodSchema, TOutput extends ZodSchema>(
+    options: CapabilityRunOptions<TInput, TOutput>,
+  ): Promise<z.infer<TOutput>> => {
     const contextsService = this.#container.get(Contexts);
     const actionRequestService = this.#container.get(ActionRequests);
-    const context = options.context || await contextsService.create({
-      setups: options.capability.setup || [],
-      init: options.context,
-      session: options.session,
-    })
+    const context =
+      options.context ||
+      (await contextsService.create({
+        setups: options.capability.setup || [],
+        init: options.context,
+        session: options.session,
+      }));
     const result = await options.capability.handler({
       input: options.input,
       container: this.#container,
@@ -93,7 +98,7 @@ class Capabilities extends EventEmitter<CapabilitiesEvents> {
     });
     const parsed = options.capability.output.safeParse(result);
     return parsed.success ? parsed.data : result;
-  }
+  };
 
   public find = async (options: FindCapabilityOptions) => {
     const { query, limit = 5 } = options;
@@ -114,7 +119,7 @@ class Capabilities extends EventEmitter<CapabilitiesEvents> {
     );
     results.sort((a, b) => b.similarity - a.similarity);
     return results.slice(0, limit);
-  }
+  };
 }
 
 export * from './capabilities.capability.js';

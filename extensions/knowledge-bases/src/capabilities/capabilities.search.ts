@@ -1,6 +1,7 @@
-import { createCapability, Databases, FeatureExtractor, z } from "@bitler/core";
-import { dbConfig } from "../databases/databases.js";
-import { MODEL } from "../consts.js";
+import { Databases, FeatureExtractor, createCapability, z } from '@bitler/core';
+
+import { dbConfig } from '../databases/databases.js';
+import { MODEL } from '../consts.js';
 
 const searchDocuments = createCapability({
   kind: `knowledge-base.search-documents`,
@@ -13,17 +14,21 @@ const searchDocuments = createCapability({
     knowledgeBaseIds: z.array(z.string()).optional(),
   }),
   output: z.object({
-    documents: z.array(z.object({
-      id: z.string(),
-      matches: z.array(z.object({
-        distance: z.number(),
-        chunkId: z.string(),
-        start: z.number().optional(),
-        end: z.number().optional(),
-      })),
-      title: z.string(),
-      content: z.string(),
-    })),
+    documents: z.array(
+      z.object({
+        id: z.string(),
+        matches: z.array(
+          z.object({
+            distance: z.number(),
+            chunkId: z.string(),
+            start: z.number().optional(),
+            end: z.number().optional(),
+          }),
+        ),
+        title: z.string(),
+        content: z.string(),
+      }),
+    ),
   }),
   handler: async ({ input, container }) => {
     const dbs = container.get(Databases);
@@ -36,21 +41,20 @@ const searchDocuments = createCapability({
     });
 
     let query = db('chunks')
-      .select([
-        'chunks.*',
-        db.raw(`embedding <-> '${vector.toSql()}' as distance`),
-      ])
+      .select(['chunks.*', db.raw(`embedding <-> '${vector.toSql()}' as distance`)])
       .limit(limit)
       .orderByRaw(`embedding <-> '${vector.toSql()}'`);
 
     if (input.knowledgeBaseIds) {
-      query = query.where('knowledgeBaseId', input.knowledgeBaseIds)
+      query = query.where('knowledgeBaseId', input.knowledgeBaseIds);
     }
 
     const chunks = await query;
 
-    const documents = await db('documents')
-      .whereIn('id', chunks.map((chunk) => chunk.documentId))
+    const documents = await db('documents').whereIn(
+      'id',
+      chunks.map((chunk) => chunk.documentId),
+    );
 
     const results = documents.map((document) => {
       const matches = chunks
@@ -67,11 +71,11 @@ const searchDocuments = createCapability({
         matches,
         title: document.title,
         content: document.content,
-      }
+      };
     });
 
     return { documents: results };
-  }
-})
+  },
+});
 
 export { searchDocuments };

@@ -1,4 +1,4 @@
-import { createActionRequest, z } from "@bitler/core";
+import { createActionRequest, z } from '@bitler/core';
 
 const createDialogOptionsSchema = z.object({
   title: z.string().describe('The title of the dialog'),
@@ -18,4 +18,3 @@ const createDialogRequest = createActionRequest({
 });
 
 export { createDialogRequest, createDialogOptionsSchema, type CreateDialogOptions };
-

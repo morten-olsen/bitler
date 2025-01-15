@@ -1,24 +1,19 @@
 import { resolve } from 'path';
-import { build, createServer, InlineConfig } from 'vite';
-import react from '@vitejs/plugin-react-swc'
-import { createViteCss } from '@bitler/frontend-config';
 import { fileURLToPath } from 'url';
 
+import { InlineConfig, build, createServer } from 'vite';
+import react from '@vitejs/plugin-react-swc';
+import { createViteCss } from '@bitler/frontend-config';
 
 const frontendPath = resolve(
-  fileURLToPath(new URL(
-    '..dist/**/*.{js,ts,jsx,tsx}',
-    import.meta.resolve('@bitler/frontend/package.json')
-  )),
+  fileURLToPath(new URL('..dist/**/*.{js,ts,jsx,tsx}', import.meta.resolve('@bitler/frontend/package.json'))),
 );
 const baseConfig = (root: string): InlineConfig => ({
   root,
   define: {
-    'process.env': {}
+    'process.env': {},
   },
-  plugins: [
-    react(),
-  ],
+  plugins: [react()],
   server: {
     port: 1337,
     proxy: {
@@ -42,11 +37,11 @@ const createFrontendDev = async () => {
   const server = await createServer(config);
 
   return server;
-}
+};
 
 const buildFrontend = async () => {
   const config = baseConfig(resolve(process.cwd(), 'frontend'));
-  await build(config)
-}
+  await build(config);
+};
 
 export { buildFrontend, createFrontendDev };

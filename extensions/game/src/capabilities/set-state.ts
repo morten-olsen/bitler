@@ -1,5 +1,6 @@
-import { createCapability, z } from "@bitler/core";
-import { gameStateContext } from "../contexts/game-state.js";
+import { createCapability, z } from '@bitler/core';
+
+import { gameStateContext } from '../contexts/game-state.js';
 
 const setState = createCapability({
   kind: 'game.set-state',
@@ -14,7 +15,7 @@ const setState = createCapability({
     'Example: { "money": 100, "health": 100 }',
     'Then, when the user buys something, you can update the state to { "money": 90, "health": 100 }',
     'Remember to include the exisiting state when updating the state, otherwise you will overwrite the state.',
-    ''
+    '',
   ].join('\n'),
   input: z.object({
     json: z.string().describe('The JSON representation of the game state as a string.'),

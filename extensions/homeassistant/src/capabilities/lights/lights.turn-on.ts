@@ -1,32 +1,41 @@
-import { createCapability, z } from "@bitler/core";
-import { HomeassistantService } from "../../services/services.ha.js";
-import { HomeAssistantContext, roomsContextSetup } from "../../context/rooms.js";
+import { createCapability, z } from '@bitler/core';
+
+import { HomeassistantService } from '../../services/services.ha.js';
+import { HomeAssistantContext, roomsContextSetup } from '../../context/rooms.js';
 
 const turnOn = createCapability({
   kind: `homeassistant.lights.turn-on`,
   name: 'Turn on lights',
   group: 'Home',
   description: 'Turn on the lights',
-  setup: [
-    roomsContextSetup,
-  ],
+  setup: [roomsContextSetup],
   input: z.object({
     rooms: z.array(z.string()).describe('The room ids to turn on the lights in (allows multiple rooms)'),
-    brightness: z.number().describe('Number indicating the percentage of full brightness, where 0 turns the light off, 1 is the minimum brightness, and 100 is the maximum brightness.').optional(),
+    brightness: z
+      .number()
+      .describe(
+        'Number indicating the percentage of full brightness, where 0 turns the light off, 1 is the minimum brightness, and 100 is the maximum brightness.',
+      )
+      .optional(),
     brightnessStep: z.number().describe('Change brightness by a percentage.').optional(),
     temperature: z.number().describe('light temperature in kelvin').optional(),
-    color: z.object({
-      r: z.number(),
-      g: z.number(),
-      b: z.number(),
-    }).describe('The color in RGB format. A list of three integers between 0 and 255 representing the values of red, green, and blue').optional(),
+    color: z
+      .object({
+        r: z.number(),
+        g: z.number(),
+        b: z.number(),
+      })
+      .describe(
+        'The color in RGB format. A list of three integers between 0 and 255 representing the values of red, green, and blue',
+      )
+      .optional(),
     transition: z.number().describe('The duration in seconds to transition to the new state').optional(),
   }),
   output: z.object({
     success: z.boolean(),
   }),
   handler: async ({ input, container, context }) => {
-    const { getRooms } = container.get(HomeAssistantContext)
+    const { getRooms } = container.get(HomeAssistantContext);
 
     const roomIds = getRooms(input.rooms || [], context).flatMap((room) => {
       if (!room || !room.lightGroup) {

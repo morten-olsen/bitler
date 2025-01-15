@@ -1,5 +1,6 @@
-import { z, ZodSchema } from "zod";
-import { ActionRequest } from "./action-requests.action.js";
+import { ZodSchema, z } from 'zod';
+
+import { ActionRequest } from './action-requests.action.js';
 
 class ActionRequestInstance {
   #requests: {

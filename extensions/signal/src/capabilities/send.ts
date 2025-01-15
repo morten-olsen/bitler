@@ -1,5 +1,6 @@
-import { createCapability, z } from "@bitler/core";
-import { SignalService } from "../services/services.signal.js";
+import { createCapability, z } from '@bitler/core';
+
+import { SignalService } from '../services/services.signal.js';
 
 const sendCapability = createCapability({
   kind: 'signal.send',
@@ -7,9 +8,14 @@ const sendCapability = createCapability({
   group: 'Signal',
   description: 'Send a message to a Signal contact',
   input: z.object({
-    recipient: z.string().describe('The recipient\'s phone number'),
+    recipient: z.string().describe("The recipient's phone number"),
     message: z.string(),
-    attachments: z.array(z.string()).optional().describe('Base64 encoded attachments ("<BASE64 ENCODED DATA>", "data:<MIME-TYPE>;base64<comma><BASE64 ENCODED DATA>", "data:<MIME-TYPE>;filename=<FILENAME>;base64<comma><BASE64 ENCODED DATA>")'),
+    attachments: z
+      .array(z.string())
+      .optional()
+      .describe(
+        'Base64 encoded attachments ("<BASE64 ENCODED DATA>", "data:<MIME-TYPE>;base64<comma><BASE64 ENCODED DATA>", "data:<MIME-TYPE>;filename=<FILENAME>;base64<comma><BASE64 ENCODED DATA>")',
+      ),
   }),
   output: z.object({
     success: z.boolean(),
@@ -26,7 +32,7 @@ const sendCapability = createCapability({
       },
     });
     return { success: true };
-  }
-})
+  },
+});
 
 export { sendCapability };

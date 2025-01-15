@@ -1,6 +1,7 @@
-import { createCapability, Databases, Events, z } from "@bitler/core";
-import { dbConfig } from "../../databases/databases.history.js";
-import { historyUpdatedEvent } from "../../events/history/history.updated.js";
+import { Databases, Events, createCapability, z } from '@bitler/core';
+
+import { dbConfig } from '../../databases/databases.history.js';
+import { historyUpdatedEvent } from '../../events/history/history.updated.js';
 
 const historyDeleteCapability = createCapability({
   kind: 'history.get',
@@ -28,6 +29,6 @@ const historyDeleteCapability = createCapability({
 
     return { success: true };
   },
-})
+});
 
 export { historyDeleteCapability };

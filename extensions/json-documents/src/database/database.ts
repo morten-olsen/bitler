@@ -1,4 +1,4 @@
-import { createDatabase, createMigration } from "@bitler/core";
+import { createDatabase, createMigration } from '@bitler/core';
 
 const init = createMigration({
   name: 'init',
@@ -14,12 +14,12 @@ const init = createMigration({
   },
   down: async (knex) => {
     await knex.schema.dropTable('documents');
-  }
+  },
 });
 
 const dbConfig = createDatabase({
   name: 'json-documents.data',
   migrations: [init],
-})
+});
 
 export { dbConfig };

@@ -1,34 +1,34 @@
-interface TypingMessage {
+type TypingMessage = {
   action: 'STARTED' | 'STOPPED';
   timestamp: number;
   groupId?: string; // Optional, only present in some cases
-}
+};
 
 // Define the data message structure
-interface DataMessage {
+type DataMessage = {
   timestamp: number;
   message: string;
   expiresInSeconds: number;
   viewOnce: boolean;
-}
+};
 
 // Define the receipt message structure
-interface ReceiptMessage {
+type ReceiptMessage = {
   when: number;
   isDelivery: boolean;
   isRead: boolean;
   isViewed: boolean;
   timestamps: number[];
-}
+};
 
 // Define the sync message structure
-interface SyncMessage {
-  readMessages?: Array<{
+type SyncMessage = {
+  readMessages?: {
     sender: string;
     senderNumber: string;
     senderUuid: string;
     timestamp: number;
-  }>;
+  }[];
   sentMessage?: {
     destination: string | null;
     destinationNumber: string | null;
@@ -42,10 +42,10 @@ interface SyncMessage {
       type: 'DELIVER';
     };
   };
-}
+};
 
 // Define the envelope structure
-interface Envelope {
+type Envelope = {
   source: string;
   sourceNumber: string;
   sourceUuid: string;
@@ -56,20 +56,12 @@ interface Envelope {
   dataMessage?: DataMessage;
   receiptMessage?: ReceiptMessage;
   syncMessage?: SyncMessage;
-}
+};
 
 // Define the message structure
-interface Message {
+type Message = {
   envelope: Envelope;
   account: string;
-}
+};
 
-export {
-  type TypingMessage,
-  type DataMessage,
-  type ReceiptMessage,
-  type SyncMessage,
-  type Envelope,
-  type Message,
-}
-
+export { type TypingMessage, type DataMessage, type ReceiptMessage, type SyncMessage, type Envelope, type Message };

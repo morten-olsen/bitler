@@ -1,21 +1,20 @@
 import React from 'react';
-import { useDialog } from "@bitler/react"
-import { Card, CardBody, Skeleton } from "@nextui-org/react";
-import clsx from "clsx";
-import { motion } from "framer-motion";
-import { Bot, User } from "lucide-react";
+import { useDialog } from '@bitler/react';
+import { Card, CardBody, Skeleton } from '@nextui-org/react';
+import clsx from 'clsx';
+import { motion } from 'framer-motion';
+import { Bot, User } from 'lucide-react';
 import Markdown from 'react-markdown';
 
 type DialogMessageProps = {
-  message: ReturnType<typeof useDialog>["messages"][number];
+  message: ReturnType<typeof useDialog>['messages'][number];
 };
 
 const DialogMessage = ({ message }: DialogMessageProps) => {
   return (
-
     <motion.div
       initial={{ opacity: 0, height: 0 }}
-      animate={{ opacity: 1, height: "auto" }}
+      animate={{ opacity: 1, height: 'auto' }}
       exit={{ opacity: 0, height: 0 }}
       transition={{ duration: 0.2 }}
     >
@@ -33,7 +32,9 @@ const DialogMessage = ({ message }: DialogMessageProps) => {
             </>
           )}
         </div>
-        <div className={clsx({ 'px-4 py-4 border-1 border-default-100 rounded-lg': true, 'flex-1': message.isLoading })}>
+        <div
+          className={clsx({ 'px-4 py-4 border-1 border-default-100 rounded-lg': true, 'flex-1': message.isLoading })}
+        >
           <div className="flex-1 justify-center flex flex-col">
             {message.isLoading ? (
               <div className="flex-1 flex flex-wrap gap-2">
@@ -56,8 +57,7 @@ const DialogMessage = ({ message }: DialogMessageProps) => {
         </div>
       </div>
     </motion.div>
-
-  )
-}
+  );
+};
 
 export { DialogMessage };

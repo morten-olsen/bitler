@@ -12,7 +12,7 @@ const init: DatabaseMigration = {
   },
   down: async (knex) => {
     await knex.schema.dropTable('timers');
-  }
-}
+  },
+};
 
 export { init };

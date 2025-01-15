@@ -1,12 +1,12 @@
-import { AgentConfig, useAgentConfig, useDialog } from "@bitler/react"
-import { Button, Textarea, useDisclosure } from "@nextui-org/react";
+import { AgentConfig, useAgentConfig, useDialog } from '@bitler/react';
+import { Button, Textarea, useDisclosure } from '@nextui-org/react';
 import { Cog, Send } from 'lucide-react';
 import { AnimatePresence } from 'framer-motion';
-import React, { useCallback, useRef, useState } from "react";
-import { useKeyboard } from "../../hooks/hooks.js";
-import { useOpenScreen } from "../screens/screens.hooks.js";
-import { DialogMessage } from "./dialog.message.js";
-import { AgentConfigContainer } from "../agent-config/agent-config.js";
+import React, { useCallback, useRef, useState } from 'react';
+import { useKeyboard } from '../../hooks/hooks.js';
+import { useOpenScreen } from '../screens/screens.hooks.js';
+import { DialogMessage } from './dialog.message.js';
+import { AgentConfigContainer } from '../agent-config/agent-config.js';
 
 type DialogProps = {
   initialAgentConfig?: AgentConfig;
@@ -26,9 +26,9 @@ const Dialog = ({ initialAgentConfig, userIntro, id }: DialogProps) => {
   const disclosure = useDisclosure();
   const openScreen = useOpenScreen();
 
-  const send = useCallback(
-    () => {
-      dialog.prompt({
+  const send = useCallback(() => {
+    dialog.prompt(
+      {
         model: agentConfig.model || undefined,
         dialog: dialog.messages,
         agent: agentConfig.agent || undefined,
@@ -37,7 +37,8 @@ const Dialog = ({ initialAgentConfig, userIntro, id }: DialogProps) => {
         discoverCapabilities: agentConfig.discoverCapabilites,
         discoverAgents: agentConfig.discoverAgents,
         prompt: input,
-      }, {
+      },
+      {
         onSuccess: (result) => {
           const { actionRequests = [] } = result || {};
           for (const { kind, value } of actionRequests) {
@@ -45,8 +46,8 @@ const Dialog = ({ initialAgentConfig, userIntro, id }: DialogProps) => {
               setAgentConfig((agentConfig) => {
                 return {
                   ...agentConfig,
-                  capabilities: [...(agentConfig.capabilities || []), ...value as any],
-                }
+                  capabilities: [...(agentConfig.capabilities || []), ...(value as any)],
+                };
               });
             }
             if (kind === 'builtin.create-dialog') {
@@ -59,7 +60,7 @@ const Dialog = ({ initialAgentConfig, userIntro, id }: DialogProps) => {
                     capabilities,
                     systemPrompt,
                   },
-                }
+                },
               });
             }
           }
@@ -68,22 +69,27 @@ const Dialog = ({ initialAgentConfig, userIntro, id }: DialogProps) => {
             top: contentAreaRef.current.scrollHeight,
             behavior: 'smooth',
           });
-        }
-      });
+        },
+      },
+    );
+  }, [agentConfig, input]);
+
+  useKeyboard(
+    {
+      key: 'Enter',
+      action: send,
     },
-    [agentConfig, input]
-  )
+    [send],
+  );
 
-  useKeyboard({
-    key: 'Enter',
-    action: send,
-  }, [send]);
-
-  useKeyboard({
-    key: 'f',
-    ctrlKey: true,
-    action: () => textAreaRef.current?.focus(),
-  }, [send]);
+  useKeyboard(
+    {
+      key: 'f',
+      ctrlKey: true,
+      action: () => textAreaRef.current?.focus(),
+    },
+    [send],
+  );
 
   return (
     <div className="h-full">
@@ -112,13 +118,12 @@ const Dialog = ({ initialAgentConfig, userIntro, id }: DialogProps) => {
               ref={textAreaRef}
               isDisabled={dialog.isLoading}
               placeholder="Type a message..."
-              className="flex-1" minRows={1} value={input} onValueChange={setInput} />
-            <Button
-              isLoading={dialog.isLoading}
-              isIconOnly
-              color="primary"
-              onPress={send}
-            >
+              className="flex-1"
+              minRows={1}
+              value={input}
+              onValueChange={setInput}
+            />
+            <Button isLoading={dialog.isLoading} isIconOnly color="primary" onPress={send}>
               <Send />
             </Button>
             <Button isIconOnly onPress={disclosure.onOpen}>
@@ -129,6 +134,6 @@ const Dialog = ({ initialAgentConfig, userIntro, id }: DialogProps) => {
       </div>
     </div>
   );
-}
+};
 
 export { Dialog };

@@ -1,14 +1,14 @@
-import { useEventEffect, useRunCapabilityQuery } from "@bitler/react";
-import React, { useEffect, useMemo, useState } from "react";
-import { Clock } from "lucide-react";
-import { Badge } from "@nextui-org/react";
+import { useEventEffect, useRunCapabilityQuery } from '@bitler/react';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Clock } from 'lucide-react';
+import { Badge } from '@nextui-org/react';
 
 const timeUntil = (futureTime: Date): string => {
   const now = new Date();
   const diff = futureTime.getTime() - now.getTime();
 
   if (diff <= 0) {
-    return "00:00:00"; // If the future time has already passed
+    return '00:00:00'; // If the future time has already passed
   }
 
   const seconds = Math.floor((diff / 1000) % 60);
@@ -22,9 +22,13 @@ const timeUntil = (futureTime: Date): string => {
 
 const Timers = () => {
   const [time, setTime] = useState(new Date());
-  const timers = useRunCapabilityQuery('timers.list', {}, {
-    queryKey: ['timers.list'],
-  });
+  const timers = useRunCapabilityQuery(
+    'timers.list',
+    {},
+    {
+      queryKey: ['timers.list'],
+    },
+  );
   useEventEffect(
     'timer.updated',
     {},
@@ -32,7 +36,7 @@ const Timers = () => {
       console.log('got update');
       timers.refetch();
     },
-    [timers.refetch]
+    [timers.refetch],
   );
 
   useEventEffect(
@@ -41,7 +45,7 @@ const Timers = () => {
     (timer) => {
       alert(`Timer ${timer.id} triggered`);
     },
-    []
+    [],
   );
 
   useEffect(() => {
@@ -52,22 +56,28 @@ const Timers = () => {
   }, []);
 
   const timerInfo = useMemo(
-    () => timers.data?.timers.map((timer) => ({
-      id: timer.id,
-      description: timer.description,
-      duration: timer.duration,
-      trigger: new Date(new Date(timer.start).getTime() + timer.duration * 1000),
-      timeLeft: timer.duration - Math.floor((time.getTime() - new Date(timer.start).getTime()) / 1000),
-    })).sort((a, b) => a.timeLeft - b.timeLeft),
-    [timers.data, time]
+    () =>
+      timers.data?.timers
+        .map((timer) => ({
+          id: timer.id,
+          description: timer.description,
+          duration: timer.duration,
+          trigger: new Date(new Date(timer.start).getTime() + timer.duration * 1000),
+          timeLeft: timer.duration - Math.floor((time.getTime() - new Date(timer.start).getTime()) / 1000),
+        }))
+        .sort((a, b) => a.timeLeft - b.timeLeft),
+    [timers.data, time],
   );
 
   const timerInfoShort = useMemo(
-    () => timerInfo && timerInfo.length > 0 ? ({
-      nextTimer: timerInfo[0],
-      totalTimers: timerInfo.length,
-    }) : undefined,
-    [timerInfo]
+    () =>
+      timerInfo && timerInfo.length > 0
+        ? {
+            nextTimer: timerInfo[0],
+            totalTimers: timerInfo.length,
+          }
+        : undefined,
+    [timerInfo],
   );
 
   if (!timerInfoShort) {
@@ -82,7 +92,7 @@ const Timers = () => {
 
       <div className="text-xs">{timeUntil(timerInfoShort.nextTimer.trigger)}</div>
     </div>
-  )
-}
+  );
+};
 
 export { Timers };

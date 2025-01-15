@@ -1,10 +1,10 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode } from 'react';
 
 type LabelProps = {
   title: string;
   className?: string;
   children?: ReactNode;
-}
+};
 
 const Label = ({ title, children }: LabelProps) => {
   return (
@@ -13,6 +13,6 @@ const Label = ({ title, children }: LabelProps) => {
       {children}
     </div>
   );
-}
+};
 
-export { Label }
+export { Label };

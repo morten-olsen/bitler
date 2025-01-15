@@ -1,5 +1,6 @@
-import { Capabilities, createCapability, Databases, z } from "@bitler/core";
-import { dbConfig } from "../databases/databases.js";
+import { Capabilities, Databases, createCapability, z } from '@bitler/core';
+
+import { dbConfig } from '../databases/databases.js';
 
 const runNotificationActionCapability = createCapability({
   kind: 'notification.run-action',
@@ -43,6 +44,6 @@ const runNotificationActionCapability = createCapability({
       notificationId: action.notificationId,
     };
   },
-})
+});
 
 export { runNotificationActionCapability };

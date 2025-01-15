@@ -1,4 +1,4 @@
-import { z } from "@bitler/core";
+import { z } from '@bitler/core';
 
 const agentSchema = z.object({
   kind: z.string(),

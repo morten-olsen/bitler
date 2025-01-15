@@ -1,4 +1,4 @@
-import { createEvent, z } from "@bitler/core";
+import { createEvent, z } from '@bitler/core';
 
 const historyUpdatedEvent = createEvent({
   kind: 'history.updated',
@@ -9,6 +9,6 @@ const historyUpdatedEvent = createEvent({
   output: z.object({
     id: z.string(),
   }),
-})
+});
 
 export { historyUpdatedEvent };

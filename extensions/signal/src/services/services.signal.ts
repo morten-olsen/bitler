@@ -1,37 +1,34 @@
-import { Container } from "@bitler/core";
-import { Client, createClient } from "../client/client.js";
-import { paths } from "../generated/api.js";
-import { SignalSocket } from "./services.socket.js";
-import { host, secure } from "../config.js";
+import { Container } from '@bitler/core';
 
-type ApiReponse<
-  TPath extends keyof paths,
-  TMethod extends string
-> = TMethod extends keyof paths[TPath] ?
-  paths[TPath][TMethod] extends { responses: { 200: { schema: infer U } } }
-  ? U : never : never;
+import { Client, createClient } from '../client/client.js';
+import { paths } from '../generated/api.js';
+import { host, secure } from '../config.js';
 
-type ApiBody<
-  TPath extends keyof paths,
-  TMethod extends string
-> = TMethod extends keyof paths[TPath] ?
-  paths[TPath][TMethod] extends { parameters: { body: { data: infer U } } }
-  ? U : never : never;
+import { SignalSocket } from './services.socket.js';
 
-type ApiPathParamters<
-  TPath extends keyof paths,
-  TMethod extends string
-> = TMethod extends keyof paths[TPath] ?
-  paths[TPath][TMethod] extends { parameters: { path: infer U } }
-  ? U : never : never;
+type ApiReponse<TPath extends keyof paths, TMethod extends string> = TMethod extends keyof paths[TPath]
+  ? paths[TPath][TMethod] extends { responses: { 200: { schema: infer U } } }
+    ? U
+    : never
+  : never;
 
-type ApiQueryParameters<
-  TPath extends keyof paths,
-  TMethod extends string
-> = TMethod extends keyof paths[TPath] ?
-  paths[TPath][TMethod] extends { parameters: { query: infer U } }
-  ? U : never : never;
+type ApiBody<TPath extends keyof paths, TMethod extends string> = TMethod extends keyof paths[TPath]
+  ? paths[TPath][TMethod] extends { parameters: { body: { data: infer U } } }
+    ? U
+    : never
+  : never;
 
+type ApiPathParamters<TPath extends keyof paths, TMethod extends string> = TMethod extends keyof paths[TPath]
+  ? paths[TPath][TMethod] extends { parameters: { path: infer U } }
+    ? U
+    : never
+  : never;
+
+type ApiQueryParameters<TPath extends keyof paths, TMethod extends string> = TMethod extends keyof paths[TPath]
+  ? paths[TPath][TMethod] extends { parameters: { query: infer U } }
+    ? U
+    : never
+  : never;
 
 class SignalService {
   #client: Client;
@@ -48,31 +45,32 @@ class SignalService {
     if (!accounts) {
       throw new Error('No accounts found');
     }
-    const sockets = accounts.map((account) => new SignalSocket({
-      id: account,
-      host,
-      secure,
-      container: this.#container,
-    }));
+    const sockets = accounts.map(
+      (account) =>
+        new SignalSocket({
+          id: account,
+          host,
+          secure,
+          container: this.#container,
+        }),
+    );
 
     return sockets;
-  }
+  };
 
   public setup = async () => {
     if (!this.#setupPromise) {
       this.#setupPromise = this.#setup();
     }
     return this.#setupPromise;
-  }
+  };
 
   public getAccounts = async () => {
     const accounts = await this.setup();
     return accounts.map((account) => account.id);
-  }
+  };
 
-  public get = async <
-    TPath extends keyof paths,
-  >(
+  public get = async <TPath extends keyof paths>(
     path: TPath,
     params: {
       query?: ApiQueryParameters<TPath, 'get'>;
@@ -83,18 +81,16 @@ class SignalService {
       params: {
         query: params.query,
         path: params.path,
-      }
+      },
     });
     if (error) {
       console.error(error);
       throw new Error('API error');
     }
     return data! as ApiReponse<TPath, 'get'>;
-  }
+  };
 
-  public post = async<
-    TPath extends keyof paths,
-  >(
+  public post = async <TPath extends keyof paths>(
     path: TPath,
     params: {
       body: ApiBody<TPath, 'post'>;
@@ -107,15 +103,14 @@ class SignalService {
       params: {
         query: params.query,
         path: params.path,
-      }
+      },
     });
     if (error) {
       console.error(error);
       throw new Error('API error');
     }
     return data! as ApiReponse<TPath, 'get'>;
-  }
-
+  };
 }
 
 export { SignalService };

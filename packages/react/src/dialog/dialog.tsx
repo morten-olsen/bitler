@@ -1,16 +1,27 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import React, { createContext, ReactNode, useEffect, useState } from "react";
-import { CapabilityInput, DefaultServer, useAgentConfigContext, useEventEffect, useRunCapabilityMutation, useRunCapabilityQuery } from "../exports.js";
-import { useClientContext } from "../client/client.context.js";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import React, { ReactNode, createContext, useEffect, useState } from 'react';
+import {
+  CapabilityInput,
+  DefaultServer,
+  useAgentConfigContext,
+  useEventEffect,
+  useRunCapabilityMutation,
+  useRunCapabilityQuery,
+} from '../exports.js';
+import { useClientContext } from '../client/client.context.js';
 
 type PromptInput = CapabilityInput<DefaultServer, 'dialog.prompt'>;
-type DialogMessage = Exclude<PromptInput['dialog'], undefined>[number]
+type DialogMessage = Exclude<PromptInput['dialog'], undefined>[number];
 
 const useConversationHistory = () => {
   const queryClient = useQueryClient();
-  const conversations = useRunCapabilityQuery('history.list', {}, {
-    queryKey: ['history.list'],
-  });
+  const conversations = useRunCapabilityQuery(
+    'history.list',
+    {},
+    {
+      queryKey: ['history.list'],
+    },
+  );
 
   useEventEffect(
     'history.updated',
@@ -20,16 +31,16 @@ const useConversationHistory = () => {
         queryKey: ['history.list'],
       });
     },
-    []
+    [],
   );
 
   return conversations;
-}
+};
 
 type UseDialogOptiops = {
   id?: string;
   agentContext?: ReturnType<typeof useAgentConfigContext>;
-}
+};
 const useDialog = (options: UseDialogOptiops) => {
   const { client } = useClientContext();
   const parentContent = useAgentConfigContext();
@@ -39,10 +50,11 @@ const useDialog = (options: UseDialogOptiops) => {
 
   const getHistory = useRunCapabilityMutation('history.get', {});
 
-  useEffect(
-    () => {
-      if (!options.id) return;
-      getHistory.mutate({ id: options.id }, {
+  useEffect(() => {
+    if (!options.id) return;
+    getHistory.mutate(
+      { id: options.id },
+      {
         onSuccess: (data) => {
           console.log('data', data);
           setMessages(data.messages as any);
@@ -53,12 +65,11 @@ const useDialog = (options: UseDialogOptiops) => {
             agents: data.agents,
             discoverAgents: data.discoverAgents,
             discoverCapabilites: data.discoverCapabilies,
-          })
+          });
         },
-      });
-    },
-    [options.id]
-  )
+      },
+    );
+  }, [options.id]);
 
   const promptMutate = useMutation({
     mutationFn: async (body: CapabilityInput<DefaultServer, 'dialog.prompt'>) => {
@@ -86,7 +97,7 @@ const useDialog = (options: UseDialogOptiops) => {
         last.content = response.response;
         last.isLoading = false;
         return [...clone, last];
-      })
+      });
       setContext(response.context);
       return response;
     },
@@ -97,8 +108,8 @@ const useDialog = (options: UseDialogOptiops) => {
     messages,
     context,
     prompt: promptMutate.mutate,
-  }
-}
+  };
+};
 
 type DialogContextValue = ReturnType<typeof useDialog>;
 
@@ -109,11 +120,7 @@ type DialogProviderProps = DialogContextValue & {
 };
 
 const DialogProvider = ({ children, ...context }: DialogProviderProps) => {
-  return (
-    <DialogContext.Provider value={context}>
-      {children}
-    </DialogContext.Provider>
-  );
-}
+  return <DialogContext.Provider value={context}>{children}</DialogContext.Provider>;
+};
 
 export { useDialog, useConversationHistory, DialogProvider };

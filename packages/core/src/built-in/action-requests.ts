@@ -1,6 +1,7 @@
-import { z } from "zod";
-import { createCapability } from "../capabilities/capabilities.js";
-import { ActionRequests, getJsonSchema } from "../exports.js";
+import { z } from 'zod';
+
+import { createCapability } from '../capabilities/capabilities.js';
+import { ActionRequests, getJsonSchema } from '../exports.js';
 
 const listActionRequestsCapability = createCapability({
   kind: 'action-requests.list',
@@ -9,18 +10,20 @@ const listActionRequestsCapability = createCapability({
   description: 'List all the action request types that the exists in the system',
   input: z.object({}),
   output: z.object({
-    actionRequests: z.array(z.object({
-      kind: z.string(),
-      name: z.string(),
-      description: z.string(),
-    })),
+    actionRequests: z.array(
+      z.object({
+        kind: z.string(),
+        name: z.string(),
+        description: z.string(),
+      }),
+    ),
   }),
   handler: async ({ container }) => {
     const actionRequestService = container.get(ActionRequests);
     const actionRequests = actionRequestService.list();
     return {
       actionRequests,
-    }
+    };
   },
 });
 
@@ -51,9 +54,8 @@ const describeActionRequestsCapability = createCapability({
         ...actionRequest,
         schema: getJsonSchema(actionRequest.schema),
       },
-    }
+    };
   },
 });
 
 export { listActionRequestsCapability, describeActionRequestsCapability };
-

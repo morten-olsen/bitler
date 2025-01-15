@@ -1,4 +1,5 @@
-import { createDatabase, createMigration, FeatureExtractor } from '@bitler/core';
+import { FeatureExtractor, createDatabase, createMigration } from '@bitler/core';
+
 import { MODEL } from '../consts.js';
 
 const init = createMigration({
@@ -35,7 +36,7 @@ const init = createMigration({
   down: async (knex) => {
     await knex.schema.dropTableIfExists('knowledge_bases');
   },
-})
+});
 const dbConfig = createDatabase({
   name: 'knowledge-bases',
   migrations: [init],

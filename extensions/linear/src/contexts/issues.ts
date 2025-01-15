@@ -1,5 +1,6 @@
-import { createContextItem, z } from "@bitler/core";
-import { issueSchema } from "../schemas/schemas.js";
+import { createContextItem, z } from '@bitler/core';
+
+import { issueSchema } from '../schemas/schemas.js';
 
 const issuesContext = createContextItem({
   kind: 'linear.issues',

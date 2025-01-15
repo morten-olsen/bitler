@@ -1,5 +1,6 @@
-import { createCapability, z } from "@bitler/core";
-import { SpotifyService } from "../services/services.spotify.js";
+import { createCapability, z } from '@bitler/core';
+
+import { SpotifyService } from '../services/services.spotify.js';
 
 const search = createCapability({
   kind: 'spotify.search',

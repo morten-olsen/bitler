@@ -1,5 +1,6 @@
-import { createCapability, Databases, z } from "@bitler/core";
-import { dbConfig } from "../../databases/databases.history.js";
+import { Databases, createCapability, z } from '@bitler/core';
+
+import { dbConfig } from '../../databases/databases.history.js';
 
 const historyGetCapability = createCapability({
   kind: 'history.get',
@@ -22,12 +23,14 @@ const historyGetCapability = createCapability({
     agents: z.array(z.string()),
     createdAt: z.date(),
     updatedAt: z.date(),
-    messages: z.array(z.object({
-      id: z.string(),
-      role: z.string(),
-      content: z.string(),
-      createdAt: z.date(),
-    })),
+    messages: z.array(
+      z.object({
+        id: z.string(),
+        role: z.string(),
+        content: z.string(),
+        createdAt: z.date(),
+      }),
+    ),
   }),
   handler: async ({ container, input }) => {
     const dbs = container.get(Databases);
@@ -47,7 +50,7 @@ const historyGetCapability = createCapability({
         'updatedAt',
       ])
       .where('id', input.id)
-      .first()
+      .first();
 
     if (!conversation) {
       return {
@@ -64,15 +67,11 @@ const historyGetCapability = createCapability({
         createdAt: new Date(),
         updatedAt: new Date(),
         messages: [],
-      }
+      };
     }
 
-    const capabilities = await db('conversationCapabilities')
-      .select(['capability'])
-      .where('conversationId', input.id);
-    const agents = await db('conversationAgents')
-      .select(['agentId'])
-      .where('conversationId', input.id);
+    const capabilities = await db('conversationCapabilities').select(['capability']).where('conversationId', input.id);
+    const agents = await db('conversationAgents').select(['agentId']).where('conversationId', input.id);
 
     const messages = await db('messages')
       .select(['id', 'role', 'content', 'createdAt'])
@@ -84,8 +83,7 @@ const historyGetCapability = createCapability({
       agents: agents.map((a) => a.agentId),
       messages,
     };
-
   },
-})
+});
 
 export { historyGetCapability };

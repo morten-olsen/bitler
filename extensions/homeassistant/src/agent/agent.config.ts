@@ -1,15 +1,12 @@
-import { createAgent } from "@bitler/llm";
-import { capabilities } from "../capabilities/capabilities.js";
+import { createAgent } from '@bitler/llm';
 
+import { capabilities } from '../capabilities/capabilities.js';
 
 const agentConfig = createAgent({
   kind: 'homeassistant.config',
   name: 'Home Assistant Config',
-  capabilities: [
-    ...Object.values(capabilities.config).map(a => a.kind)
-  ],
+  capabilities: [...Object.values(capabilities.config).map((a) => a.kind)],
   description: 'Used for home assistant tasks',
 });
-
 
 export { agentConfig };

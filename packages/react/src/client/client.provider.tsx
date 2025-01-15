@@ -1,7 +1,7 @@
-import React, { type ReactNode, useMemo } from "react";
-import { ClientContext } from "./client.context.js";
-import { useQuery } from "@tanstack/react-query";
-import { Client } from "@bitler/client";
+import React, { type ReactNode, useMemo } from 'react';
+import { ClientContext } from './client.context.js';
+import { useQuery } from '@tanstack/react-query';
+import { Client } from '@bitler/client';
 
 type ClientProviderProps = {
   baseUrl: string;
@@ -20,22 +20,18 @@ const ClientProvider = ({ baseUrl, children }: ClientProviderProps) => {
         capabilities: capabilitiesList,
         agents: agentList,
         models: [],
-      }
+      };
     },
     onError: (error) => {
       console.error(error);
-    }
+    },
   });
 
   if (!setup.data) {
     return null;
   }
 
-  return (
-    <ClientContext.Provider value={{ client, ...setup.data }}>
-      {children}
-    </ClientContext.Provider>
-  );
-}
+  return <ClientContext.Provider value={{ client, ...setup.data }}>{children}</ClientContext.Provider>;
+};
 
 export { ClientProvider };

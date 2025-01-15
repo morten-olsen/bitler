@@ -1,6 +1,7 @@
-import { createCapability, z } from "@bitler/core";
-import { HomeassistantService } from "../../services/services.ha.js";
-import { HomeAssistantContext, roomsContextSetup } from "../../context/rooms.js";
+import { createCapability, z } from '@bitler/core';
+
+import { HomeassistantService } from '../../services/services.ha.js';
+import { HomeAssistantContext, roomsContextSetup } from '../../context/rooms.js';
 
 const orNull = <T extends z.ZodType<any>>(type: T) => z.union([type, z.null()]);
 const lightSchema = z.object({
@@ -18,21 +19,21 @@ const get = createCapability({
   name: 'Get light status',
   group: 'Home',
   description: 'Get the status of the lights in a room',
-  setup: [
-    roomsContextSetup,
-  ],
+  setup: [roomsContextSetup],
   input: z.object({
     rooms: z.array(z.string()).describe('The room ids to turn off the lights in (allows multiple rooms)'),
     transition: z.number().describe('The duration in seconds to transition to the new state').optional(),
   }),
   output: z.object({
-    rooms: z.array(z.object({
-      id: z.string(),
-      all: lightSchema,
-    })),
+    rooms: z.array(
+      z.object({
+        id: z.string(),
+        all: lightSchema,
+      }),
+    ),
   }),
   handler: async ({ input, container, context }) => {
-    const { getRooms } = container.get(HomeAssistantContext)
+    const { getRooms } = container.get(HomeAssistantContext);
     const ha = container.get(HomeassistantService);
     await ha.ready();
 
@@ -47,9 +48,9 @@ const get = createCapability({
       const room = {
         id: roomInfo.id,
         all: allEntity?.attributes as any,
-      }
+      };
       return [room];
-    })
+    });
 
     return {
       rooms,

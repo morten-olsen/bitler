@@ -1,6 +1,6 @@
 import React from 'react';
-import { NextUIProvider } from "@nextui-org/react";
-import { BitlerProvider } from "@bitler/react";
+import { NextUIProvider } from '@nextui-org/react';
+import { BitlerProvider } from '@bitler/react';
 import { useTheme } from '@nextui-org/use-theme';
 import { Sidebar } from './containers/sidebar/sidebar.js';
 import { ScreensProvider } from './containers/screens/screens.provider.js';
@@ -26,6 +26,6 @@ const App = () => {
       </ScreensProvider>
     </NextUIProvider>
   );
-}
+};
 
 export { App };

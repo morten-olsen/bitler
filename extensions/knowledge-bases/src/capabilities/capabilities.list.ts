@@ -1,5 +1,6 @@
-import { createCapability, Databases, z } from "@bitler/core";
-import { dbConfig } from "../databases/databases.js";
+import { Databases, createCapability, z } from '@bitler/core';
+
+import { dbConfig } from '../databases/databases.js';
 
 const listKnowledgeBasesCapability = createCapability({
   kind: 'knowledge-base.list',
@@ -8,10 +9,12 @@ const listKnowledgeBasesCapability = createCapability({
   description: 'List all knowledge bases',
   input: z.object({}),
   output: z.object({
-    knowledgeBases: z.array(z.object({
-      id: z.string(),
-      name: z.string(),
-    })),
+    knowledgeBases: z.array(
+      z.object({
+        id: z.string(),
+        name: z.string(),
+      }),
+    ),
   }),
   handler: async ({ container }) => {
     const dbs = container.get(Databases);
@@ -19,6 +22,6 @@ const listKnowledgeBasesCapability = createCapability({
     const knowledgeBases = await db('knowledgeBases').select();
     return { knowledgeBases };
   },
-})
+});
 
 export { listKnowledgeBasesCapability };

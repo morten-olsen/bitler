@@ -1,5 +1,5 @@
-import { dialogCreateNewCapability } from "../capabilities/dialog/dialog.create.js";
-import { createAgent } from "../services/agents/agents.js";
+import { dialogCreateNewCapability } from '../capabilities/dialog/dialog.create.js';
+import { createAgent } from '../services/agents/agents.js';
 
 const receptionistAgent = createAgent({
   kind: 'builtin.receptionist',
@@ -10,9 +10,7 @@ const receptionistAgent = createAgent({
     'The user will tell what they to do, and your job is to then use the create new dialog tool',
     'to create an expert agent that can help the user with their request.',
   ].join('\n'),
-  capabilities: [
-    dialogCreateNewCapability.kind,
-  ],
+  capabilities: [dialogCreateNewCapability.kind],
 });
 
 export { receptionistAgent };

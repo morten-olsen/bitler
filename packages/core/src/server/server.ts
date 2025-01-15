@@ -1,20 +1,23 @@
-import fastify from "fastify";
+import { resolve } from 'path';
+
+import fastify from 'fastify';
 import cors from '@fastify/cors';
-import swagger from "@fastify/swagger";
-import swaggerUi from "@fastify/swagger-ui";
-import { jsonSchemaTransform, serializerCompiler, validatorCompiler, ZodTypeProvider } from "fastify-type-provider-zod";
-import { Container } from "../container/container.js";
-import { capabilitiesPlugin } from "./routes/routes.capabilities.js";
-import { schemasPlugin } from "./routes/routes.schema.js";
-import { eventsPlugin } from "./routes/routes.events.js";
-import { builtIn, Extension, Extensions } from "../exports.js";
-import { resolve } from "path";
-import fastifyStatic from "@fastify/static";
-import { filesPlugin } from "./routes/routes.files.js";
+import swagger from '@fastify/swagger';
+import swaggerUi from '@fastify/swagger-ui';
+import { ZodTypeProvider, jsonSchemaTransform, serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
+import fastifyStatic from '@fastify/static';
+
+import { Container } from '../container/container.js';
+import { Extension, Extensions, builtIn } from '../exports.js';
+
+import { capabilitiesPlugin } from './routes/routes.capabilities.js';
+import { schemasPlugin } from './routes/routes.schema.js';
+import { eventsPlugin } from './routes/routes.events.js';
+import { filesPlugin } from './routes/routes.files.js';
 
 type CreateOptions = {
   setup?: (app: fastify.FastifyInstance) => Promise<void>;
-}
+};
 class Server {
   #container: Container;
 
@@ -63,24 +66,17 @@ class Server {
     await app.ready();
     app.swagger();
     return app;
-  }
+  };
 }
 
 type Configuration = {
   extensions?: Extension[];
   container?: Container;
-}
+};
 
-const setupServer = async ({
-  extensions = [],
-  container = new Container(),
-}: Configuration) => {
-
+const setupServer = async ({ extensions = [], container = new Container() }: Configuration) => {
   const extensionsService = container.get(Extensions);
-  await extensionsService.register([
-    builtIn,
-    ...extensions
-  ]);
+  await extensionsService.register([builtIn, ...extensions]);
   const server = container.get(Server);
   const app = await server.create({
     setup: async (app) => {
@@ -95,7 +91,7 @@ const setupServer = async ({
   await app.listen({
     port: 3000,
     host: process.env.HOST,
-  })
-}
+  });
+};
 
 export { Server, setupServer, type Configuration };

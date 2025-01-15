@@ -1,14 +1,12 @@
-import { createCapability, z } from "@bitler/core";
-import { HomeAssistantContext, HomeassistantService, roomsContextSetup } from "@bitler/homeassistant";
+import { createCapability, z } from '@bitler/core';
+import { HomeAssistantContext, HomeassistantService, roomsContextSetup } from '@bitler/homeassistant';
 
 const resume = createCapability({
   kind: 'music.resume',
   name: 'Resume',
   group: 'Music',
   description: 'Resume paused music',
-  setup: [
-    roomsContextSetup,
-  ],
+  setup: [roomsContextSetup],
   input: z.object({
     room: z.string().describe('Room ID'),
   }),
@@ -31,11 +29,11 @@ const resume = createCapability({
       service: 'media_play',
       target: {
         entities: [player],
-      }
-    })
+      },
+    });
     return {
       success: true,
-    }
+    };
   },
 });
 

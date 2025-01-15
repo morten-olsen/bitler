@@ -1,7 +1,8 @@
-import { z } from "zod";
-import { createCapability } from "../capabilities/capabilities.js";
-import { Events } from "../events/events.js";
-import { getJsonSchema } from "../utils/zod.js";
+import { z } from 'zod';
+
+import { createCapability } from '../capabilities/capabilities.js';
+import { Events } from '../events/events.js';
+import { getJsonSchema } from '../utils/zod.js';
 
 const listEventsCapability = createCapability({
   kind: 'events.list',
@@ -10,19 +11,21 @@ const listEventsCapability = createCapability({
   description: 'List all the events that the exists in the system',
   input: z.object({}),
   output: z.object({
-    events: z.array(z.object({
-      kind: z.string(),
-      name: z.string(),
-      group: z.string(),
-      description: z.string(),
-    })),
+    events: z.array(
+      z.object({
+        kind: z.string(),
+        name: z.string(),
+        group: z.string(),
+        description: z.string(),
+      }),
+    ),
   }),
   handler: async ({ container }) => {
     const eventsService = container.get(Events);
     const events = eventsService.list();
     return {
       events,
-    }
+    };
   },
 });
 
@@ -56,9 +59,8 @@ const describeEventsCapability = createCapability({
         input: getJsonSchema(event.input),
         output: getJsonSchema(event.output),
       },
-    }
+    };
   },
 });
-
 
 export { listEventsCapability, describeEventsCapability };

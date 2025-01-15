@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Sidebar } from './containers/sidebar/sidebar.js';
 import { Screens } from './containers/screens/screens.container.js';
@@ -14,6 +13,6 @@ const Main = () => {
       </div>
     </div>
   );
-}
+};
 
 export { Main };

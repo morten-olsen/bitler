@@ -1,7 +1,8 @@
-import { FastifyPluginAsyncZod } from "fastify-type-provider-zod"
-import { z } from "zod"
-import { Event, Events } from "../../events/events.js";
-import { httpErrors } from "@fastify/sensible";
+import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
+import { z } from 'zod';
+import { httpErrors } from '@fastify/sensible';
+
+import { Event, Events } from '../../events/events.js';
 
 const eventsPlugin: FastifyPluginAsyncZod = async (app) => {
   app.route({
@@ -25,10 +26,12 @@ const eventsPlugin: FastifyPluginAsyncZod = async (app) => {
       }
       const parsedInput = event.input.parse(input);
       reply.hijack();
-      reply.raw.setHeaders(new Map([
-        ["Content-Type", "application/octet-stream"],
-        ["Cache-Control", "no-cache"]
-      ]));
+      reply.raw.setHeaders(
+        new Map([
+          ['Content-Type', 'application/octet-stream'],
+          ['Cache-Control', 'no-cache'],
+        ]),
+      );
 
       const send = (response: unknown) => {
         reply.raw.write(`${JSON.stringify(response)}\n`);
@@ -38,23 +41,25 @@ const eventsPlugin: FastifyPluginAsyncZod = async (app) => {
         if (emittedEvent.kind !== event.kind) {
           return;
         }
-        if (event.filter && !(await event.filter({
-          container: request.container,
-          input: parsedInput,
-          event: value,
-        }))) {
+        if (
+          event.filter &&
+          !(await event.filter({
+            container: request.container,
+            input: parsedInput,
+            event: value,
+          }))
+        ) {
           return;
         }
         send(value);
-      }
-
+      };
 
       eventsService.on('emitted', handler);
-      reply.raw.on("close", () => {
+      reply.raw.on('close', () => {
         eventsService.off('emitted', handler);
       });
     },
   });
 };
 
-export { eventsPlugin }
+export { eventsPlugin };

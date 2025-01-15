@@ -1,6 +1,7 @@
-import { createCapability, Databases, Events, z } from "@bitler/core";
-import { dbConfig } from "../../databases/databases.history.js";
-import { historyUpdatedEvent } from "../../events/history/history.updated.js";
+import { Databases, Events, createCapability, z } from '@bitler/core';
+
+import { dbConfig } from '../../databases/databases.history.js';
+import { historyUpdatedEvent } from '../../events/history/history.updated.js';
 
 const stringOrNull = z.union([z.string(), z.null()]);
 
@@ -28,39 +29,45 @@ const historySetCapability = createCapability({
     const db = await dbs.get(dbConfig);
 
     await db.transaction(async (trx) => {
-
-      await trx('conversations').insert({
-        id: input.id,
-        name: input.name,
-        description: input.description,
-        agent: input.agent,
-        systemPrompt: input.systemPrompt,
-        discoverCapabilies: input.discoverCapabilies,
-        discoverAgents: input.discoverAgents,
-        updatedAt: new Date(),
-      }).onConflict('id').merge();
+      await trx('conversations')
+        .insert({
+          id: input.id,
+          name: input.name,
+          description: input.description,
+          agent: input.agent,
+          systemPrompt: input.systemPrompt,
+          discoverCapabilies: input.discoverCapabilies,
+          discoverAgents: input.discoverAgents,
+          updatedAt: new Date(),
+        })
+        .onConflict('id')
+        .merge();
 
       if (input.capabilities) {
         await trx('conversationCapabilities').where('conversationId', input.id).delete();
 
         if (input.capabilities.length > 0) {
-          await trx('conversationCapabilities').insert(input.capabilities.map((capability) => ({
-            conversationId: input.id,
-            capability: capability,
-          })));
+          await trx('conversationCapabilities').insert(
+            input.capabilities.map((capability) => ({
+              conversationId: input.id,
+              capability: capability,
+            })),
+          );
         }
       }
 
       if (input.agents) {
         await trx('conversationAgents').where('conversationId', input.id).delete();
         if (input.agents.length > 0) {
-          await trx('conversationAgents').insert(input.agents.map((agent) => ({
-            conversationId: input.id,
-            agentId: agent,
-          })));
+          await trx('conversationAgents').insert(
+            input.agents.map((agent) => ({
+              conversationId: input.id,
+              agentId: agent,
+            })),
+          );
         }
       }
-    })
+    });
 
     const events = container.get(Events);
     events.publish(historyUpdatedEvent, {
@@ -69,6 +76,6 @@ const historySetCapability = createCapability({
 
     return { success: true };
   },
-})
+});
 
 export { historySetCapability };

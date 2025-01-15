@@ -1,7 +1,7 @@
-import { setupServer } from "@bitler/core";
-import { readFile } from "fs/promises";
-import { resolve } from "path";
+import { readFile } from 'fs/promises';
+import { resolve } from 'path';
 
+import { setupServer } from '@bitler/core';
 
 const pkgLocation = resolve('./package.json');
 const pkg = JSON.parse(await readFile(pkgLocation, 'utf-8'));

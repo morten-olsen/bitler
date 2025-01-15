@@ -1,4 +1,4 @@
-import { createDatabase, createMigration } from "@bitler/core";
+import { createDatabase, createMigration } from '@bitler/core';
 
 const init = createMigration({
   name: 'init',
@@ -29,6 +29,6 @@ const init = createMigration({
 const dbConfig = createDatabase({
   name: 'notifications',
   migrations: [init],
-})
+});
 
 export { dbConfig };

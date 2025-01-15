@@ -1,7 +1,8 @@
-import { z } from "zod";
-import { createCapability } from "../capabilities/capabilities.js";
-import { Configs } from "../configs/configs.js";
-import { createEvent } from "../events/events.js";
+import { z } from 'zod';
+
+import { createCapability } from '../capabilities/capabilities.js';
+import { Configs } from '../configs/configs.js';
+import { createEvent } from '../events/events.js';
 
 const listConfigsCapability = createCapability({
   kind: 'configs.list',
@@ -10,12 +11,14 @@ const listConfigsCapability = createCapability({
   description: 'List all the configs that the exists in the system',
   input: z.object({}),
   output: z.object({
-    configs: z.array(z.object({
-      kind: z.string(),
-      name: z.string(),
-      group: z.string().optional(),
-      description: z.string(),
-    })),
+    configs: z.array(
+      z.object({
+        kind: z.string(),
+        name: z.string(),
+        group: z.string().optional(),
+        description: z.string(),
+      }),
+    ),
   }),
   handler: async ({ container }) => {
     const configsService = container.get(Configs);

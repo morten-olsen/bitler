@@ -1,5 +1,6 @@
-import { createCapability, Databases, z } from "@bitler/core";
-import { dbConfig } from "../databases/databases.js";
+import { Databases, createCapability, z } from '@bitler/core';
+
+import { dbConfig } from '../databases/databases.js';
 
 const listNotificationCapability = createCapability({
   kind: 'notification.list',
@@ -8,20 +9,24 @@ const listNotificationCapability = createCapability({
   description: 'List notifications',
   input: z.object({}),
   output: z.object({
-    notifications: z.array(z.object({
-      id: z.string(),
-      title: z.string(),
-      message: z.string(),
-      createdAt: z.string(),
-      actions: z.array(z.object({
+    notifications: z.array(
+      z.object({
         id: z.string(),
         title: z.string(),
-        description: z.string().optional(),
-        kind: z.string(),
-        removeNotification: z.boolean().optional(),
-        data: z.any(),
-      })),
-    })),
+        message: z.string(),
+        createdAt: z.string(),
+        actions: z.array(
+          z.object({
+            id: z.string(),
+            title: z.string(),
+            description: z.string().optional(),
+            kind: z.string(),
+            removeNotification: z.boolean().optional(),
+            data: z.any(),
+          }),
+        ),
+      }),
+    ),
   }),
   handler: async ({ container }) => {
     const dbs = container.get(Databases);

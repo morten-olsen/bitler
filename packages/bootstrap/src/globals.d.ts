@@ -1,4 +1,3 @@
-declare module "tsx" {
-
-  export = any
+declare module 'tsx' {
+  export = any;
 }

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from 'react';
 import { Autocomplete, AutocompleteItem, Chip } from '@nextui-org/react';
 
 type TagbarProps<T> = {
@@ -13,34 +13,28 @@ type TagbarProps<T> = {
 function Tagbar<T extends object>({ selected, onSelectedChange, filter, items, getKey, children }: TagbarProps<T>) {
   const [inputValue, setInputValue] = useState('');
 
-  const selectedItems = useMemo(
-    () => {
-      if (!selected) {
-        return [];
-      }
-      return selected.map((key) => items.find((item) => getKey(item) === key)).filter(Boolean) as T[];
-    },
-    [selected, items, getKey],
-  );
+  const selectedItems = useMemo(() => {
+    if (!selected) {
+      return [];
+    }
+    return selected.map((key) => items.find((item) => getKey(item) === key)).filter(Boolean) as T[];
+  }, [selected, items, getKey]);
 
-  const filtered = useMemo(
-    () => {
-      if (!inputValue) {
-        return items.filter((item) => !selectedItems.includes(item));
+  const filtered = useMemo(() => {
+    if (!inputValue) {
+      return items.filter((item) => !selectedItems.includes(item));
+    }
+    return items.filter((item) => {
+      if (selected && selected.includes(getKey(item))) {
+        return false;
       }
-      return items.filter((item) => {
-        if (selected && selected.includes(getKey(item))) {
-          return false;
-        }
-        if (filter) {
-          return filter(inputValue, item);
-        }
-        const key = getKey(item);
-        return key.toLowerCase().includes(inputValue);
-      })
-    },
-    [inputValue, items, filter, getKey],
-  );
+      if (filter) {
+        return filter(inputValue, item);
+      }
+      const key = getKey(item);
+      return key.toLowerCase().includes(inputValue);
+    });
+  }, [inputValue, items, filter, getKey]);
 
   const onSelect = useCallback(
     (key: string | null) => {
@@ -48,13 +42,14 @@ function Tagbar<T extends object>({ selected, onSelectedChange, filter, items, g
         return;
       }
       setInputValue('');
-      onSelectedChange?.([...new Set([...(selected || []), key])])
+      onSelectedChange?.([...new Set([...(selected || []), key])]);
     },
     [onSelectedChange, selected],
   );
 
   return (
-    <div className="flex flex-wrap gap-1"
+    <div
+      className="flex flex-wrap gap-1"
       onPointerDown={(evt) => evt.stopPropagation()}
       onMouseDown={(evt) => evt.stopPropagation()}
       onClick={(evt) => evt.stopPropagation()}
@@ -79,15 +74,9 @@ function Tagbar<T extends object>({ selected, onSelectedChange, filter, items, g
           onSelect(item as any);
         }}
       >
-        {(item) => (
-          <AutocompleteItem
-            key={getKey(item)}
-          >
-            {children(item)}
-          </AutocompleteItem>
-        )}
+        {(item) => <AutocompleteItem key={getKey(item)}>{children(item)}</AutocompleteItem>}
       </Autocomplete>
-    </div >
+    </div>
   );
 }
 

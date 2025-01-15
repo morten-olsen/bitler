@@ -1,6 +1,7 @@
-import { createCapability, Databases, z } from "@bitler/core";
-import { nanoid } from "nanoid";
-import { dbConfig } from "../database/database.js";
+import { Databases, createCapability, z } from '@bitler/core';
+import { nanoid } from 'nanoid';
+
+import { dbConfig } from '../database/database.js';
 
 const addDocument = createCapability({
   kind: 'json-documents.add-document',

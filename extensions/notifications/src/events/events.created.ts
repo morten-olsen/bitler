@@ -1,4 +1,4 @@
-import { createEvent, z } from "@bitler/core";
+import { createEvent, z } from '@bitler/core';
 
 const notificationCreatedEvent = createEvent({
   kind: 'notification.created',
@@ -10,11 +10,13 @@ const notificationCreatedEvent = createEvent({
     id: z.string(),
     title: z.string(),
     message: z.string(),
-    actions: z.array(z.object({
-      id: z.string(),
-      title: z.string(),
-      description: z.string().optional(),
-    })),
+    actions: z.array(
+      z.object({
+        id: z.string(),
+        title: z.string(),
+        description: z.string().optional(),
+      }),
+    ),
   }),
 });
 

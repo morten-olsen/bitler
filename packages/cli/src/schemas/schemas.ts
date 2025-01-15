@@ -2,8 +2,9 @@ import { Type } from '@sinclair/typebox';
 import { compile } from 'json-schema-to-typescript';
 
 type SchemaResponse = {
-  capabilities: {
-    [key: string]: {
+  capabilities: Record<
+    string,
+    {
       kind: string;
       name: string;
       group: string;
@@ -11,39 +12,42 @@ type SchemaResponse = {
       input: any;
       output: any;
     }
-  };
-  actionRequests: {
-    [key: string]: {
+  >;
+  actionRequests: Record<
+    string,
+    {
       kind: string;
       name: string;
       description: string;
       schema: any;
     }
-  };
-  contextItems: {
-    [key: string]: {
+  >;
+  contextItems: Record<
+    string,
+    {
       kind: string;
       name: string;
       description: string;
       schema: any;
     }
-  };
-  events: {
-    [key: string]: {
+  >;
+  events: Record<
+    string,
+    {
       kind: string;
       name: string;
       description: string;
       input: any;
       output: any;
     }
-  };
-}
+  >;
+};
 
 const getSchemas = async (baseUrl: string) => {
   const response = await fetch(`${baseUrl}/api/schemas`);
   const schemas = await response.json();
-  return schemas as SchemaResponse;;
-}
+  return schemas as SchemaResponse;
+};
 
 const buildSchema = async (baseUrl: string) => {
   const schemas = await getSchemas(baseUrl);
@@ -57,7 +61,7 @@ const buildSchema = async (baseUrl: string) => {
             output: Type.Unsafe(value.output),
           }),
         ]),
-      )
+      ),
     ),
     actionRequests: Type.Object(
       Object.fromEntries(
@@ -67,7 +71,7 @@ const buildSchema = async (baseUrl: string) => {
             schema: Type.Unsafe(value.schema),
           }),
         ]),
-      )
+      ),
     ),
     contextItems: Type.Object(
       Object.fromEntries(
@@ -77,7 +81,7 @@ const buildSchema = async (baseUrl: string) => {
             schema: Type.Unsafe(value.schema),
           }),
         ]),
-      )
+      ),
     ),
     events: Type.Object(
       Object.fromEntries(
@@ -88,24 +92,19 @@ const buildSchema = async (baseUrl: string) => {
             output: Type.Unsafe(value.output),
           }),
         ]),
-      )
+      ),
     ),
   });
   return schema;
-}
+};
 
 const buildTypes = async (baseUrl: string) => {
   const schemas = await buildSchema(baseUrl);
-  const comiled = await compile(
-    schemas,
-    'BitlerServer',
-    {
-      additionalProperties: false,
-    }
-  );
+  const comiled = await compile(schemas, 'BitlerServer', {
+    additionalProperties: false,
+  });
 
   return comiled;
-}
+};
 
-export { buildSchema, buildTypes }
-
+export { buildSchema, buildTypes };

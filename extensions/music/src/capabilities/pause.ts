@@ -1,14 +1,12 @@
-import { createCapability, z } from "@bitler/core";
-import { HomeAssistantContext, HomeassistantService, roomsContextSetup } from "@bitler/homeassistant";
+import { createCapability, z } from '@bitler/core';
+import { HomeAssistantContext, HomeassistantService, roomsContextSetup } from '@bitler/homeassistant';
 
 const pause = createCapability({
   kind: 'music.pause',
   name: 'Pause',
   group: 'Music',
   description: 'Pause music',
-  setup: [
-    roomsContextSetup,
-  ],
+  setup: [roomsContextSetup],
   input: z.object({
     room: z.string().describe('Room ID'),
   }),
@@ -31,11 +29,11 @@ const pause = createCapability({
       service: 'media_pause',
       target: {
         entities: [player],
-      }
-    })
+      },
+    });
     return {
       success: true,
-    }
+    };
   },
 });
 

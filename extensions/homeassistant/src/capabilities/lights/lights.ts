@@ -1,6 +1,7 @@
-import { get } from "../lights/lights.get.js";
-import { turnOff } from "./lights.turn-off.js";
-import { turnOn } from "./lights.turn-on.js";
+import { get } from '../lights/lights.get.js';
+
+import { turnOff } from './lights.turn-off.js';
+import { turnOn } from './lights.turn-on.js';
 
 const lights = {
   get,

@@ -12,18 +12,7 @@ import { knowledgeBases } from '@bitler/knowledge-bases';
 import { notifications } from '@bitler/notifications';
 
 const config: Configuration = {
-  extensions: [
-    llm,
-    notifications,
-    knowledgeBases,
-    timers,
-    game,
-    jsonDocuments,
-    homeassistant,
-    music,
-    linear,
-    signal,
-  ]
+  extensions: [llm, notifications, knowledgeBases, timers, game, jsonDocuments, homeassistant, music, linear, signal],
 };
 
 export { config };

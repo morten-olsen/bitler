@@ -1,14 +1,12 @@
-import { createCapability, z } from "@bitler/core";
-import { HomeAssistantContext, HomeassistantService, roomsContextSetup } from "@bitler/homeassistant";
+import { createCapability, z } from '@bitler/core';
+import { HomeAssistantContext, HomeassistantService, roomsContextSetup } from '@bitler/homeassistant';
 
 const setVolume = createCapability({
   kind: 'music.set-volume',
   name: 'Set volume',
   group: 'Music',
   description: 'Set music volume',
-  setup: [
-    roomsContextSetup,
-  ],
+  setup: [roomsContextSetup],
   input: z.object({
     volume: z.number().describe('Volume level (0-1)'),
     room: z.string().describe('Room ID'),
@@ -35,11 +33,11 @@ const setVolume = createCapability({
       },
       target: {
         entities: [player],
-      }
-    })
+      },
+    });
     return {
       success: true,
-    }
+    };
   },
 });
 

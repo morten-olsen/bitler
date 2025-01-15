@@ -1,4 +1,4 @@
-import { z } from "@bitler/core";
+import { z } from '@bitler/core';
 
 const DEFAULT_MODEL = 'openai-gpt-4o-mini';
 
@@ -13,24 +13,28 @@ const modelSchema = z.object({
 type Model = z.infer<typeof modelSchema>;
 
 class Models {
-  #models: Model[] = [{
-    id: 'openai-gpt-4o-mini',
-    token: process.env.OPENAI_API_KEY!,
-    name: 'OpenAI GPT-4o Mini',
-    modelName: 'gpt-4o-mini',
-  }, {
-    id: 'ollama-llama-3.2-1b',
-    token: 'ollama',
-    name: 'LLama 3.2 1b',
-    api: 'http://localhost:11434/v1',
-    modelName: 'llama3.2:1b',
-  }, {
-    id: 'ollama-llama-3.1-8b',
-    token: 'ollama',
-    name: 'LLama 3.1 8b',
-    api: 'http://localhost:11434/v1',
-    modelName: 'llama3.1:8b',
-  }];
+  #models: Model[] = [
+    {
+      id: 'openai-gpt-4o-mini',
+      token: process.env.OPENAI_API_KEY!,
+      name: 'OpenAI GPT-4o Mini',
+      modelName: 'gpt-4o-mini',
+    },
+    {
+      id: 'ollama-llama-3.2-1b',
+      token: 'ollama',
+      name: 'LLama 3.2 1b',
+      api: 'http://localhost:11434/v1',
+      modelName: 'llama3.2:1b',
+    },
+    {
+      id: 'ollama-llama-3.1-8b',
+      token: 'ollama',
+      name: 'LLama 3.1 8b',
+      api: 'http://localhost:11434/v1',
+      modelName: 'llama3.1:8b',
+    },
+  ];
 
   public get default() {
     return this.#models.find((m) => m.id === DEFAULT_MODEL)!;

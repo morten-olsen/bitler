@@ -1,4 +1,4 @@
-import { z } from "@bitler/core";
+import { z } from '@bitler/core';
 
 const date = z.union([z.string(), z.date()]);
 const issueSchema = z.object({
@@ -23,4 +23,3 @@ const issueSchema = z.object({
 type Issue = z.infer<typeof issueSchema>;
 
 export { issueSchema, type Issue };
-

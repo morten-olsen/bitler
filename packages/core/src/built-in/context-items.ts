@@ -1,8 +1,9 @@
-import { z } from "zod";
-import { createCapability } from "../capabilities/capabilities.js";
-import { ContextItems } from "../contexts/contexts.items.js";
-import { getJsonSchema } from "../utils/zod.js";
-import { createEvent } from "../events/events.js";
+import { z } from 'zod';
+
+import { createCapability } from '../capabilities/capabilities.js';
+import { ContextItems } from '../contexts/contexts.items.js';
+import { getJsonSchema } from '../utils/zod.js';
+import { createEvent } from '../events/events.js';
 
 const listContextItemsCapability = createCapability({
   kind: 'context-items.list',
@@ -11,18 +12,20 @@ const listContextItemsCapability = createCapability({
   description: 'List all the context items that the exists in the system',
   input: z.object({}),
   output: z.object({
-    contextItems: z.array(z.object({
-      kind: z.string(),
-      name: z.string(),
-      description: z.string(),
-    })),
+    contextItems: z.array(
+      z.object({
+        kind: z.string(),
+        name: z.string(),
+        description: z.string(),
+      }),
+    ),
   }),
   handler: async ({ container }) => {
     const contextItemsService = container.get(ContextItems);
     const contextItems = contextItemsService.list();
     return {
       contextItems,
-    }
+    };
   },
 });
 
@@ -53,7 +56,7 @@ const describeContextItemsCapability = createCapability({
         ...contextItem,
         schema: getJsonSchema(contextItem.schema),
       },
-    }
+    };
   },
 });
 

@@ -1,9 +1,9 @@
 import '../src/style.css';
 import React from 'react';
-import type { Preview } from "@storybook/react";
+import type { Preview } from '@storybook/react';
 import { NextUIProvider } from '@nextui-org/react';
 import { BitlerProvider } from '@bitler/react';
-import { ThemeProvider as NextThemesProvider } from "next-themes";
+import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import { ScreensProvider } from '../src/containers/screens/screens.provider';
 
 const preview: Preview = {
@@ -16,7 +16,6 @@ const preview: Preview = {
       </NextThemesProvider>
     ),
     (Story) => (
-
       <ScreensProvider>
         <BitlerProvider baseUrl="http://localhost:3000">
           <Story />

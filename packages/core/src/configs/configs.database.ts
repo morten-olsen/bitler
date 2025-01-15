@@ -1,21 +1,21 @@
-import { createDatabase, createMigration } from "../databases/databases.js";
+import { createDatabase, createMigration } from '../databases/databases.js';
 
 const init = createMigration({
-  name: "init",
+  name: 'init',
   up: async (knex) => {
-    await knex.schema.createTable("configs", (table) => {
-      table.string("kind").primary();
-      table.json("value");
+    await knex.schema.createTable('configs', (table) => {
+      table.string('kind').primary();
+      table.json('value');
     });
   },
   down: async (knex) => {
-    await knex.schema.dropTable("configs");
+    await knex.schema.dropTable('configs');
   },
 });
 
 const dbConfig = createDatabase({
-  name: "configs",
+  name: 'configs',
   migrations: [init],
-})
+});
 
 export { dbConfig };

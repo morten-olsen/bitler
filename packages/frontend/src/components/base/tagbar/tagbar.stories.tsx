@@ -23,7 +23,7 @@ export const Default: Story = () => {
   return (
     <Tagbar
       items={capabilities}
-      getKey={item => item.kind}
+      getKey={(item) => item.kind}
       filter={(query, item) => item.name.toLowerCase().includes(query)}
       selected={selected}
       onSelectedChange={setSelected}
@@ -34,5 +34,5 @@ export const Default: Story = () => {
         </>
       )}
     </Tagbar>
-  )
+  );
 };

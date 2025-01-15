@@ -1,4 +1,5 @@
-import { ActionRequests, Capabilities, ContextItems, createExtension, Events } from '@bitler/core';
+import { ActionRequests, Capabilities, ContextItems, Events, createExtension } from '@bitler/core';
+
 import { Agents } from './services/agents/agents.js';
 import { addCapabilitiesRequest } from './action-requests/capabilities.js';
 import { createDialogRequest } from './action-requests/create-dialog.js';
@@ -17,9 +18,7 @@ import { receptionistAgent } from './agents/recepionist.js';
 const llm = createExtension({
   setup: async ({ container }) => {
     const contextItemsService = container.get(ContextItems);
-    contextItemsService.register([
-      capabilitiesContext,
-    ]);
+    contextItemsService.register([capabilitiesContext]);
 
     const capabilitiesService = container.get(Capabilities);
     capabilitiesService.register([
@@ -34,22 +33,15 @@ const llm = createExtension({
     ]);
 
     const eventsService = container.get(Events);
-    eventsService.register([
-      historyUpdatedEvent,
-    ]);
+    eventsService.register([historyUpdatedEvent]);
 
     const actionRequestsService = container.get(ActionRequests);
-    actionRequestsService.register([
-      addCapabilitiesRequest,
-      createDialogRequest,
-    ]);
+    actionRequestsService.register([addCapabilitiesRequest, createDialogRequest]);
 
     const agentsService = container.get(Agents);
-    agentsService.register([
-      receptionistAgent,
-    ]);
+    agentsService.register([receptionistAgent]);
   },
-})
+});
 
 export { createAgent, Agents } from './services/agents/agents.js';
 export { llm };

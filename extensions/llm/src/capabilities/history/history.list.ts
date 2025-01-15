@@ -1,5 +1,6 @@
-import { createCapability, Databases, z } from "@bitler/core";
-import { dbConfig } from "../../databases/databases.history.js";
+import { Databases, createCapability, z } from '@bitler/core';
+
+import { dbConfig } from '../../databases/databases.history.js';
 
 const historyListCapability = createCapability({
   kind: 'history.list',
@@ -10,14 +11,16 @@ const historyListCapability = createCapability({
     limit: z.number().optional(),
   }),
   output: z.object({
-    conversations: z.array(z.object({
-      id: z.string(),
-      name: z.string().optional(),
-      description: z.string().optional(),
-      pinned: z.boolean(),
-      createdAt: z.date(),
-      updatedAt: z.date(),
-    })),
+    conversations: z.array(
+      z.object({
+        id: z.string(),
+        name: z.string().optional(),
+        description: z.string().optional(),
+        pinned: z.boolean(),
+        createdAt: z.date(),
+        updatedAt: z.date(),
+      }),
+    ),
   }),
   handler: async ({ container, input }) => {
     const dbs = container.get(Databases);
@@ -31,11 +34,10 @@ const historyListCapability = createCapability({
       query = query.limit(input.limit);
     }
 
-
     const conversations = await query;
 
     return { conversations };
   },
-})
+});
 
 export { historyListCapability };

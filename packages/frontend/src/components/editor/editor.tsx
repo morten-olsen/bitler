@@ -8,19 +8,12 @@ const Editor = ({ className, ...props }: Props) => {
   const divRef = useRef<HTMLDivElement>(null);
 
   return (
-    <div
-      ref={divRef}
-      className={clsx(className, 'relative h-full')}
-    >
+    <div ref={divRef} className={clsx(className, 'relative h-full')}>
       <div className="absolute inset-0">
-        <MonacoEditor
-          theme="vs-dark"
-          defaultLanguage="yaml"
-          {...props}
-        />
+        <MonacoEditor theme="vs-dark" defaultLanguage="yaml" {...props} />
       </div>
-    </div >
+    </div>
   );
-}
+};
 
 export { Editor };

@@ -1,20 +1,27 @@
-import { Context, createContextItem, createContextSetup, Databases, z } from "@bitler/core";
-import { databaseConfig } from "../database/database.js";
+import { Context, Databases, createContextItem, createContextSetup, z } from '@bitler/core';
+
+import { databaseConfig } from '../database/database.js';
 
 const roomsContext = createContextItem({
   kind: `homeassistant.rooms`,
   name: 'Rooms',
   description: 'A list of rooms in the house',
-  schema: z.array(z.object({
-    id: z.string(),
-    names: z.array(z.string()),
-    mediaPlayers: z.union([z.string(), z.null()]).optional(),
-    lightGroup: z.union([z.string(), z.null()]).optional(),
-    lights: z.array(z.object({
+  schema: z.array(
+    z.object({
       id: z.string(),
-      name: z.string(),
-    })).optional(),
-  })),
+      names: z.array(z.string()),
+      mediaPlayers: z.union([z.string(), z.null()]).optional(),
+      lightGroup: z.union([z.string(), z.null()]).optional(),
+      lights: z
+        .array(
+          z.object({
+            id: z.string(),
+            name: z.string(),
+          }),
+        )
+        .optional(),
+    }),
+  ),
 });
 
 const roomsContextSetup = createContextSetup({
@@ -31,9 +38,9 @@ const roomsContextSetup = createContextSetup({
         mediaPlayers: room.mediaPlayers,
         names,
         lightGroup: room.lightGroup,
-      }
+      };
     });
-    context.set(roomsContext, rooms)
+    context.set(roomsContext, rooms);
   },
 });
 
@@ -44,13 +51,10 @@ class HomeAssistantContext {
       return [];
     }
     const room = ids.map((id) => rooms.find((room) => room.id === id));
-    return room
-  }
+    return room;
+  };
 }
 
 export { HomeAssistantContext };
 
-export {
-  roomsContext,
-  roomsContextSetup,
-};
+export { roomsContext, roomsContextSetup };

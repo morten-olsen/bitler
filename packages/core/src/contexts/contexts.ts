@@ -1,13 +1,14 @@
-import { Container } from "../container/container.js";
-import { Session } from "../session/session.js";
-import { Context } from "./contexts.context.js";
-import { ContextSetup } from "./contexts.setup.js";
+import { Container } from '../container/container.js';
+import { Session } from '../session/session.js';
+
+import { Context } from './contexts.context.js';
+import { ContextSetup } from './contexts.setup.js';
 
 type ContextCreateOptions = {
   setups: ContextSetup[];
   init?: Record<string, unknown>;
   session: Session;
-}
+};
 class Contexts {
   #container: Container;
 
@@ -28,8 +29,7 @@ class Contexts {
       });
     }
     return context;
-  }
-
+  };
 }
 
 export * from './contexts.context.js';

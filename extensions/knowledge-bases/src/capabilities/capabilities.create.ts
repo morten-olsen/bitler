@@ -1,5 +1,6 @@
-import { createCapability, createId, Databases, z } from "@bitler/core";
-import { dbConfig } from "../databases/databases.js";
+import { Databases, createCapability, createId, z } from '@bitler/core';
+
+import { dbConfig } from '../databases/databases.js';
 
 const createKnowledgeBaseCapability = createCapability({
   kind: 'knowledge-base.create',
@@ -19,6 +20,6 @@ const createKnowledgeBaseCapability = createCapability({
     await db('knowledgeBases').insert({ id, name: input.name });
     return { id };
   },
-})
+});
 
 export { createKnowledgeBaseCapability };

@@ -1,5 +1,6 @@
-import { z, ZodSchema } from "zod";
-import { Container } from "../container/container.js";
+import { ZodSchema, z } from 'zod';
+
+import { Container } from '../container/container.js';
 
 type ConfigItemValidateOptions<TSchema extends ZodSchema> = {
   input: z.infer<TSchema>;

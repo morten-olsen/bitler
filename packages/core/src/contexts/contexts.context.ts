@@ -1,14 +1,16 @@
-import { z, ZodSchema } from "zod";
-import { ContextItem } from "./contexts.item.js";
-import { Container } from "../exports.js";
-import { ContextItems } from "./contexts.items.js";
+import { ZodSchema, z } from 'zod';
+
+import { Container } from '../exports.js';
+
+import { ContextItem } from './contexts.item.js';
+import { ContextItems } from './contexts.items.js';
 
 type ContextOptions = {
   container: Container;
   init?: Record<string, unknown>;
-}
+};
 class Context {
-  #items: Map<string, unknown> = new Map();
+  #items = new Map<string, unknown>();
 
   constructor(options: ContextOptions) {
     if (options.init) {
@@ -46,18 +48,23 @@ class Context {
   }
 
   public describe = () => {
-    return JSON.stringify(Array.from(this.#items.entries()).map(([item, value]) => ({
-      kind: item,
-      value,
-    })));
-  }
+    return JSON.stringify(
+      Array.from(this.#items.entries()).map(([item, value]) => ({
+        kind: item,
+        value,
+      })),
+    );
+  };
 
   public toJSON = () => {
-    return Array.from(this.#items.entries()).reduce((acc, [item, value]) => {
-      acc[item] = value;
-      return acc;
-    }, {} as Record<string, unknown>);
-  }
+    return Array.from(this.#items.entries()).reduce(
+      (acc, [item, value]) => {
+        acc[item] = value;
+        return acc;
+      },
+      {} as Record<string, unknown>,
+    );
+  };
 }
 
 export { Context };

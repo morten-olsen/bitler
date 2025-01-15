@@ -1,9 +1,10 @@
-import { Capabilities, ContextItems, createExtension } from "@bitler/core";
-import { capabilities } from "./capabilities/capabilities.js";
-import { roomsContext } from "./context/rooms.js";
-import { Agents } from "@bitler/llm";
-import { agent } from "./agent/agent.js";
-import { agentConfig } from "./agent/agent.config.js";
+import { Capabilities, ContextItems, createExtension } from '@bitler/core';
+import { Agents } from '@bitler/llm';
+
+import { capabilities } from './capabilities/capabilities.js';
+import { roomsContext } from './context/rooms.js';
+import { agent } from './agent/agent.js';
+import { agentConfig } from './agent/agent.config.js';
 
 const homeassistant = createExtension({
   setup: async ({ container }) => {
@@ -14,12 +15,9 @@ const homeassistant = createExtension({
     contextItemsService.register([roomsContext]);
 
     const capabilitiesService = container.get(Capabilities);
-    capabilitiesService.register([
-      ...Object.values(capabilities.lights),
-      ...Object.values(capabilities.config),
-    ]);
+    capabilitiesService.register([...Object.values(capabilities.lights), ...Object.values(capabilities.config)]);
   },
-})
+});
 
 export { HomeassistantService } from './services/services.ha.js';
 export { roomsContextSetup, HomeAssistantContext } from './context/rooms.js';

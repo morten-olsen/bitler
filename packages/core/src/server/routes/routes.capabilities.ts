@@ -1,6 +1,7 @@
 import { httpErrors } from '@fastify/sensible';
-import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
+import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import { z } from 'zod';
+
 import { Capabilities } from '../../capabilities/capabilities.js';
 import { Session } from '../../exports.js';
 
@@ -13,24 +14,28 @@ const capabilitiesPlugin: FastifyPluginAsyncZod = async (app) => {
       summary: 'Get list of available tasks',
       tags: ['capabilities'],
       response: {
-        200: z.array(z.object({
-          kind: z.string(),
-          name: z.string(),
-          group: z.string(),
-          description: z.string().optional(),
-        }))
+        200: z.array(
+          z.object({
+            kind: z.string(),
+            name: z.string(),
+            group: z.string(),
+            description: z.string().optional(),
+          }),
+        ),
       },
     },
     handler: async (request, reply) => {
       const capabilitiesService = request.container.get(Capabilities);
       const capabilities = capabilitiesService.list();
-      await reply.send(capabilities.map((capability) => ({
-        kind: capability.kind,
-        name: capability.name,
-        group: capability.group,
-        description: capability.description,
-      })));
-    }
+      await reply.send(
+        capabilities.map((capability) => ({
+          kind: capability.kind,
+          name: capability.name,
+          group: capability.group,
+          description: capability.description,
+        })),
+      );
+    },
   });
 
   app.route({
@@ -69,7 +74,7 @@ const capabilitiesPlugin: FastifyPluginAsyncZod = async (app) => {
         throw error;
       }
     },
-  })
+  });
 };
 
 export { capabilitiesPlugin };

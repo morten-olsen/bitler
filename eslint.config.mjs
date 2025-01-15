@@ -1,7 +1,8 @@
-import { FlatCompat } from "@eslint/eslintrc";
-import eslint from "@eslint/js";
-import tseslint from "typescript-eslint";
-import eslintConfigPrettier from "eslint-config-prettier";
+import { FlatCompat } from '@eslint/eslintrc';
+import importPlugin from 'eslint-plugin-import';
+import eslint from '@eslint/js';
+import eslintConfigPrettier from 'eslint-config-prettier';
+import tseslint from 'typescript-eslint';
 
 const compat = new FlatCompat({
   baseDirectory: import.meta.__dirname,
@@ -14,19 +15,30 @@ export default tseslint.config(
   ...tseslint.configs.stylistic,
   eslintConfigPrettier,
   {
+    files: ['**/*.{ts,tsxx}'],
+    extends: [importPlugin.flatConfigs.recommended, importPlugin.flatConfigs.typescript],
     rules: {
-      "@typescript-eslint/consistent-type-definitions": ["error", "type"],
-      "sort-imports": ["error", {
-        "ignoreCase": false,
-        "ignoreDeclarationSort": false,
-        "ignoreMemberSort": false,
-        "memberSyntaxSortOrder": ["none", "all", "multiple", "single"],
-        "allowSeparatedGroups": false
-    }]
+      'import/no-unresolved': 'off',
+      'import/extensions': ['error', 'ignorePackages'],
+      'import/exports-last': 'error',
+      'import/no-default-export': 'error',
+      'import/order': [
+        'error',
+        {
+          groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
+          'newlines-between': 'always',
+        },
+      ],
+      'import/no-duplicates': 'error',
     },
   },
-  ...compat.extends("plugin:prettier/recommended"),
   {
-    ignores: ["**/node_modules/", "**/dist/", "**/.turbo/"],
+    rules: {
+      '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
+    },
+  },
+  ...compat.extends('plugin:prettier/recommended'),
+  {
+    ignores: ['**/node_modules/', '**/dist/', '**/.turbo/', '**/generated/'],
   },
 );

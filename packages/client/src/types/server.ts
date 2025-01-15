@@ -1,21 +1,19 @@
 type ServerSchema = {
-  capabilities: {
-    [kind: string]: {
+  capabilities: Record<
+    string,
+    {
       input: any;
       output: any;
     }
-  };
-  actionRequests: {
-    [kind: string]: any;
-  };
-  events: {
-    [kind: string]: {
+  >;
+  actionRequests: Record<string, any>;
+  events: Record<
+    string,
+    {
       input: any;
       output: any;
     }
-  };
-}
+  >;
+};
 
-export {
-  type ServerSchema,
-}
+export { type ServerSchema };

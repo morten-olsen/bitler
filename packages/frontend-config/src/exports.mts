@@ -1,18 +1,16 @@
-
 import tailwind from 'tailwindcss';
 import autoprefixer from 'autoprefixer';
-import { createTailwindConfig, CreateTailwindConfigOptions } from './tailwind.mjs';
+import { CreateTailwindConfigOptions, createTailwindConfig } from './tailwind.mjs';
 
 const createViteCss = (options: CreateTailwindConfigOptions = {}) => ({
   postcss: {
     plugins: [
       tailwind({
-        config: createTailwindConfig(options)
+        config: createTailwindConfig(options),
       }),
-      autoprefixer()
-    ]
+      autoprefixer(),
+    ],
   },
-
 });
 
 export * from './tailwind.mjs';

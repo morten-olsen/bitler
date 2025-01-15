@@ -1,16 +1,19 @@
-import { createCapability, createId, Databases, z } from "@bitler/core";
-import { dbConfig } from "../../databases/databases.history.js";
+import { Databases, createCapability, createId, z } from '@bitler/core';
+
+import { dbConfig } from '../../databases/databases.history.js';
 
 const historyAddMessagesCapability = createCapability({
   kind: 'history.add-messages',
   name: 'Add messages',
   group: 'History',
   description: 'Add messages to a conversation',
-  input: z.array(z.object({
-    conversationId: z.string(),
-    role: z.string(),
-    content: z.string(),
-  })),
+  input: z.array(
+    z.object({
+      conversationId: z.string(),
+      role: z.string(),
+      content: z.string(),
+    }),
+  ),
   output: z.object({
     success: z.boolean(),
   }),
@@ -28,11 +31,11 @@ const historyAddMessagesCapability = createCapability({
         role: message.role,
         content: message.content,
         createdAt: new Date(),
-      }))
-    )
+      })),
+    );
 
     return { success: true };
   },
-})
+});
 
 export { historyAddMessagesCapability };

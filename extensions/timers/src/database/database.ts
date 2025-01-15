@@ -1,5 +1,6 @@
-import { DatabaseOptions } from "@bitler/core";
-import { init } from "./migrations/migrations.001-init.js";
+import { DatabaseOptions } from '@bitler/core';
+
+import { init } from './migrations/migrations.001-init.js';
 
 const dbConfig: DatabaseOptions = {
   name: 'timers',
@@ -7,4 +8,3 @@ const dbConfig: DatabaseOptions = {
 };
 
 export { dbConfig };
-

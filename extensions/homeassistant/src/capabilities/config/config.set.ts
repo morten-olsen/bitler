@@ -1,15 +1,14 @@
-import { createCapability, Databases, z } from "@bitler/core";
-import { roomsContext, roomsContextSetup } from "../../context/rooms.js";
-import { databaseConfig } from "../../database/database.js";
+import { Databases, createCapability, z } from '@bitler/core';
+
+import { roomsContext, roomsContextSetup } from '../../context/rooms.js';
+import { databaseConfig } from '../../database/database.js';
 
 const set = createCapability({
   kind: `homeassistant.setup.set-config`,
   name: 'Set config',
   group: 'Home',
   description: 'Set the configuration for the home assistant integration',
-  setup: [
-    roomsContextSetup,
-  ],
+  setup: [roomsContextSetup],
   input: z.object({
     rooms: roomsContext.schema,
   }),
@@ -24,16 +23,20 @@ const set = createCapability({
     await db('rooms').delete();
 
     await db.transaction(async (trx) => {
-      await trx('rooms').insert(input.rooms.map((room) => ({
-        id: room.id,
-        mediaPlayers: room.mediaPlayers,
-        lightGroup: room.lightGroup,
-      })));
+      await trx('rooms').insert(
+        input.rooms.map((room) => ({
+          id: room.id,
+          mediaPlayers: room.mediaPlayers,
+          lightGroup: room.lightGroup,
+        })),
+      );
 
-      const roomNames = input.rooms.flatMap((room) => room.names.map((name) => ({
-        room_id: room.id,
-        name,
-      })));
+      const roomNames = input.rooms.flatMap((room) =>
+        room.names.map((name) => ({
+          room_id: room.id,
+          name,
+        })),
+      );
 
       await trx('room_names').insert(roomNames);
     });

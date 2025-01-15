@@ -1,5 +1,6 @@
-import { createCapability, z } from "@bitler/core";
-import { LinearService } from "../servies/services.linear.js";
+import { createCapability, z } from '@bitler/core';
+
+import { LinearService } from '../servies/services.linear.js';
 
 const profile = createCapability({
   kind: 'linear.profile',
@@ -17,6 +18,6 @@ const profile = createCapability({
     const user = await getUser();
     return user;
   },
-})
+});
 
 export { profile };

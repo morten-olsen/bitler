@@ -1,5 +1,6 @@
-import { FastifyPluginAsyncZod } from "fastify-type-provider-zod";
+import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import { z } from 'zod';
+
 import { Files } from '../../files/files.js';
 
 const filesPlugin: FastifyPluginAsyncZod = async (app) => {
@@ -19,7 +20,7 @@ const filesPlugin: FastifyPluginAsyncZod = async (app) => {
       const file = await filesService.get(request.params.hash);
       reply.type(file.contentType);
       reply.send(file.content);
-    }
+    },
   });
 };
 

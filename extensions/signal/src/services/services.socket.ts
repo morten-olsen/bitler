@@ -1,7 +1,8 @@
-import { Capabilities, Container, Databases, Session } from "@bitler/core";
-import { addDocument } from "@bitler/json-documents";
-import { Message } from "../types/message.js";
-import { addNotificationCapability, removeNotificationsCapability } from "@bitler/notifications";
+import { Capabilities, Container, Databases, Session } from '@bitler/core';
+import { addDocument } from '@bitler/json-documents';
+import { addNotificationCapability, removeNotificationsCapability } from '@bitler/notifications';
+
+import { Message } from '../types/message.js';
 
 type SignalSocketOptions = {
   id: string;
@@ -24,19 +25,19 @@ class SignalSocket {
 
   #onopen = () => {
     console.log('connected');
-  }
+  };
 
   #onclose = () => {
     console.log('disconnected');
-  }
+  };
 
   #onerror = (event: Event) => {
     console.error(event);
-  }
+  };
 
   #onmessage = async (event: MessageEvent) => {
     const { container } = this.#options;
-    const capabilities = container.get(Capabilities)
+    const capabilities = container.get(Capabilities);
     const message: Message = JSON.parse(event.data);
     await capabilities.run({
       capability: addDocument,
@@ -45,7 +46,7 @@ class SignalSocket {
         source: 'signal',
         type: 'message',
         data: message,
-      }
+      },
     });
     if (message.envelope.dataMessage) {
       await capabilities.run({
@@ -64,8 +65,8 @@ class SignalSocket {
     }
 
     if (message.envelope.syncMessage?.readMessages) {
-      const ids = message.envelope.syncMessage.readMessages.map((readMessage) =>
-        `signal-${readMessage.senderUuid}-${readMessage.timestamp}`
+      const ids = message.envelope.syncMessage.readMessages.map(
+        (readMessage) => `signal-${readMessage.senderUuid}-${readMessage.timestamp}`,
       );
 
       await capabilities.run({
@@ -76,21 +77,18 @@ class SignalSocket {
         },
       });
     }
-  }
+  };
 
   #setup = () => {
     const { id, host, secure } = this.#options;
-    const socketUrl = new URL(
-      `v1/receive/${id}`,
-      `${secure ? 'wss' : 'ws'}://${host}`,
-    );
+    const socketUrl = new URL(`v1/receive/${id}`, `${secure ? 'wss' : 'ws'}://${host}`);
     const socket = new WebSocket(socketUrl);
-    socket.addEventListener('message', this.#onmessage);;
+    socket.addEventListener('message', this.#onmessage);
     socket.addEventListener('open', this.#onopen);
     socket.addEventListener('close', this.#onclose);
     socket.addEventListener('error', this.#onerror);
     return socket;
-  }
+  };
 }
 
 export { SignalSocket, type SignalSocketOptions };

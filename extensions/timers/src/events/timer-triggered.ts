@@ -1,4 +1,4 @@
-import { createEvent, z } from "@bitler/core";
+import { createEvent, z } from '@bitler/core';
 
 const timerTriggeredEvent = createEvent({
   kind: 'timer.triggered',
@@ -13,4 +13,4 @@ const timerTriggeredEvent = createEvent({
   }),
 });
 
-export { timerTriggeredEvent }; 
+export { timerTriggeredEvent };

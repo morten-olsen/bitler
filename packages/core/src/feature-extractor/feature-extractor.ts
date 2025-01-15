@@ -1,4 +1,4 @@
-import { cos_sim, FeatureExtractionPipeline, pipeline } from '@huggingface/transformers';
+import { FeatureExtractionPipeline, cos_sim, pipeline } from '@huggingface/transformers';
 import { toSql } from 'pgvector';
 
 class Vector {
@@ -24,29 +24,28 @@ class Vector {
 
   public toSql = () => {
     return toSql(this.#value);
-  }
+  };
 
   public distanceTo = (other: Vector) => {
     return cos_sim(this.#value, other.value);
-  }
+  };
 }
 
 type ExtractOptions = {
   input: string[];
   model?: string;
-}
+};
 
 type Extractor = {
   extractor: FeatureExtractionPipeline;
   dimensions: number;
-}
+};
 
 class FeatureExtractor {
-  #extractors: Map<string, Promise<Extractor>> = new Map();
+  #extractors = new Map<string, Promise<Extractor>>();
 
   #setupExctractor = async (model: string) => {
-    const extractor = await pipeline('feature-extraction', model, {
-    });
+    const extractor = await pipeline('feature-extraction', model, {});
     const { config } = extractor.model;
     if (!('hidden_size' in config) || typeof config.hidden_size !== 'number') {
       throw new Error('Invalid model configuration');
@@ -54,7 +53,7 @@ class FeatureExtractor {
     return {
       extractor,
       dimensions: config.hidden_size,
-    }
+    };
   };
 
   #getExtractor = async (name: string) => {
@@ -79,12 +78,12 @@ class FeatureExtractor {
   public getDimensions = async (model: string) => {
     const { dimensions } = await this.#getExtractor(model);
     return dimensions;
-  }
+  };
 
   public getFieldType = async (model: string) => {
     const dimensions = await this.getDimensions(model);
     return `vector(${dimensions})`;
-  }
+  };
 }
 
-export { FeatureExtractor, Vector }
+export { FeatureExtractor, Vector };

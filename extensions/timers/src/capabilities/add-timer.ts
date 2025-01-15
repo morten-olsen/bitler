@@ -1,6 +1,7 @@
-import { createCapability, z } from "@bitler/core";
-import { addTimerSchema, TimerService } from "../service/service.js";
-import { currentTimeContextSetup } from "../context/context.js";
+import { createCapability, z } from '@bitler/core';
+
+import { TimerService, addTimerSchema } from '../service/service.js';
+import { currentTimeContextSetup } from '../context/context.js';
 
 const addTimer = createCapability({
   kind: 'timers.add',
@@ -8,9 +9,7 @@ const addTimer = createCapability({
   group: 'Timers',
   description: 'Add a timer',
   input: addTimerSchema,
-  setup: [
-    currentTimeContextSetup,
-  ],
+  setup: [currentTimeContextSetup],
   output: z.object({
     id: z.string().describe('ID of the timer'),
   }),

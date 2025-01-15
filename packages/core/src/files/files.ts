@@ -1,17 +1,19 @@
 import { createHash } from 'crypto';
-import { dbConfig } from './files.db.js';
+import { join, resolve } from 'path';
+import { mkdir, readFile, writeFile } from 'fs/promises';
+
 import { Container } from '../container/container.js';
 import { Databases } from '../databases/databases.js';
 import { createId } from '../utils/ids.js';
-import { join, resolve } from 'path';
-import { mkdir, readFile, writeFile } from 'fs/promises';
+
+import { dbConfig } from './files.db.js';
 
 type AddFileOptions = {
   owner?: string;
   expiresAt?: Date;
   contentType: string;
   content: string | Buffer;
-}
+};
 
 class Files {
   #container: Container;
@@ -50,7 +52,7 @@ class Files {
       contentHash,
       leaseId: id,
     };
-  }
+  };
 
   public get = async (hash: string) => {
     const dbs = this.#container.get(Databases);
@@ -69,7 +71,7 @@ class Files {
       contentType: info.contentType,
       content,
     };
-  }
+  };
 }
 
 export { Files };

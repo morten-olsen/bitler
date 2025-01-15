@@ -1,4 +1,5 @@
 import createBaseClient from 'openapi-fetch';
+
 import { paths } from '../generated/api.js';
 import { host, secure } from '../config.js';
 
@@ -8,7 +9,7 @@ const createClient = () => {
   });
 
   return client;
-}
+};
 
 type Client = ReturnType<typeof createClient>;
 

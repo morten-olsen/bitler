@@ -1,7 +1,8 @@
-import { createCapability, z } from "@bitler/core";
-import { LinearService } from "../servies/services.linear.js";
-import { issueSchema } from "../schemas/schemas.js";
-import { issuesContext } from "../contexts/issues.js";
+import { createCapability, z } from '@bitler/core';
+
+import { LinearService } from '../servies/services.linear.js';
+import { issueSchema } from '../schemas/schemas.js';
+import { issuesContext } from '../contexts/issues.js';
 
 const getIssue = createCapability({
   kind: 'linear.get-issue',
@@ -24,6 +25,6 @@ const getIssue = createCapability({
       issue,
     };
   },
-})
+});
 
 export { getIssue };

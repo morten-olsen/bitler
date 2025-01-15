@@ -1,4 +1,4 @@
-import { createDatabase, createMigration } from "@bitler/core";
+import { createDatabase, createMigration } from '@bitler/core';
 
 const init = createMigration({
   name: 'init',
@@ -16,7 +16,6 @@ const init = createMigration({
       table.integer('discoverAgents').defaultTo(0);
       table.json('context').nullable();
     });
-
 
     await knex.schema.createTable('conversationCapabilities', (table) => {
       table.string('conversationId').notNullable().references('id').inTable('conversations').onDelete('CASCADE');

@@ -1,5 +1,6 @@
-import { createContextItem, createContextSetup, z } from "@bitler/core";
-import { LinearService } from "../servies/services.linear.js";
+import { createContextItem, createContextSetup, z } from '@bitler/core';
+
+import { LinearService } from '../servies/services.linear.js';
 
 const userContext = createContextItem({
   kind: 'linear.user',

@@ -1,5 +1,6 @@
-import { createCapability, Databases, z } from "@bitler/core";
-import { dbConfig } from "../database/database.js";
+import { Databases, createCapability, z } from '@bitler/core';
+
+import { dbConfig } from '../database/database.js';
 
 const removeDocuments = createCapability({
   kind: 'json-documents.remove-documents',
@@ -31,7 +32,7 @@ const removeDocuments = createCapability({
     }
     await query.delete();
     return { success: true };
-  }
+  },
 });
 
 export { removeDocuments };

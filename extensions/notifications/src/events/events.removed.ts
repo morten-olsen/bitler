@@ -1,4 +1,4 @@
-import { createEvent, z } from "@bitler/core";
+import { createEvent, z } from '@bitler/core';
 
 const notificationRemovedEvent = createEvent({
   kind: 'notification.removed',

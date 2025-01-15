@@ -1,5 +1,6 @@
-import { createCapability, Databases, z } from "@bitler/core";
-import { dbConfig } from "../database/database.js";
+import { Databases, createCapability, z } from '@bitler/core';
+
+import { dbConfig } from '../database/database.js';
 
 const getTypes = createCapability({
   kind: 'json-documents.get-types',

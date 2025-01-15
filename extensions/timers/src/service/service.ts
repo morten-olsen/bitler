@@ -1,8 +1,9 @@
-import { Container, createId, Databases, EventEmitter, Events, z } from "@bitler/core";
-import { dbConfig } from "../database/database.js";
-import { timerTriggeredEvent } from "../events/timer-triggered.js";
-import { timerUpdatedEvent } from "../events/timers-updated.js";
-import { timerCreatedEvent } from "../events/create-event.js";
+import { Container, Databases, EventEmitter, Events, createId, z } from '@bitler/core';
+
+import { dbConfig } from '../database/database.js';
+import { timerTriggeredEvent } from '../events/timer-triggered.js';
+import { timerUpdatedEvent } from '../events/timers-updated.js';
+import { timerCreatedEvent } from '../events/create-event.js';
 
 const addTimerSchema = z.object({
   duration: z.number().describe('Duration in seconds'),
@@ -18,7 +19,7 @@ const timerSchema = z.object({
 
 type TimerEvents = {
   trigger: (id: string) => void;
-}
+};
 
 type AddTimerOptions = z.infer<typeof addTimerSchema>;
 
@@ -27,11 +28,11 @@ type Timer = {
   duration: number;
   start: Date;
   timeout: NodeJS.Timeout;
-}
+};
 
 class TimerService extends EventEmitter<TimerEvents> {
   #container: Container;
-  #timers: Map<string, Timer> = new Map();
+  #timers = new Map<string, Timer>();
 
   constructor(container: Container) {
     super();
@@ -73,21 +74,24 @@ class TimerService extends EventEmitter<TimerEvents> {
       const triggerTime = start.getTime() + duration;
       const triggerDelay = triggerTime - Date.now();
 
-      const timeout = setTimeout(() => {
-        this.emit('trigger', id);
-      }, Math.max(triggerDelay, 0));
+      const timeout = setTimeout(
+        () => {
+          this.emit('trigger', id);
+        },
+        Math.max(triggerDelay, 0),
+      );
 
       this.#timers.set(id, { duration, description, start, timeout });
     }
-  }
+  };
 
   public get = (id: string) => {
     return this.#timers.get(id);
-  }
+  };
 
   public start = async () => {
     await this.#setup();
-  }
+  };
 
   public listTimers = async () => {
     return Array.from(this.#timers.entries()).map(([id, timer]) => ({
@@ -96,7 +100,7 @@ class TimerService extends EventEmitter<TimerEvents> {
       duration: timer.duration,
       start: timer.start.toISOString(),
     }));
-  }
+  };
 
   public addTimer = async (options: AddTimerOptions) => {
     const id = createId();
@@ -125,16 +129,15 @@ class TimerService extends EventEmitter<TimerEvents> {
       description: options.description,
       duration: options.duration,
       action: 'created',
-    })
+    });
     eventsService.publish(timerCreatedEvent, {
       id,
       description: options.description,
       duration: options.duration,
-    })
-
+    });
 
     return { id };
-  }
+  };
 
   public removeTimer = async (id: string) => {
     const timer = this.#timers.get(id);
@@ -146,7 +149,7 @@ class TimerService extends EventEmitter<TimerEvents> {
         description: timer.description,
         duration: timer.duration,
         action: 'removed',
-      })
+      });
     }
     this.#timers.delete(id);
 
@@ -155,7 +158,7 @@ class TimerService extends EventEmitter<TimerEvents> {
     await db('timers').where('id', id).delete();
 
     return this.listTimers();
-  }
+  };
 }
 
 export { TimerService, addTimerSchema, timerSchema };

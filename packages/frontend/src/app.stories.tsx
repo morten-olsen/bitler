@@ -1,7 +1,7 @@
-import React from "react";
-import { Meta, StoryObj } from "@storybook/react";
-import { Main } from "./main.js";
-import { Fullscreen } from "./components/layouts/fullscreen/fullscreen.js";
+import React from 'react';
+import { Meta, StoryObj } from '@storybook/react';
+import { Main } from './main.js';
+import { Fullscreen } from './components/layouts/fullscreen/fullscreen.js';
 
 const meta = {
   title: 'App',
@@ -21,5 +21,4 @@ export const App: Story = {
       <Main />
     </Fullscreen>
   ),
-
 };

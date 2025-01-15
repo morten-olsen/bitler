@@ -1,16 +1,13 @@
-import { createCapability, z } from "@bitler/core";
-import { HomeassistantService, roomsContext, roomsContextSetup } from "@bitler/homeassistant";
+import { createCapability, z } from '@bitler/core';
+import { HomeassistantService, roomsContext, roomsContextSetup } from '@bitler/homeassistant';
 
 const status = createCapability({
   kind: 'music.status',
   name: 'Status',
   group: 'Music',
   description: 'Get music status',
-  setup: [
-    roomsContextSetup,
-  ],
-  input: z.object({
-  }),
+  setup: [roomsContextSetup],
+  input: z.object({}),
   output: z.object({
     rooms: z.array(
       z.object({
@@ -38,27 +35,27 @@ const status = createCapability({
     await haService.ready();
     const roomsInfo = context.get(roomsContext);
 
-    const rooms = roomsInfo?.flatMap(room => {
-      if (!room.mediaPlayers) {
-        return [];
-      }
-      const entity = haService.entities[room.mediaPlayers];
-      if (!entity) {
-        return [];
-      }
-      return {
-        id: room.id,
-        player: {
-          id: entity.entity_id,
-          state: entity.state,
-          ...entity.attributes,
-        },
-      };
-    }) || [];
+    const rooms =
+      roomsInfo?.flatMap((room) => {
+        if (!room.mediaPlayers) {
+          return [];
+        }
+        const entity = haService.entities[room.mediaPlayers];
+        if (!entity) {
+          return [];
+        }
+        return {
+          id: room.id,
+          player: {
+            id: entity.entity_id,
+            state: entity.state,
+            ...entity.attributes,
+          },
+        };
+      }) || [];
     return {
       rooms,
-    }
-
+    };
   },
 });
 

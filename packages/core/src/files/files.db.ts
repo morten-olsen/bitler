@@ -1,4 +1,4 @@
-import { createDatabase, createMigration } from "../databases/databases.js";
+import { createDatabase, createMigration } from '../databases/databases.js';
 
 const init = createMigration({
   name: 'init',

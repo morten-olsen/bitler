@@ -1,22 +1,37 @@
-import OpenAI from "openai";
-import { Agents } from "../agents/agents.js";
-import { CompletionDialog, CompletionOptions } from "./completion.schemas.js";
-import { Agent } from "../agents/agents.schemas.js";
-import { ActionRequestInstance, ActionRequests, Capabilities, Capability, Container, Context, Contexts, excludeUndefined, getJsonSchema, Session, z, ZodSchema } from "@bitler/core";
-import { Models } from "../../models/models.js";
-import { historySetCapability } from "../../capabilities/history/history.set.js";
-import { agentSession } from "../../session/agent.js";
-import { historyAddMessagesCapability } from "../../capabilities/history/history.add-messages.js";
+import OpenAI from 'openai';
+import {
+  ActionRequestInstance,
+  ActionRequests,
+  Capabilities,
+  Capability,
+  Container,
+  Context,
+  Contexts,
+  Session,
+  ZodSchema,
+  excludeUndefined,
+  getJsonSchema,
+  z,
+} from '@bitler/core';
+
+import { Agent } from '../agents/agents.schemas.js';
+import { Agents } from '../agents/agents.js';
+import { Models } from '../../models/models.js';
+import { historySetCapability } from '../../capabilities/history/history.set.js';
+import { agentSession } from '../../session/agent.js';
+import { historyAddMessagesCapability } from '../../capabilities/history/history.add-messages.js';
+
+import { CompletionDialog, CompletionOptions } from './completion.schemas.js';
 
 const sanitizeString = (str: string) => {
-  return str.replace(/[^a-zA-Z0-9_-]/g, "_");
-}
+  return str.replace(/[^a-zA-Z0-9_-]/g, '_');
+};
 
 type ConvertContext<TContext> = {
-  context: TContext,
-  actionRequests?: ActionRequestInstance,
-  session: Session,
-}
+  context: TContext;
+  actionRequests?: ActionRequestInstance;
+  session: Session;
+};
 
 class Completion {
   #container: Container;
@@ -51,8 +66,8 @@ class Completion {
         description: capability.agentDescription || capability.description || capability.kind,
         parameters: getJsonSchema(capability.input) as any,
       },
-    }))
-  }
+    }));
+  };
 
   #convertAgents = (agents: Agent[], context: ConvertContext<Record<string, unknown> | undefined>) => {
     return agents.map((agent) => ({
@@ -71,12 +86,14 @@ class Completion {
         },
         parse: JSON.parse,
         description: agent.description,
-        parameters: getJsonSchema(z.object({
-          prompt: z.string(),
-        })) as any,
+        parameters: getJsonSchema(
+          z.object({
+            prompt: z.string(),
+          }),
+        ) as any,
       },
-    }))
-  }
+    }));
+  };
 
   #getDialog = (options: CompletionOptions, context: Context) => {
     const agentService = this.#container.get(Agents);
@@ -85,18 +102,18 @@ class Completion {
 
     const dialog: CompletionDialog[] = [];
     if (systemPrompt) {
-      dialog.push({ role: "system", content: systemPrompt });
+      dialog.push({ role: 'system', content: systemPrompt });
     }
     if (context.hasValues) {
       const contextDescription = context.describe();
-      dialog.push({ role: "system", content: contextDescription });
+      dialog.push({ role: 'system', content: contextDescription });
     }
     if (options.dialog) {
       dialog.push(...options.dialog);
     }
-    dialog.push({ role: "user", content: options.prompt });
+    dialog.push({ role: 'user', content: options.prompt });
     return dialog;
-  }
+  };
 
   #getCapabilities = async (options: CompletionOptions) => {
     const capabilityService = this.#container.get(Capabilities);
@@ -107,13 +124,15 @@ class Completion {
     const capabilities = capabilityService.get([
       ...(options.capabilities || []),
       ...(agent?.capabilities || []),
-      ...(await capabilityService.find({
-        query: options.prompt,
-        limit: options.discoverCapabilities || 0
-      })).map((result) => result.capability.kind),
+      ...(
+        await capabilityService.find({
+          query: options.prompt,
+          limit: options.discoverCapabilities || 0,
+        })
+      ).map((result) => result.capability.kind),
     ]);
     return capabilities;
-  }
+  };
 
   #getAgents = async (options: CompletionOptions) => {
     const agentService = this.#container.get(Agents);
@@ -124,18 +143,18 @@ class Completion {
       ...(await agentService.find(options.prompt, options.discoverAgents || 0)).map((result) => result.agent.kind),
     ]);
     return agents;
-  }
+  };
 
   public complete = async <TSchema extends ZodSchema | undefined = undefined>(
     options: CompletionOptions & {
-      schema?: TSchema,
-      actionRequests?: ActionRequestInstance,
-      session?: Session,
-    }
+      schema?: TSchema;
+      actionRequests?: ActionRequestInstance;
+      session?: Session;
+    },
   ): Promise<{
-    response: TSchema extends ZodSchema ? z.infer<TSchema> : string,
-    context: Record<string, unknown>,
-    actionRequests: { kind: string, value: unknown, description?: string }[],
+    response: TSchema extends ZodSchema ? z.infer<TSchema> : string;
+    context: Record<string, unknown>;
+    actionRequests: { kind: string; value: unknown; description?: string }[];
   }> => {
     const modelService = this.#container.get(Models);
     const contextService = this.#container.get(Contexts);
@@ -146,15 +165,13 @@ class Completion {
     const capabilities = await this.#getCapabilities(options);
     const agents = await this.#getAgents(options);
 
-    const contextSetups = capabilities.flatMap(
-      (capability) => capability?.setup ? capability.setup : []
-    );
+    const contextSetups = capabilities.flatMap((capability) => (capability?.setup ? capability.setup : []));
     const session = new Session();
     session.set(agentSession, {
       agent: options.agent,
       model: model.id,
-      capabilities: capabilities.flatMap((capability) => capability ? [capability.kind] : []),
-      agents: agents.flatMap((agent) => agent ? [agent.kind] : []),
+      capabilities: capabilities.flatMap((capability) => (capability ? [capability.kind] : [])),
+      agents: agents.flatMap((agent) => (agent ? [agent.kind] : [])),
     });
     const context = await contextService.create({
       setups: contextSetups,
@@ -188,7 +205,7 @@ class Completion {
           max_tokens: options.maxTokens,
           tools,
           model: model.modelName,
-        })
+        });
         const finalContent = await runner.finalContent();
         if (!finalContent) {
           throw new Error('No final content');
@@ -200,7 +217,7 @@ class Completion {
           messages: dialog,
           max_tokens: options.maxTokens,
           model: model.modelName,
-        })
+        });
 
         const result = completion.choices[0]?.message?.content;
         if (!result) {
@@ -208,7 +225,7 @@ class Completion {
         }
         return result;
       }
-    }
+    };
 
     const response = await getResponse();
 
@@ -223,22 +240,25 @@ class Completion {
           agent: options.agent || null,
           discoverAgents: options.discoverAgents || 0,
           discoverCapabilies: options.discoverCapabilities || 0,
-          capabilities: capabilities.flatMap((capability) => capability ? [capability.kind] : []),
-          agents: agents.flatMap((agent) => agent ? [agent.kind] : []),
-        }
+          capabilities: capabilities.flatMap((capability) => (capability ? [capability.kind] : [])),
+          agents: agents.flatMap((agent) => (agent ? [agent.kind] : [])),
+        },
       });
       await capabilitiesService.run({
         capability: historyAddMessagesCapability,
         session,
-        input: [{
-          conversationId: options.conversationId,
-          role: "user",
-          content: options.prompt,
-        }, {
-          conversationId: options.conversationId,
-          role: "assistant",
-          content: response,
-        }]
+        input: [
+          {
+            conversationId: options.conversationId,
+            role: 'user',
+            content: options.prompt,
+          },
+          {
+            conversationId: options.conversationId,
+            role: 'assistant',
+            content: response,
+          },
+        ],
       });
     }
 
@@ -246,9 +266,9 @@ class Completion {
       response: response as any,
       context: context.toJSON(),
       actionRequests: actionRequests.toJSON(),
-    }
-  }
+    };
+  };
 }
 
-export * from "./completion.schemas.js";
+export * from './completion.schemas.js';
 export { Completion };

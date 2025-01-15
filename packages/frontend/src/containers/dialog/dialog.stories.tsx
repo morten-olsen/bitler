@@ -1,8 +1,7 @@
-
-import React from "react";
-import { Meta, StoryObj } from "@storybook/react";
-import { Dialog as DialogComponent } from "./dialog.js";
-import { Fullscreen } from "../../components/layouts/fullscreen/fullscreen.js";
+import React from 'react';
+import { Meta, StoryObj } from '@storybook/react';
+import { Dialog as DialogComponent } from './dialog.js';
+import { Fullscreen } from '../../components/layouts/fullscreen/fullscreen.js';
 
 const meta = {
   title: 'Screens/Dialog',
@@ -16,10 +15,8 @@ export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-
 export const Dialog: Story = {
-  args: {
-  },
+  args: {},
   render: (args: any) => (
     <Fullscreen>
       <DialogComponent {...args} />

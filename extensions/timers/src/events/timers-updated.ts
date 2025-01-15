@@ -1,5 +1,4 @@
-
-import { createEvent, z } from "@bitler/core";
+import { createEvent, z } from '@bitler/core';
 
 const timerUpdatedEvent = createEvent({
   kind: 'timer.updated',
@@ -11,11 +10,7 @@ const timerUpdatedEvent = createEvent({
     id: z.string(),
     description: z.string().optional(),
     duration: z.number(),
-    action: z.union([
-      z.literal('created'),
-      z.literal('updated'),
-      z.literal('removed'),
-    ]),
+    action: z.union([z.literal('created'), z.literal('updated'), z.literal('removed')]),
   }),
 });
 

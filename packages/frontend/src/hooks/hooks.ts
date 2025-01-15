@@ -1,5 +1,6 @@
-import { useEffect } from "react";
-import { useScreenActive } from "../containers/screens/screens.screen-context.js";
+import { useEffect } from 'react';
+
+import { useScreenActive } from '../containers/screens/screens.screen-context.js';
 
 type UseKeyboardOptions = {
   key: string;
@@ -11,14 +12,7 @@ type UseKeyboardOptions = {
 };
 
 const useKeyboard = (options: UseKeyboardOptions, deps: any[] = []) => {
-  const {
-    key,
-    shiftKey = false,
-    ctrlKey = false,
-    altKey = false,
-    metaKey = false,
-    action,
-  } = options;
+  const { key, shiftKey = false, ctrlKey = false, altKey = false, metaKey = false, action } = options;
   const isActive = useScreenActive();
   useEffect(() => {
     if (!isActive) {
@@ -37,20 +31,12 @@ const useKeyboard = (options: UseKeyboardOptions, deps: any[] = []) => {
       }
     };
 
-    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener('keydown', handleKeyDown);
 
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [
-    key,
-    shiftKey,
-    ctrlKey,
-    altKey,
-    metaKey,
-    isActive,
-    ...deps,
-  ])
-}
+  }, [key, shiftKey, ctrlKey, altKey, metaKey, isActive, ...deps]);
+};
 
 export { useKeyboard };

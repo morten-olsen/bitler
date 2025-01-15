@@ -1,24 +1,23 @@
-import type { StorybookConfig } from "@storybook/react-vite";
-import path from "path";
-import { join, dirname } from "path";
+import path, { dirname, join } from 'path';
+
+import type { StorybookConfig } from '@storybook/react-vite';
 import { createViteCss } from '@bitler/frontend-config';
 
-
-const frontendPath = path.resolve('./src/**/*.{js,ts,jsx,tsx}')
+const frontendPath = path.resolve('./src/**/*.{js,ts,jsx,tsx}');
 
 function getAbsolutePath(value: string): any {
-  return dirname(require.resolve(join(value, "package.json")));
+  return dirname(require.resolve(join(value, 'package.json')));
 }
 const config: StorybookConfig = {
-  stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
+  stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
   addons: [
-    getAbsolutePath("@storybook/addon-onboarding"),
-    getAbsolutePath("@storybook/addon-essentials"),
-    getAbsolutePath("@chromatic-com/storybook"),
-    getAbsolutePath("@storybook/addon-interactions"),
+    getAbsolutePath('@storybook/addon-onboarding'),
+    getAbsolutePath('@storybook/addon-essentials'),
+    getAbsolutePath('@chromatic-com/storybook'),
+    getAbsolutePath('@storybook/addon-interactions'),
   ],
   framework: {
-    name: getAbsolutePath("@storybook/react-vite"),
+    name: getAbsolutePath('@storybook/react-vite'),
     options: {},
   },
   async viteFinal(config) {
@@ -26,9 +25,8 @@ const config: StorybookConfig = {
     return mergeConfig(config, {
       css: createViteCss({
         frontendPath,
-      })
-
+      }),
     });
-  }
+  },
 };
 export default config;

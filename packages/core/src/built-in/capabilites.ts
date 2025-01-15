@@ -1,7 +1,8 @@
-import { z } from "zod";
-import { Capabilities, createCapability } from "../capabilities/capabilities.js";
-import { createEvent } from "../events/events.js";
-import { getJsonSchema } from "../utils/zod.js";
+import { z } from 'zod';
+
+import { Capabilities, createCapability } from '../capabilities/capabilities.js';
+import { createEvent } from '../events/events.js';
+import { getJsonSchema } from '../utils/zod.js';
 
 const listCapabilitiesCapability = createCapability({
   kind: 'capabilities.list',
@@ -10,12 +11,14 @@ const listCapabilitiesCapability = createCapability({
   description: 'List all the capabilities that the exists in the system',
   input: z.object({}),
   output: z.object({
-    capabilities: z.array(z.object({
-      kind: z.string(),
-      name: z.string(),
-      group: z.string(),
-      description: z.string(),
-    })),
+    capabilities: z.array(
+      z.object({
+        kind: z.string(),
+        name: z.string(),
+        group: z.string(),
+        description: z.string(),
+      }),
+    ),
   }),
   handler: async ({ container }) => {
     const capabilitiesService = container.get(Capabilities);
@@ -36,15 +39,17 @@ const findCapabilitiesCapability = createCapability({
     limit: z.number().optional(),
   }),
   output: z.object({
-    capabilities: z.array(z.object({
-      capability: z.object({
-        kind: z.string(),
-        name: z.string(),
-        group: z.string(),
-        description: z.string(),
+    capabilities: z.array(
+      z.object({
+        capability: z.object({
+          kind: z.string(),
+          name: z.string(),
+          group: z.string(),
+          description: z.string(),
+        }),
+        similarity: z.number(),
       }),
-      similarity: z.number(),
-    })),
+    ),
   }),
   handler: async ({ container, input }) => {
     const capabilitiesService = container.get(Capabilities);
@@ -103,6 +108,11 @@ const capabilitiesUpdatedEvent = createEvent({
       kinds: z.array(z.string()),
     }),
   }),
-})
+});
 
-export { listCapabilitiesCapability, describeCapabilitiesCapability, capabilitiesUpdatedEvent, findCapabilitiesCapability };
+export {
+  listCapabilitiesCapability,
+  describeCapabilitiesCapability,
+  capabilitiesUpdatedEvent,
+  findCapabilitiesCapability,
+};

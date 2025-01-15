@@ -6,7 +6,6 @@ const theme = create({
   brandTitle: 'Bitler',
 });
 
-
 addons.setConfig({
   theme,
 });

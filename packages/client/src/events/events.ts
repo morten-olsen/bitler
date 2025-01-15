@@ -1,15 +1,19 @@
-import { BitlerServer } from "../generated/types.js";
-import { ServerSchema } from "../types/server.js";
+import type { BitlerServer } from '../generated/types.js';
+import type { ServerSchema } from '../types/server.js';
 
-type EventInput<TSchema extends ServerSchema, TKind extends keyof TSchema["events"] | string> =
-  TKind extends keyof TSchema["events"] ? TSchema["events"][TKind]["input"] : unknown;
+type EventInput<
+  TSchema extends ServerSchema,
+  TKind extends keyof TSchema['events'] | string,
+> = TKind extends keyof TSchema['events'] ? TSchema['events'][TKind]['input'] : unknown;
 
-type EventOutput<TSchema extends ServerSchema, TKind extends keyof TSchema["events"] | string> =
-  TKind extends keyof TSchema["events"] ? TSchema["events"][TKind]["output"] : unknown;
+type EventOutput<
+  TSchema extends ServerSchema,
+  TKind extends keyof TSchema['events'] | string,
+> = TKind extends keyof TSchema['events'] ? TSchema['events'][TKind]['output'] : unknown;
 
 type EventsOptions = {
   baseUrl: string;
-}
+};
 
 const decoder = new TextDecoder();
 
@@ -20,9 +24,7 @@ class Events<TSchema extends ServerSchema = BitlerServer> {
     this.#options = options;
   }
 
-  public subscribe = async <
-    TKind extends keyof TSchema["capabilities"],
-  >(
+  public subscribe = async <TKind extends keyof TSchema['capabilities']>(
     kind: TKind,
     input: EventInput<TSchema, TKind>,
     handler: (output: EventOutput<TSchema, TKind>) => void,
@@ -62,13 +64,13 @@ class Events<TSchema extends ServerSchema = BitlerServer> {
       if (!reader.closed) {
         reader.cancel();
       }
-    }
+    };
     task();
 
     return {
       unsubscribe: abortController.abort,
-    }
-  }
+    };
+  };
 }
 
 export { Events, type EventInput, type EventOutput };

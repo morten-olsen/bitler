@@ -1,4 +1,4 @@
-import { DatabaseMigration } from "@bitler/core";
+import { DatabaseMigration } from '@bitler/core';
 
 const init: DatabaseMigration = {
   name: 'init',
@@ -17,9 +17,8 @@ const init: DatabaseMigration = {
   down: async (knex) => {
     await knex.schema.dropTable('room_names');
     await knex.schema.dropTable('rooms');
-  }
-}
-
+  },
+};
 
 const addMediaPlayers: DatabaseMigration = {
   name: 'addMediaPlayers',
@@ -32,8 +31,8 @@ const addMediaPlayers: DatabaseMigration = {
     await knex.schema.alterTable('rooms', (table) => {
       table.dropColumn('mediaPlayers');
     });
-  }
-}
+  },
+};
 const migrations = [init, addMediaPlayers];
 
 export { migrations };

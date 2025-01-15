@@ -1,6 +1,7 @@
-import { createCapability, Databases, Events, z } from "@bitler/core";
-import { dbConfig } from "../databases/databases.js";
-import { notificationRemovedEvent } from "../events/events.removed.js";
+import { Databases, Events, createCapability, z } from '@bitler/core';
+
+import { dbConfig } from '../databases/databases.js';
+import { notificationRemovedEvent } from '../events/events.removed.js';
 
 const removeNotificationsCapability = createCapability({
   kind: 'notification.remove',
@@ -26,9 +27,8 @@ const removeNotificationsCapability = createCapability({
       eventsService.publish(notificationRemovedEvent, { id });
     });
 
-
     return { success: true };
   },
-})
+});
 
 export { removeNotificationsCapability };

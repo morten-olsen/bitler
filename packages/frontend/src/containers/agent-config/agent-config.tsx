@@ -1,28 +1,28 @@
-import { AgentConfigProvider, useAgentConfigContext, useAgents, useCapabilities, useModels } from "@bitler/react";
+import { AgentConfigProvider, useAgentConfigContext, useAgents, useCapabilities, useModels } from '@bitler/react';
 import {
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerBody,
-  DrawerFooter,
   Autocomplete,
   AutocompleteItem,
   Button,
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerFooter,
+  DrawerHeader,
   Input,
   Textarea,
   useDisclosure,
-} from "@nextui-org/react";
-import React, { ReactNode, useContext } from "react"
-import { Tagbar } from "../../components/base/tagbar/tagbar.js";
-import { AgentConfigContext } from "./agent-config.context.js";
-import { useKeyboard } from "../../hooks/hooks.js";
-import { Label } from "../../components/base/label/label.js";
+} from '@nextui-org/react';
+import React, { ReactNode, useContext } from 'react';
+import { Tagbar } from '../../components/base/tagbar/tagbar.js';
+import { AgentConfigContext } from './agent-config.context.js';
+import { useKeyboard } from '../../hooks/hooks.js';
+import { Label } from '../../components/base/label/label.js';
 
 type AgentConfigContextValue = ReturnType<typeof useAgentConfigContext>;
 
 type AgentConfigProps = {
   children?: ReactNode;
-  disclosure: ReturnType<typeof useDisclosure>
+  disclosure: ReturnType<typeof useDisclosure>;
   context: AgentConfigContextValue;
 };
 
@@ -32,7 +32,6 @@ const AgentConfigContainer = ({ children, disclosure, context }: AgentConfigProp
   const agents = useAgents();
   const models = useModels();
   const [agentConfig, setAgentConfig] = context;
-
 
   useKeyboard({
     key: 'p',
@@ -54,15 +53,11 @@ const AgentConfigContainer = ({ children, disclosure, context }: AgentConfigProp
                     <Autocomplete
                       selectedKey={agentConfig.agent}
                       onSelectionChange={(value) => {
-                        setAgentConfig((prev) => ({ ...prev, agent: value?.toString() }))
+                        setAgentConfig((prev) => ({ ...prev, agent: value?.toString() }));
                       }}
                       items={agents}
                     >
-                      {(item) => (
-                        <AutocompleteItem key={item.kind}>
-                          {item.name}
-                        </AutocompleteItem>
-                      )}
+                      {(item) => <AutocompleteItem key={item.kind}>{item.name}</AutocompleteItem>}
                     </Autocomplete>
                   </Label>
                   <Label title="System prompt">
@@ -70,7 +65,7 @@ const AgentConfigContainer = ({ children, disclosure, context }: AgentConfigProp
                       minRows={1}
                       value={agentConfig.systemPrompt || ''}
                       onChange={(e) => {
-                        setAgentConfig((prev) => ({ ...prev, systemPrompt: e.target.value }))
+                        setAgentConfig((prev) => ({ ...prev, systemPrompt: e.target.value }));
                       }}
                     />
                   </Label>
@@ -78,15 +73,11 @@ const AgentConfigContainer = ({ children, disclosure, context }: AgentConfigProp
                     <Autocomplete
                       selectedKey={agentConfig.model}
                       onSelectionChange={(value) => {
-                        setAgentConfig((prev) => ({ ...prev, model: value?.toString() }))
+                        setAgentConfig((prev) => ({ ...prev, model: value?.toString() }));
                       }}
                       items={models}
                     >
-                      {(item) => (
-                        <AutocompleteItem key={item.id}>
-                          {item.name}
-                        </AutocompleteItem>
-                      )}
+                      {(item) => <AutocompleteItem key={item.id}>{item.name}</AutocompleteItem>}
                     </Autocomplete>
                   </Label>
                   <Label title="Capabilities">
@@ -118,7 +109,6 @@ const AgentConfigContainer = ({ children, disclosure, context }: AgentConfigProp
                       {(agent) => (
                         <div>
                           <div>{agent.name}</div>
-
                         </div>
                       )}
                     </Tagbar>
@@ -129,7 +119,7 @@ const AgentConfigContainer = ({ children, disclosure, context }: AgentConfigProp
                         type="number"
                         value={agentConfig.discoverCapabilites?.toString() || '0'}
                         onChange={(e) => {
-                          setAgentConfig((prev) => ({ ...prev, discoverCapabilites: parseInt(e.target.value) }))
+                          setAgentConfig((prev) => ({ ...prev, discoverCapabilites: parseInt(e.target.value) }));
                         }}
                       />
                     </Label>
@@ -138,16 +128,20 @@ const AgentConfigContainer = ({ children, disclosure, context }: AgentConfigProp
                         type="number"
                         value={agentConfig.discoverAgents?.toString() || '0'}
                         onChange={(e) => {
-                          setAgentConfig((prev) => ({ ...prev, discoverAgents: parseInt(e.target.value) }))
+                          setAgentConfig((prev) => ({ ...prev, discoverAgents: parseInt(e.target.value) }));
                         }}
                       />
                     </Label>
                   </div>
                 </DrawerBody>
                 <DrawerFooter>
-                  <Button color="danger" variant="light" onPress={() => {
-                    setAgentConfig({});
-                  }}>
+                  <Button
+                    color="danger"
+                    variant="light"
+                    onPress={() => {
+                      setAgentConfig({});
+                    }}
+                  >
                     Clear
                   </Button>
                 </DrawerFooter>
@@ -158,7 +152,7 @@ const AgentConfigContainer = ({ children, disclosure, context }: AgentConfigProp
       </AgentConfigProvider>
     </AgentConfigContext.Provider>
   );
-}
+};
 
 const useAgentConfigControls = () => {
   const context = useContext(AgentConfigContext);

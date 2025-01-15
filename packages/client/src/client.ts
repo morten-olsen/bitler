@@ -1,11 +1,11 @@
-import { Capabilities } from "./capabilites/capabilities.js";
-import { Events } from "./events/events.js";
-import { BitlerServer } from "./generated/types.js";
-import { ServerSchema } from "./types/server.js";
+import { Capabilities } from './capabilites/capabilities.js';
+import { Events } from './events/events.js';
+import { BitlerServer } from './generated/types.js';
+import { ServerSchema } from './types/server.js';
 
 type ClientOptions = {
   baseUrl: string;
-}
+};
 
 class Client<TSchema extends ServerSchema = BitlerServer> {
   #capabilities: Capabilities<TSchema>;

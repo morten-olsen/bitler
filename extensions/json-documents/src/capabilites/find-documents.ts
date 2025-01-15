@@ -1,5 +1,6 @@
-import { createCapability, Databases, z } from "@bitler/core";
-import { dbConfig } from "../database/database.js";
+import { Databases, createCapability, z } from '@bitler/core';
+
+import { dbConfig } from '../database/database.js';
 
 const findDocuments = createCapability({
   kind: 'json-documents.find-documents',
@@ -11,13 +12,15 @@ const findDocuments = createCapability({
     types: z.array(z.string()).optional(),
     limit: z.number().optional(),
   }),
-  output: z.array(z.object({
-    id: z.string(),
-    source: z.string(),
-    type: z.string(),
-    createdAt: z.string(),
-    data: z.any(),
-  })),
+  output: z.array(
+    z.object({
+      id: z.string(),
+      source: z.string(),
+      type: z.string(),
+      createdAt: z.string(),
+      data: z.any(),
+    }),
+  ),
   handler: async ({ container, input }) => {
     const dbs = container.get(Databases);
     const db = await dbs.get(dbConfig);
@@ -32,7 +35,7 @@ const findDocuments = createCapability({
       query = query.limit(input.limit);
     }
     return query;
-  }
+  },
 });
 
 export { findDocuments };

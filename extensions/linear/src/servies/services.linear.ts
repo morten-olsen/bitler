@@ -1,5 +1,5 @@
-import { Container } from "@bitler/core";
-import { LinearClient, User } from "@linear/sdk";
+import { Container } from '@bitler/core';
+import { LinearClient, User } from '@linear/sdk';
 
 class LinearService {
   #container: Container;
@@ -23,7 +23,7 @@ class LinearService {
     }
 
     return this.#userPromise;
-  }
+  };
 }
 
 export { LinearService };

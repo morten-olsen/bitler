@@ -1,4 +1,4 @@
-import { createDatabase, createMigration } from "@bitler/core";
+import { createDatabase, createMigration } from '@bitler/core';
 
 const addNotificationsTable = createMigration({
   name: 'add-notifications-table',
@@ -12,7 +12,7 @@ const addNotificationsTable = createMigration({
   },
   down: async (knex) => {
     await knex.schema.dropTable('notifications');
-  }
+  },
 });
 
 const dbConfig = createDatabase({

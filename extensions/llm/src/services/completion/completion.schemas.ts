@@ -1,11 +1,7 @@
-import { z } from "@bitler/core";
+import { z } from '@bitler/core';
 
 const completionDialogSchema = z.object({
-  role: z.union([
-    z.literal("user"),
-    z.literal("assistant"),
-    z.literal("system"),
-  ]),
+  role: z.union([z.literal('user'), z.literal('assistant'), z.literal('system')]),
   content: z.string(),
 });
 
@@ -29,5 +25,3 @@ const completionOptionsSchema = z.object({
 type CompletionOptions = z.infer<typeof completionOptionsSchema>;
 
 export { completionDialogSchema, type CompletionDialog, completionOptionsSchema, type CompletionOptions };
-
-

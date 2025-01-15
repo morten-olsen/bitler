@@ -25,4 +25,3 @@ class EventEmitter<TEvents extends Events> {
 }
 
 export { EventEmitter };
-
