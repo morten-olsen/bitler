@@ -1,9 +1,10 @@
+import React from 'react';
 import { NextUIProvider } from "@nextui-org/react";
 import { BitlerProvider } from "@bitler/react";
-import { Sidebar } from './containers/sidebar/sidebar';
 import { useTheme } from '@nextui-org/use-theme';
-import { ScreensProvider } from './containers/screens/screens.provider';
-import { Screens } from './containers/screens/screens.container';
+import { Sidebar } from './containers/sidebar/sidebar.js';
+import { ScreensProvider } from './containers/screens/screens.provider.js';
+import { Screens } from './containers/screens/screens.container.js';
 
 const App = () => {
   const { theme } = useTheme('dark');

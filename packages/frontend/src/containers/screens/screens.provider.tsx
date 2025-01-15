@@ -1,6 +1,6 @@
 import React, { ComponentType, ReactNode, useCallback, useState } from "react";
 import { nanoid } from "nanoid";
-import { Screen, ScreensContext, ScreenShowOptions } from "./screens.context";
+import { Screen, ScreensContext, ScreenShowOptions } from "./screens.context.js";
 
 type ScreensProviderProps = {
   children: ReactNode;

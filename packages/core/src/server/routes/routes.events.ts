@@ -40,7 +40,8 @@ const eventsPlugin: FastifyPluginAsyncZod = async (app) => {
         }
         if (event.filter && !(await event.filter({
           container: request.container,
-          input: parsedInput
+          input: parsedInput,
+          event: value,
         }))) {
           return;
         }

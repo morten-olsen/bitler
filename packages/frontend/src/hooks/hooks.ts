@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useScreenActive } from "../containers/screens/screens.screen-context";
+import { useScreenActive } from "../containers/screens/screens.screen-context.js";
 
 type UseKeyboardOptions = {
   key: string;

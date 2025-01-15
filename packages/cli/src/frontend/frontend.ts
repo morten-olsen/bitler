@@ -1,10 +1,16 @@
 import { resolve } from 'path';
 import { build, createServer, InlineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc'
-import tailwind from 'tailwindcss';
-import { tailwindConfig } from './frontend.tailwind.js';
-import autoprefixer from 'autoprefixer';
+import { createViteCss } from '@bitler/frontend-config';
+import { fileURLToPath } from 'url';
 
+
+const frontendPath = resolve(
+  fileURLToPath(new URL(
+    '..dist/**/*.{js,ts,jsx,tsx}',
+    import.meta.resolve('@bitler/frontend/package.json')
+  )),
+);
 const baseConfig = (root: string): InlineConfig => ({
   root,
   define: {
@@ -19,22 +25,14 @@ const baseConfig = (root: string): InlineConfig => ({
       '/api': 'http://localhost:3000',
     },
   },
-  css: {
-    postcss: {
-      plugins: [
-        tailwind({
-          config: tailwindConfig
-        }),
-        autoprefixer()
-      ]
-    },
-  },
+  css: createViteCss({
+    frontendPath,
+  }),
   build: {
     outDir: resolve('dist', 'frontend'),
     rollupOptions: {
       input: {
         app: resolve('frontend', 'index.html'),
-        //js: resolve('frontend', 'main.tsx'),
       },
     },
   },

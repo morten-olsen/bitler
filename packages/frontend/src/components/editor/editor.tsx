@@ -1,6 +1,6 @@
-import MonacoEditor from '@monaco-editor/react';
+import { Editor as MonacoEditor } from '@monaco-editor/react';
 import clsx from 'clsx';
-import { ComponentProps, useRef } from 'react';
+import React, { ComponentProps, useRef } from 'react';
 
 type Props = ComponentProps<typeof MonacoEditor>;
 

@@ -1,5 +1,7 @@
-import { Capabilities, Container, Session } from "@bitler/core";
+import { Capabilities, Container, Databases, Session } from "@bitler/core";
 import { addDocument } from "@bitler/json-documents";
+import { Message } from "../types/message.js";
+import { addNotificationCapability, removeNotificationsCapability } from "@bitler/notifications";
 
 type SignalSocketOptions = {
   id: string;
@@ -35,8 +37,7 @@ class SignalSocket {
   #onmessage = async (event: MessageEvent) => {
     const { container } = this.#options;
     const capabilities = container.get(Capabilities)
-    const message: any = JSON.parse(event.data);
-    console.log('message', message);
+    const message: Message = JSON.parse(event.data);
     await capabilities.run({
       capability: addDocument,
       session: new Session(),
@@ -46,7 +47,35 @@ class SignalSocket {
         data: message,
       }
     });
+    if (message.envelope.dataMessage) {
+      await capabilities.run({
+        capability: addNotificationCapability,
+        session: new Session(),
+        input: {
+          id: `signal-${message.envelope.sourceUuid}-${message.envelope.timestamp}`,
+          title: 'New signal message',
+          message: [
+            `**From ${message.envelope.sourceName} (${message.envelope.source})**`,
+            '',
+            message.envelope.dataMessage.message,
+          ].join('\n'),
+        },
+      });
+    }
 
+    if (message.envelope.syncMessage?.readMessages) {
+      const ids = message.envelope.syncMessage.readMessages.map((readMessage) =>
+        `signal-${readMessage.senderUuid}-${readMessage.timestamp}`
+      );
+
+      await capabilities.run({
+        capability: removeNotificationsCapability,
+        session: new Session(),
+        input: {
+          ids,
+        },
+      });
+    }
   }
 
   #setup = () => {

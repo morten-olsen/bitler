@@ -1,5 +1,0 @@
-const Prompt = () => {
-
-}
-
-export { Prompt };

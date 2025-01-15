@@ -32,7 +32,7 @@ const turnOff = createCapability({
     const ha = container.get(HomeassistantService);
     await ha.callService({
       domain: 'light',
-      service: 'turn_on',
+      service: 'turn_off',
       serviceData: {
         entity_id: roomIds,
         transition: input.transition,

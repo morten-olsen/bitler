@@ -1,7 +1,8 @@
+import React from 'react';
 import { Tab, Tabs } from "@nextui-org/react";
-import { useScreensContext } from "./screens.hooks";
+import { useScreensContext } from "./screens.hooks.js";
 import { X } from "lucide-react";
-import { ScreenContext } from "./screens.screen-context";
+import { ScreenContext } from "./screens.screen-context.js";
 
 const Screens = () => {
   const { screens, selected, setSelected, close } = useScreensContext()

@@ -8,6 +8,7 @@
   ],
   "scripts": {
     "build": "tsc --build",
+    "dev": "tsc --build --watch",
     "generate:types": "openapi-typescript https://bbernhard.github.io/signal-cli-rest-api/src/docs/swagger.json -o src/generated/api.ts"
   },
   "devDependencies": {
@@ -18,6 +19,7 @@
   "dependencies": {
     "@bitler/core": "workspace:*",
     "@bitler/json-documents": "workspace:*",
+    "@bitler/notifications": "workspace:*",
     "nanoid": "^5.0.9",
     "openapi-fetch": "^0.13.3"
   }

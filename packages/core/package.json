@@ -7,11 +7,9 @@
     "dist",
     "bin"
   ],
-  "bin": {
-    "bitler-bootstrap": "./bin/bootstrap.js"
-  },
   "scripts": {
-    "build": "tsc --build"
+    "build": "tsc --build",
+    "dev": "tsc --build --watch"
   },
   "devDependencies": {
     "@bitler/configs": "workspace:*",
@@ -19,8 +17,7 @@
     "typescript": "^5.7.2"
   },
   "exports": {
-    ".": "./dist/exports.js",
-    "./bootstrap": "./dist/bootstrap.js"
+    ".": "./dist/exports.js"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.2.15",

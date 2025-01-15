@@ -8,6 +8,9 @@
       "path": "./extensions/llm"
     },
     {
+      "path": "./extensions/notifications"
+    },
+    {
       "path": "./extensions/knowledge-bases"
     },
     {
@@ -41,7 +44,7 @@
       "path": "./packages/react"
     },
     {
-      "path": "./packages/frontend/tsconfig.build.json"
+      "path": "./packages/frontend"
     }
   ]
 }

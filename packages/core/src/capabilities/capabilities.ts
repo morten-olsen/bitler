@@ -65,8 +65,8 @@ class Capabilities extends EventEmitter<CapabilitiesEvents> {
     this.emit('registered', capabilities);
   }
 
-  public get = (kinds: string[]) => {
-    return kinds.map((kind) => Array.from(this.#capabilities).find((capability) => capability.kind === kind));
+  public get = (kinds: string[]): Capability<ZodSchema, ZodSchema>[] => {
+    return kinds.map((kind) => Array.from(this.#capabilities).find((capability) => capability.kind === kind)) as Capability<ZodSchema, ZodSchema>[];
   }
 
   public list = () => {
@@ -76,7 +76,7 @@ class Capabilities extends EventEmitter<CapabilitiesEvents> {
   public run = async <
     TInput extends ZodSchema,
     TOutput extends ZodSchema,
-  >(options: CapabilityRunOptions<TInput, TOutput>) => {
+  >(options: CapabilityRunOptions<TInput, TOutput>): Promise<z.infer<TOutput>> => {
     const contextsService = this.#container.get(Contexts);
     const actionRequestService = this.#container.get(ActionRequests);
     const context = options.context || await contextsService.create({

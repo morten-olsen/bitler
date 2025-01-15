@@ -8,7 +8,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "bitler build",
+    "dev": "bitler-bootstrap",
     "start": "bitler-bootstrap"
   },
   "devDependencies": {
@@ -16,7 +16,9 @@
     "typescript": "^5.7.2"
   },
   "dependencies": {
+    "@bitler/bootstrap": "workspace:*",
     "@bitler/llm": "workspace:*",
+    "@bitler/notifications": "workspace:*",
     "@bitler/knowledge-bases": "workspace:*",
     "@bitler/cli": "workspace:*",
     "@bitler/core": "workspace:*",

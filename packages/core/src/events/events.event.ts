@@ -1,9 +1,10 @@
 import { z, ZodSchema } from "zod";
 import { Container } from "../exports.js";
 
-type EventHandlerOptions<TInput extends ZodSchema> = {
+type EventHandlerOptions<TInput extends ZodSchema, TOutput extends ZodSchema> = {
   container: Container;
   input: z.infer<TInput>;
+  event: z.infer<TOutput>;
 };
 
 type Event<
@@ -16,7 +17,7 @@ type Event<
   description: string;
   input: TInput;
   output: TOutput;
-  filter?: (options: EventHandlerOptions<TInput>) => Promise<boolean>;
+  filter?: (options: EventHandlerOptions<TInput, TOutput>) => Promise<boolean>;
 }
 
 const createEvent = <TInput extends ZodSchema, TOutput extends ZodSchema>(

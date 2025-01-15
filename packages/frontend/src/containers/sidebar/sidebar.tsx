@@ -1,17 +1,18 @@
+import React from 'react';
 import { ListVideo, Library, Signpost, Database, MessagesSquare, Plus } from 'lucide-react';
-import { useOpenScreen } from '../screens/screens.hooks';
-import { Dialog } from '../dialog/dialog';
-import { Timers } from '../timers/timers';
-import { Capabilities } from '../capbilites/capabilites';
+import { useOpenScreen } from '../screens/screens.hooks.js';
+import { Dialog } from '../dialog/dialog.js';
+import { Timers } from '../timers/timers.js';
+import { Capabilities } from '../capbilites/capabilites.js';
 import { Listbox, ListboxItem, ListboxSection } from '@nextui-org/react';
 import { nanoid } from 'nanoid';
-import { Conversations } from '../conversations/conversations';
+import { Conversations } from '../conversations/conversations.js';
 
 const Sidebar = () => {
   const openScreen = useOpenScreen();
   return (
     <div
-      className="h-full flex flex-col border-default-100 border-r-1 px-4 pt-10 pb-4"
+      className="h-full flex flex-col hidden md:flex border-default-100 border-r-1 px-4 pt-10 pb-4"
     >
       <Listbox>
         <ListboxSection title="Conversations" showDivider>

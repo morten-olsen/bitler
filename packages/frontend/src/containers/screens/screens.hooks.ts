@@ -1,5 +1,5 @@
 import { useContext } from "react"
-import { ScreensContext } from "./screens.context"
+import { ScreensContext } from "./screens.context.js"
 
 const useScreensContext = () => {
   const context = useContext(ScreensContext);

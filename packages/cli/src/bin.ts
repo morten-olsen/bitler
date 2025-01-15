@@ -15,40 +15,6 @@ buildSchemaCommand.action(async (input, output) => {
   await writeFile(location, types);
 });
 
-const devCommand = program.command('dev')
-devCommand.action(async () => {
-  const { createBackendDev } = await import('./backend/backend.js');
-  const { createFrontendDev } = await import('./frontend/frontend.js');
-  const frontend = await createFrontendDev();
-  await frontend.listen(1337);
-  const backend = await createBackendDev();
-  backend.start();
-});
-
-const buildCommand = program.command('build')
-buildCommand.action(async () => {
-  const { buildBackend } = await import('./backend/backend.js');
-  await buildBackend();
-  const { buildFrontend } = await import('./frontend/frontend.js');
-  await buildFrontend();
-});
-
-
-const backendCommand = program.command('backend')
-
-const backendBuildCommand = backendCommand.command('build')
-backendBuildCommand.action(async () => {
-  const { buildBackend } = await import('./backend/backend.js');
-  await buildBackend();
-});
-
-const backendDevCommand = backendCommand.command('dev')
-backendDevCommand.action(async () => {
-  const { createBackendDev } = await import('./backend/backend.js');
-  const backend = await createBackendDev();
-  backend.start();
-});
-
 const frontendCommand = program.command('frontend')
 const frontendBuildCommand = frontendCommand.command('build')
 frontendBuildCommand.action(async () => {

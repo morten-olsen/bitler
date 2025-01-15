@@ -1,10 +1,11 @@
 
+import React from "react";
 import { useConversationHistory } from "@bitler/react"
-import { useOpenScreen } from "../screens/screens.hooks";
+import { useOpenScreen } from "../screens/screens.hooks.js";
 import { Listbox, ListboxItem } from "@nextui-org/react";
 import { Activity } from "lucide-react";
 import clsx from "clsx";
-import { Dialog } from "../dialog/dialog";
+import { Dialog } from "../dialog/dialog.js";
 
 type IconWrapperProps = {
   children: React.ReactNode;

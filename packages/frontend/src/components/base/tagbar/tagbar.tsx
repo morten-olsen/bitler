@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { Autocomplete, AutocompleteItem, Chip } from '@nextui-org/react';
 
 type TagbarProps<T> = {
@@ -63,7 +63,6 @@ function Tagbar<T extends object>({ selected, onSelectedChange, filter, items, g
         <Chip
           className="h-12 rounded-lg"
           key={getKey(item)}
-          size="lg"
           onClose={() => {
             onSelectedChange?.((selected || []).filter((key) => key !== getKey(item)));
           }}

@@ -2,11 +2,6 @@ import { createCapability, Databases, FeatureExtractor, z } from "@bitler/core";
 import { dbConfig } from "../databases/databases.js";
 import { MODEL } from "../consts.js";
 
-type SearchSpecificDocumentsInput = {
-  id: string;
-  name: string;
-};
-
 const searchDocuments = createCapability({
   kind: `knowledge-base.search-documents`,
   name: 'Search documents',
@@ -15,7 +10,7 @@ const searchDocuments = createCapability({
   input: z.object({
     query: z.string(),
     limit: z.number().optional(),
-    knowledgeBaseIds: z.array(z.string()),
+    knowledgeBaseIds: z.array(z.string()).optional(),
   }),
   output: z.object({
     documents: z.array(z.object({

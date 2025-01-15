@@ -1,0 +1,10 @@
+{
+  "extends": "@bitler/configs/tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "allowSyntheticDefaultImports": true
+  },
+  "include": [
+    "src/**/*"
+  ]
+}

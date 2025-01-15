@@ -12,11 +12,11 @@ import {
   Textarea,
   useDisclosure,
 } from "@nextui-org/react";
-import { ReactNode, useContext } from "react"
-import { Tagbar } from "../components/base/tagbar/tagbar";
-import { AgentConfigContext } from "./agent-config.context";
-import { useKeyboard } from "../hooks/hooks";
-import { Label } from "../components/base/label/label";
+import React, { ReactNode, useContext } from "react"
+import { Tagbar } from "../../components/base/tagbar/tagbar.js";
+import { AgentConfigContext } from "./agent-config.context.js";
+import { useKeyboard } from "../../hooks/hooks.js";
+import { Label } from "../../components/base/label/label.js";
 
 type AgentConfigContextValue = ReturnType<typeof useAgentConfigContext>;
 

@@ -1,5 +1,5 @@
 import { useEventEffect, useRunCapabilityQuery } from "@bitler/react";
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Clock } from "lucide-react";
 import { Badge } from "@nextui-org/react";
 
@@ -76,7 +76,7 @@ const Timers = () => {
 
   return (
     <div className="flex flex-col items-center gap-2">
-      <Badge content={timerInfoShort.totalTimers}>
+      <Badge content={timerInfoShort.totalTimers.toString()}>
         <Clock className="w-5 h-5 text-primary" />
       </Badge>
 

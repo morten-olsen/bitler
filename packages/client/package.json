@@ -8,6 +8,7 @@
   ],
   "scripts": {
     "build": "tsc --build",
+    "dev": "tsc --build --watch",
     "generate:types": "bitler schema generate http://localhost:3000 ./src/generated/types.ts"
   },
   "devDependencies": {

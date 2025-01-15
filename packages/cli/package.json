@@ -11,7 +11,8 @@
     "bitler": "bin/bin.js"
   },
   "scripts": {
-    "build": "tsc --build"
+    "build": "tsc --build",
+    "dev": "tsc --build --watch"
   },
   "devDependencies": {
     "@bitler/configs": "workspace:*",
@@ -21,6 +22,7 @@
   },
   "dependencies": {
     "@bitler/core": "workspace:*",
+    "@bitler/frontend-config": "workspace:*",
     "@bitler/frontend": "workspace:*",
     "@sinclair/typebox": "^0.34.13",
     "@tailwindcss/typography": "^0.5.16",

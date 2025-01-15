@@ -2,12 +2,11 @@ import { AgentConfig, useAgentConfig, useDialog } from "@bitler/react"
 import { Button, Textarea, useDisclosure } from "@nextui-org/react";
 import { Cog, Send } from 'lucide-react';
 import { AnimatePresence } from 'framer-motion';
-import { useCallback, useRef, useState } from "react";
-import { useKeyboard } from "../../hooks/hooks";
-import { useOpenScreen } from "../screens/screens.hooks";
-import { DialogMessage } from "./dialog.message";
-import { nanoid } from "nanoid";
-import { AgentConfigContainer } from "../../agent-config/agent-config";
+import React, { useCallback, useRef, useState } from "react";
+import { useKeyboard } from "../../hooks/hooks.js";
+import { useOpenScreen } from "../screens/screens.hooks.js";
+import { DialogMessage } from "./dialog.message.js";
+import { AgentConfigContainer } from "../agent-config/agent-config.js";
 
 type DialogProps = {
   initialAgentConfig?: AgentConfig;
