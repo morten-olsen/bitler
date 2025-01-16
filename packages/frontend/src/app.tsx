@@ -15,12 +15,8 @@ const App = () => {
         <main className={`h-full ${theme} text-foreground bg-background`}>
           <Fullscreen>
             <BitlerProvider baseUrl="">
-              <div className="flex h-full">
-                <Sidebar />
-                <div className="flex-1">
-                  <Screens />
-                </div>
-              </div>
+              <Sidebar />
+              <Screens />
             </BitlerProvider>
           </Fullscreen>
         </main>

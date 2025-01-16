@@ -1,5 +1,5 @@
 import { cos_sim } from '@huggingface/transformers';
-import { ZodSchema, z } from 'zod';
+import { ZodSchema, ZodType, z } from 'zod';
 
 import { Container } from '../container/container.js';
 import { FeatureExtractor, Vector } from '../feature-extractor/feature-extractor.js';
@@ -77,7 +77,7 @@ class Capabilities extends EventEmitter<CapabilitiesEvents> {
     return Array.from(this.#capabilities);
   };
 
-  public run = async <TInput extends ZodSchema, TOutput extends ZodSchema>(
+  public run = async <TInput extends ZodType, TOutput extends ZodType>(
     options: CapabilityRunOptions<TInput, TOutput>,
   ): Promise<z.infer<TOutput>> => {
     const contextsService = this.#container.get(Contexts);

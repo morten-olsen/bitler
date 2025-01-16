@@ -7,6 +7,7 @@ import { useKeyboard } from '../../hooks/hooks.js';
 import { useOpenScreen } from '../screens/screens.hooks.js';
 import { DialogMessage } from './dialog.message.js';
 import { AgentConfigContainer } from '../agent-config/agent-config.js';
+import { Page } from '../../components/layouts/page/page.js';
 
 type DialogProps = {
   initialAgentConfig?: AgentConfig;
@@ -92,10 +93,10 @@ const Dialog = ({ initialAgentConfig, userIntro, id }: DialogProps) => {
   );
 
   return (
-    <div className="h-full">
-      <div className="p-2 max-w-4xl mx-auto h-full flex flex-col">
-        <AgentConfigContainer disclosure={disclosure} context={agentConfigContext}>
-          <div className="flex-1 bg-slate-00 p-12 overflow-y-scroll" ref={contentAreaRef}>
+    <AgentConfigContainer disclosure={disclosure} context={agentConfigContext}>
+      <Page>
+        <Page.Body>
+          <Page.Content>
             <div className="flex flex-col gap-4">
               <AnimatePresence>
                 {dialog.messages.length === 0 && userIntro && (
@@ -108,31 +109,40 @@ const Dialog = ({ initialAgentConfig, userIntro, id }: DialogProps) => {
                   />
                 )}
                 {dialog.messages.map((message, i) => (
-                  <DialogMessage key={i} message={message} />
+                  <DialogMessage
+                    key={message.id || i}
+                    message={message}
+                    remove={() => (message.id ? dialog.removeMessages([message.id]) : undefined)}
+                    retry={() => (message.id ? dialog.retry(message.id) : undefined)}
+                  />
                 ))}
               </AnimatePresence>
             </div>
-          </div>
-          <div className="flex p-2 gap-2 justify-start">
-            <Textarea
-              ref={textAreaRef}
-              isDisabled={dialog.isLoading}
-              placeholder="Type a message..."
-              className="flex-1"
-              minRows={1}
-              value={input}
-              onValueChange={setInput}
-            />
-            <Button isLoading={dialog.isLoading} isIconOnly color="primary" onPress={send}>
-              <Send />
-            </Button>
-            <Button isIconOnly onPress={disclosure.onOpen}>
-              <Cog />
-            </Button>
-          </div>
-        </AgentConfigContainer>
-      </div>
-    </div>
+          </Page.Content>
+        </Page.Body>
+        <Page.Footer>
+          <Page.Content>
+            <div className="flex p-2 gap-2 justify-start">
+              <Textarea
+                ref={textAreaRef}
+                isDisabled={dialog.isLoading}
+                placeholder="Type a message..."
+                className="flex-1"
+                minRows={1}
+                value={input}
+                onValueChange={setInput}
+              />
+              <Button isLoading={dialog.isLoading} isIconOnly color="primary" onPress={send}>
+                <Send />
+              </Button>
+              <Button isIconOnly onPress={disclosure.onOpen}>
+                <Cog />
+              </Button>
+            </div>
+          </Page.Content>
+        </Page.Footer>
+      </Page>
+    </AgentConfigContainer>
   );
 };
 

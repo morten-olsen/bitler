@@ -7,6 +7,78 @@
 
 export interface BitlerServer {
   capabilities: {
+    "action-requests.list": {
+      input: {};
+      output: {
+        actionRequests: {
+          kind: string;
+          name: string;
+          description: string;
+        }[];
+      };
+    };
+    "action-requests.describe": {
+      input: {
+        kind: string;
+      };
+      output: {
+        actionRequest: {
+          kind: string;
+          name: string;
+          description: string;
+          schema?: unknown;
+        };
+      };
+    };
+    "context-items.list": {
+      input: {};
+      output: {
+        contextItems: {
+          kind: string;
+          name: string;
+          description: string;
+        }[];
+      };
+    };
+    "context-items.describe": {
+      input: {
+        kind: string;
+      };
+      output: {
+        contextItem: {
+          kind: string;
+          name: string;
+          description: string;
+          schema?: unknown;
+        };
+      };
+    };
+    "events.list": {
+      input: {};
+      output: {
+        events: {
+          kind: string;
+          name: string;
+          group: string;
+          description: string;
+        }[];
+      };
+    };
+    "capabilities.describe": {
+      input: {
+        kind: string;
+      };
+      output: {
+        capability: {
+          kind: string;
+          name: string;
+          group: string;
+          description: string;
+          input?: unknown;
+          output?: unknown;
+        };
+      };
+    };
     "capabilities.list": {
       input: {};
       output: {
@@ -17,6 +89,57 @@ export interface BitlerServer {
           description: string;
         }[];
       };
+    };
+    "capabilities.find": {
+      input: {
+        query: string;
+        limit?: number;
+      };
+      output: {
+        capabilities: {
+          capability: {
+            kind: string;
+            name: string;
+            group: string;
+            description: string;
+          };
+          similarity: number;
+        }[];
+      };
+    };
+    "configs.list": {
+      input: {};
+      output: {
+        configs: {
+          kind: string;
+          name: string;
+          group?: string;
+          description: string;
+        }[];
+      };
+    };
+    "configs.describe": {
+      input: {
+        kind: string;
+      };
+      output: {
+        config: {
+          kind: string;
+          name: string;
+          group?: string;
+          description: string;
+          schema?: unknown;
+          hasValue: boolean;
+        };
+      };
+    };
+    "configs.set": {
+      input: {
+        kind: string;
+        name: string;
+        value?: unknown;
+      };
+      output: {};
     };
     "agents.list": {
       input: {};
@@ -54,6 +177,8 @@ export interface BitlerServer {
         context: {
           [k: string]: unknown;
         };
+        requestId?: string;
+        responseId?: string;
         actionRequests: {
           kind: string;
           description?: string;
@@ -151,6 +276,7 @@ export interface BitlerServer {
         content: string;
       }[];
       output: {
+        ids: string[];
         success: boolean;
       };
     };
@@ -163,6 +289,161 @@ export interface BitlerServer {
       };
       output: {
         success: boolean;
+      };
+    };
+    "history.delete-messages": {
+      input: {
+        ids: string[];
+      };
+      output: {
+        success: boolean;
+      };
+    };
+    "aws.s3.list-buckets": {
+      input: {
+        awsProfile?: string;
+      };
+      output: {
+        buckets: string[];
+      };
+    };
+    "aws.s3.list-objects": {
+      input: {
+        awsProfile?: string;
+        bucket: string;
+        prefix?: string;
+      };
+      output: {
+        bucket: string;
+        keys: string[];
+      };
+    };
+    "aws.s3.get-objects": {
+      input: {
+        awsProfile?: string;
+        objects: {
+          bucket: string;
+          key: string;
+        }[];
+      };
+      output: {
+        objects: {
+          bucket: string;
+          key: string;
+          content: string;
+        }[];
+      };
+    };
+    "notification.add": {
+      input: {
+        id?: string;
+        title: string;
+        message: string;
+        actions?: {
+          title: string;
+          description?: string;
+          /**
+           * The kind of capability to run
+           */
+          kind: string;
+          removeNotification?: boolean;
+          /**
+           * The input to the capability
+           */
+          data?: {
+            [k: string]: unknown;
+          };
+        }[];
+      };
+      output: {
+        id: string;
+      };
+    };
+    "notification.list": {
+      input: {};
+      output: {
+        notifications: {
+          id: string;
+          title: string;
+          message: string;
+          createdAt: string;
+          actions: {
+            id: string;
+            title: string;
+            description?: string;
+            kind: string;
+            removeNotification?: boolean;
+            data?: unknown;
+          }[];
+        }[];
+      };
+    };
+    "notification.remove": {
+      input: {
+        ids: string[];
+      };
+      output: {
+        success: boolean;
+      };
+    };
+    "notification.run-action": {
+      input: {
+        actionId: string;
+      };
+      output: {
+        actionId: string;
+        notificationId: string;
+        success: boolean;
+      };
+    };
+    "knowledge-base.list": {
+      input: {};
+      output: {
+        knowledgeBases: {
+          id: string;
+          name: string;
+        }[];
+      };
+    };
+    "knowledge-base.create": {
+      input: {
+        name: string;
+      };
+      output: {
+        id: string;
+      };
+    };
+    "knowledge-base.add-document": {
+      input: {
+        knowledgeBaseId: string;
+        documents: {
+          documentId: string;
+          title: string;
+          content: string;
+        }[];
+      };
+      output: {
+        success: boolean;
+      };
+    };
+    "knowledge-base.search-documents": {
+      input: {
+        query: string;
+        limit?: number;
+        knowledgeBaseIds?: string[];
+      };
+      output: {
+        documents: {
+          id: string;
+          matches: {
+            distance: number;
+            chunkId: string;
+            start?: number;
+            end?: number;
+          }[];
+          title: string;
+          content: string;
+        }[];
       };
     };
     "timers.add": {
@@ -581,6 +862,29 @@ export interface BitlerServer {
         success: boolean;
       };
     };
+    "http.fetch": {
+      input: {
+        method: "GET" | "POST" | "PUT" | "DELETE";
+        url: string;
+        headers: {
+          [k: string]: string;
+        };
+        body?: {
+          contentType: string;
+          content: string;
+        };
+      };
+      output: {
+        response: {
+          statusCode: number;
+          statusText?: string;
+          headers: {
+            [k: string]: string;
+          };
+          body: string;
+        };
+      };
+    };
   };
   actionRequests: {
     "builtin.add-capabilities": {
@@ -671,10 +975,53 @@ export interface BitlerServer {
     };
   };
   events: {
+    "configs.updated": {
+      input: {};
+      output: {
+        config: {
+          kind: string;
+        };
+      };
+    };
+    "capabilities.updated": {
+      input: {};
+      output: {
+        capability: {
+          kinds: string[];
+        };
+      };
+    };
+    "context-items.updated": {
+      input: {};
+      output: {
+        kind: string;
+      };
+    };
     "history.updated": {
       input: {};
       output: {
         id: string;
+      };
+    };
+    "notification.removed": {
+      input: {
+        ids?: string[];
+      };
+      output: {
+        id: string;
+      };
+    };
+    "notification.created": {
+      input: {};
+      output: {
+        id: string;
+        title: string;
+        message: string;
+        actions: {
+          id: string;
+          title: string;
+          description?: string;
+        }[];
       };
     };
     "timer.created": {

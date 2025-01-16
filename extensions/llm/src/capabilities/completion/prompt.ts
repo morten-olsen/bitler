@@ -12,6 +12,8 @@ const completionPromptDialog = createCapability({
   output: z.object({
     response: z.string(),
     context: z.record(z.unknown()),
+    requestId: z.string().optional(),
+    responseId: z.string().optional(),
     actionRequests: z.array(
       z.object({
         kind: z.string(),

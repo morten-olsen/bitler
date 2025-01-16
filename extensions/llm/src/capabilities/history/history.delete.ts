@@ -4,10 +4,10 @@ import { dbConfig } from '../../databases/databases.history.js';
 import { historyUpdatedEvent } from '../../events/history/history.updated.js';
 
 const historyDeleteCapability = createCapability({
-  kind: 'history.get',
-  name: 'Get a conversation',
+  kind: 'history.delete',
   group: 'History',
-  description: 'List all conversations',
+  name: 'Delete conversation',
+  description: 'Delete a conversation',
   input: z.object({
     id: z.string(),
   }),

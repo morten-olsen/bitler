@@ -1,25 +1,27 @@
 import React from 'react';
 import { Meta, StoryObj } from '@storybook/react';
-import { Dialog as DialogComponent } from './dialog.js';
+import { Capability as CapabilityComponent } from './capability.js';
 import { Fullscreen } from '../../components/layouts/fullscreen/fullscreen.js';
 
 const meta = {
-  title: 'Screens/Dialog',
-  component: DialogComponent,
+  title: 'Screens/Capability',
+  component: CapabilityComponent,
   parameters: {
     layout: 'fullscreen',
   },
-} as Meta<typeof DialogComponent>;
+} as Meta<typeof CapabilityComponent>;
 
 export default meta;
 
 type Story = StoryObj<typeof meta>;
 
-export const Dialog: Story = {
-  args: {},
+export const Capability: Story = {
+  args: {
+    kind: 'history.list',
+  },
   render: (args) => (
     <Fullscreen>
-      <DialogComponent {...args} />
+      <CapabilityComponent {...args} />
     </Fullscreen>
   ),
 };

@@ -11,10 +11,12 @@ import { llm } from '@bitlerjs/llm';
 import { knowledgeBases } from '@bitlerjs/knowledge-bases';
 import { notifications } from '@bitlerjs/notifications';
 import { http } from '@bitlerjs/http';
+import { aws } from '@bitlerjs/aws';
 
 const config: Configuration = {
   extensions: [
     llm,
+    aws,
     notifications,
     knowledgeBases,
     timers,

@@ -3,7 +3,7 @@ import { Database, Library, ListVideo, MessagesSquare, Plus, Signpost } from 'lu
 import { useOpenScreen } from '../screens/screens.hooks.js';
 import { Dialog } from '../dialog/dialog.js';
 import { Timers } from '../timers/timers.js';
-import { Capabilities } from '../capbilites/capabilites.js';
+import { Capabilities } from '../capabilites/capabilites.js';
 import { Listbox, ListboxItem, ListboxSection } from '@nextui-org/react';
 import { nanoid } from 'nanoid';
 import { Conversations } from '../conversations/conversations.js';

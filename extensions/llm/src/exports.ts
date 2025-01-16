@@ -14,6 +14,7 @@ import { agentsList } from './capabilities/agents/agents.list.js';
 import { historyUpdatedEvent } from './events/history/history.updated.js';
 import { capabilitiesContext } from './contexts/capabilites.js';
 import { receptionistAgent } from './agents/recepionist.js';
+import { historyDeleteMessagesCapability } from './capabilities/history/history.delete-messages.js';
 
 const llm = createExtension({
   setup: async ({ container }) => {
@@ -30,6 +31,7 @@ const llm = createExtension({
       historySetCapability,
       historyAddMessagesCapability,
       historyAddCapabilitiesCapability,
+      historyDeleteMessagesCapability,
     ]);
 
     const eventsService = container.get(Events);

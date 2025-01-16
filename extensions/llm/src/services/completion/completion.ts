@@ -153,6 +153,8 @@ class Completion {
     },
   ): Promise<{
     response: TSchema extends ZodSchema ? z.infer<TSchema> : string;
+    requestId?: string;
+    responseId?: string;
     context: Record<string, unknown>;
     actionRequests: { kind: string; value: unknown; description?: string }[];
   }> => {
@@ -228,6 +230,8 @@ class Completion {
     };
 
     const response = await getResponse();
+    let requestId: string | undefined;
+    let responseId: string | undefined;
 
     if (options.conversationId) {
       const capabilitiesService = this.#container.get(Capabilities);
@@ -244,7 +248,7 @@ class Completion {
           agents: agents.flatMap((agent) => (agent ? [agent.kind] : [])),
         },
       });
-      await capabilitiesService.run({
+      const addResult = await capabilitiesService.run({
         capability: historyAddMessagesCapability,
         session,
         input: [
@@ -260,10 +264,14 @@ class Completion {
           },
         ],
       });
+      requestId = addResult.ids[0];
+      responseId = addResult.ids[1];
     }
 
     return {
       response: response as any,
+      requestId,
+      responseId,
       context: context.toJSON(),
       actionRequests: actionRequests.toJSON(),
     };

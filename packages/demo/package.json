@@ -8,27 +8,29 @@
     "dist"
   ],
   "scripts": {
-    "dev": "bitler-bootstrap",
-    "start": "bitler-bootstrap"
+    "start": "bitler-bootstrap",
+    "build": "bitler frontend build"
   },
   "devDependencies": {
     "@bitlerjs/configs": "workspace:*",
+    "nodemon": "^3.1.9",
     "typescript": "^5.7.2"
   },
   "dependencies": {
+    "@bitlerjs/aws": "workspace:*",
     "@bitlerjs/bootstrap": "workspace:*",
-    "@bitlerjs/llm": "workspace:*",
-    "@bitlerjs/http": "workspace:*",
-    "@bitlerjs/notifications": "workspace:*",
-    "@bitlerjs/knowledge-bases": "workspace:*",
     "@bitlerjs/cli": "workspace:*",
     "@bitlerjs/core": "workspace:*",
     "@bitlerjs/frontend": "workspace:*",
     "@bitlerjs/game": "workspace:*",
     "@bitlerjs/homeassistant": "workspace:*",
+    "@bitlerjs/http": "workspace:*",
     "@bitlerjs/json-documents": "workspace:*",
+    "@bitlerjs/knowledge-bases": "workspace:*",
     "@bitlerjs/linear": "workspace:*",
+    "@bitlerjs/llm": "workspace:*",
     "@bitlerjs/music": "workspace:*",
+    "@bitlerjs/notifications": "workspace:*",
     "@bitlerjs/signal": "workspace:*",
     "@bitlerjs/timers": "workspace:*",
     "@fastify/static": "^8.0.3",

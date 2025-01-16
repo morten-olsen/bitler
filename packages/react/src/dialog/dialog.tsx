@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import React, { ReactNode, createContext, useEffect, useState } from 'react';
+import React, { ReactNode, createContext, useCallback, useEffect, useState } from 'react';
 import {
   CapabilityInput,
   DefaultServer,
@@ -45,7 +45,7 @@ const useDialog = (options: UseDialogOptiops) => {
   const { client } = useClientContext();
   const parentContent = useAgentConfigContext();
   const [agentConfig, setAgentConfig] = options?.agentContext || parentContent;
-  const [messages, setMessages] = useState<(DialogMessage & { isLoading?: boolean })[]>([]);
+  const [messages, setMessages] = useState<(DialogMessage & { id?: string; isLoading?: boolean })[]>([]);
   const [context, setContext] = useState<Record<string, unknown>>({});
 
   const getHistory = useRunCapabilityMutation('history.get', {});
@@ -85,28 +85,59 @@ const useDialog = (options: UseDialogOptiops) => {
         conversationId: options.id,
         ...body,
       };
-      console.log('config', config);
       setMessages((prev) => [...prev, { role: 'user', content: body.prompt }]);
       setMessages((prev) => [...prev, { role: 'assistant', content: '', isLoading: true }]);
       const { capabilities } = client;
       const response = await capabilities.run('dialog.prompt', config);
       setMessages((prev) => {
         const clone = [...prev];
-        const last = clone.pop();
-        if (!last) return prev;
-        last.content = response.response;
-        last.isLoading = false;
-        return [...clone, last];
+        const agent = clone.pop();
+        const user = clone.pop();
+        if (!user || !agent) return prev;
+        user.id = response.requestId;
+        agent.content = response.response;
+        agent.isLoading = false;
+        agent.id = response.responseId;
+        return [...clone, user, agent];
       });
       setContext(response.context);
       return response;
     },
   });
 
+  const removeMessagesMutate = useRunCapabilityMutation('history.delete-messages');
+
+  const removeMessages = useCallback((ids: string[]) => {
+    removeMessagesMutate.mutate(
+      { ids },
+      {
+        onSuccess: () => {
+          setMessages((prev) => prev.filter((m) => !ids.includes(m.id || '')));
+        },
+      },
+    );
+  }, []);
+
+  const retry = useCallback(
+    (messageId: string) => {
+      if (!options.id) return;
+      const messageIndex = messages.findIndex((m) => m.id === messageId);
+      if (messageIndex === -1) return;
+      const nextMessages = [...messages].slice(0, messageIndex);
+      setMessages(nextMessages);
+      promptMutate.mutate({
+        prompt: messages[messageIndex].content,
+      });
+    },
+    [messages, options.id],
+  );
+
   return {
     isLoading: promptMutate.isLoading,
     messages,
     context,
+    removeMessages,
+    retry,
     prompt: promptMutate.mutate,
   };
 };

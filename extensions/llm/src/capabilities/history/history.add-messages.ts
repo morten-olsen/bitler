@@ -15,26 +15,27 @@ const historyAddMessagesCapability = createCapability({
     }),
   ),
   output: z.object({
+    ids: z.array(z.string()),
     success: z.boolean(),
   }),
   handler: async ({ container, input }) => {
     const dbs = container.get(Databases);
     const db = await dbs.get(dbConfig);
 
-    if (!input.length) {
-      return { success: true };
-    }
-    await db('messages').insert(
-      input.map((message) => ({
-        id: createId(),
-        conversationId: message.conversationId,
-        role: message.role,
-        content: message.content,
-        createdAt: new Date(),
-      })),
-    );
+    const mapped = input.map((message) => ({
+      id: createId(),
+      conversationId: message.conversationId,
+      role: message.role,
+      content: message.content,
+      createdAt: new Date(),
+    }));
 
-    return { success: true };
+    if (!input.length) {
+      return { success: true, ids: [] };
+    }
+    await db('messages').insert(mapped);
+
+    return { success: true, ids: mapped.map((m) => m.id) };
   },
 });
 
