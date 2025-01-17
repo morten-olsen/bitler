@@ -27,6 +27,7 @@ type Capability<TInput extends ZodSchema, TOutput extends ZodSchema> = {
   description: string;
   agentDescription?: string;
   setup?: ContextSetup[];
+  disableDiscovery?: boolean;
   input: TInput;
   output: TOutput;
   handler: CapabilityHandler<TInput, TOutput>;

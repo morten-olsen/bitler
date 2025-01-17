@@ -10,6 +10,7 @@ const dialogCreateNewCapability = createCapability({
   setup: [capabilitiesContextSetup],
   description: 'Create a new dialog',
   input: createDialogOptionsSchema,
+  disableDiscovery: true,
   output: z.object({
     success: z.boolean(),
   }),

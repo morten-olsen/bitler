@@ -33,7 +33,6 @@ const Timers = () => {
     'timer.updated',
     {},
     () => {
-      console.log('got update');
       timers.refetch();
     },
     [timers.refetch],

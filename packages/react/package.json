@@ -19,6 +19,7 @@
   "dependencies": {
     "@bitlerjs/client": "workspace:*",
     "@tanstack/react-query": "4",
+    "jsondiffpatch": "^0.6.0",
     "nanoid": "^5.0.9"
   }
 }

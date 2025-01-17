@@ -165,7 +165,6 @@ export interface BitlerServer {
           [k: string]: unknown;
         };
         maxTokens?: number;
-        conversationId?: string;
         prompt: string;
         dialog?: {
           role: "user" | "assistant" | "system";
@@ -173,16 +172,19 @@ export interface BitlerServer {
         }[];
       };
       output: {
-        response: string;
-        context: {
-          [k: string]: unknown;
-        };
-        requestId?: string;
-        responseId?: string;
-        actionRequests: {
+        response?: unknown;
+        actionRequests?: {
           kind: string;
           description?: string;
           value?: unknown;
+        }[];
+        context?: {
+          [k: string]: unknown;
+        };
+        files?: {
+          hash: string;
+          caption?: string;
+          contentType?: string;
         }[];
       };
     };
@@ -213,89 +215,101 @@ export interface BitlerServer {
         success: boolean;
       };
     };
-    "history.list": {
+    find: {
       input: {
+        text?: string;
+        ids?: string[];
+        parents?: string[];
+        contexts?: string[];
+        projects?: string[];
+        offset?: number;
         limit?: number;
+        updated?: {
+          before?: string;
+          after?: string;
+        };
+        created?: {
+          before?: string;
+          after?: string;
+        };
+        completed?: {
+          is?: boolean;
+          before?: string;
+          after?: string;
+        };
+        dueDate?: {
+          before?: string;
+          after?: string;
+        };
+        startDate?: {
+          before?: string;
+          after?: string;
+        };
       };
       output: {
-        conversations: {
+        hasMore: boolean;
+        todos: {
+          parentId?: string | null;
+          contextId?: string | null;
+          projectId?: string | null;
+          ownerId?: string | null;
+          assigneeId?: string | null;
+          title: string;
+          description?: string | null;
+          deletedAt?: string | null;
+          completedAt?: string | null;
+          dueDate?: string | null;
+          dueTime?: string | null;
+          startDate?: string | null;
+          startTime?: string | null;
+          tags?: string[];
           id: string;
-          name?: string;
-          description?: string;
-          pinned: boolean;
           createdAt: string;
           updatedAt: string;
         }[];
       };
     };
-    "history.get": {
+    "todos.set": {
       input: {
-        id: string;
-      };
-      output: {
-        id: string;
-        name?: string;
-        description?: string;
-        pinned: boolean;
-        agent?: string;
-        systemPrompt?: string;
-        discoverCapabilies?: number;
-        discoverAgents?: number;
-        capabilities: string[];
-        agents: string[];
-        createdAt: string;
-        updatedAt: string;
-        messages: {
-          id: string;
-          role: string;
-          content: string;
-          createdAt: string;
-        }[];
-      };
-    };
-    "history.set": {
-      input: {
-        id: string;
-        name?: string | null;
+        parentId?: string | null;
+        contextId?: string | null;
+        projectId?: string | null;
+        ownerId?: string | null;
+        assigneeId?: string | null;
+        title: string;
         description?: string | null;
-        agent?: string | null;
-        systemPrompt?: string | null;
-        discoverCapabilies?: number;
-        discoverAgents?: number;
-        capabilities?: string[];
-        agents?: string[];
+        deletedAt?: string | null;
+        completedAt?: string | null;
+        dueDate?: string | null;
+        dueTime?: string | null;
+        startDate?: string | null;
+        startTime?: string | null;
+        tags?: string[];
+        id: string;
       };
       output: {
         success: boolean;
       };
     };
-    "history.add-messages": {
+    "todos.create": {
       input: {
-        conversationId: string;
-        role: string;
-        content: string;
-      }[];
-      output: {
-        ids: string[];
-        success: boolean;
-      };
-    };
-    "history.add-capabilities": {
-      input: {
-        /**
-         * The capabilities to add to the conversation (kind). These will become available the next time the user makes a request.
-         */
-        capabilities: string[];
-      };
-      output: {
-        success: boolean;
-      };
-    };
-    "history.delete-messages": {
-      input: {
-        ids: string[];
+        parentId?: string | null;
+        contextId?: string | null;
+        projectId?: string | null;
+        ownerId?: string | null;
+        assigneeId?: string | null;
+        title: string;
+        description?: string | null;
+        deletedAt?: string | null;
+        completedAt?: string | null;
+        dueDate?: string | null;
+        dueTime?: string | null;
+        startDate?: string | null;
+        startTime?: string | null;
+        tags?: string[];
       };
       output: {
+        id: string;
         success: boolean;
       };
     };
@@ -885,39 +899,182 @@ export interface BitlerServer {
         };
       };
     };
-  };
-  actionRequests: {
-    "builtin.add-capabilities": {
-      /**
-       * The capabilities to add to the agent (kind)
-       */
-      schema: string[];
-    };
-    "builtin.create-dialog": {
-      schema: {
-        /**
-         * The title of the dialog
-         */
-        title: string;
-        /**
-         * The system prompt for the dialog
-         */
+    "conversations.prompt": {
+      input: {
+        conversationId: string;
+        agent?: string;
+        model?: string;
         systemPrompt?: string;
-        /**
-         * The user prompt for the dialog
-         */
-        userPrompt?: string;
-        /**
-         * The capabilities that the agent will have access to
-         */
+        discoverCapabilities?: number;
+        discoverAgents?: number;
         capabilities?: string[];
-        /**
-         * An intro shown to the user before the dialog starts
-         */
-        userIntro: string;
+        agents?: string[];
+        context?: {
+          [k: string]: unknown;
+        };
+        maxTokens?: number;
+        prompt: string;
+        dialog?: {
+          role: "user" | "assistant" | "system";
+          content: string;
+        }[];
+      };
+      output: {
+        response?: unknown;
+        actionRequests?: {
+          kind: string;
+          description?: string;
+          value?: unknown;
+        }[];
+        context?: {
+          [k: string]: unknown;
+        };
+        files?: {
+          hash: string;
+          caption?: string;
+          contentType?: string;
+        }[];
+      };
+    };
+    "conversations.sync": {
+      input: {
+        conversationId: string;
+      };
+      output: {
+        conversationId: string;
+        title?: string;
+        description?: string;
+        agent?: string;
+        messages: {
+          role: "user" | "assistant" | "system";
+          content: string;
+          id: string;
+          files?: {
+            hash: string;
+            caption?: string;
+            contentType?: string;
+          }[];
+          loading?: boolean;
+        }[];
+        context?: {
+          [k: string]: unknown;
+        };
+        agents?: string[];
+        capabilities?: string[];
+        discoverCapabilities?: number;
+        discoverAgents?: number;
+      };
+    };
+    "conversations.remove-messages": {
+      input: {
+        conversationId: string;
+        messageIds: string[];
+      };
+      output: {
+        success: boolean;
+      };
+    };
+    "conversations.retry-message": {
+      input: {
+        conversationId: string;
+        messageId: string;
+      };
+      output: {
+        response?: unknown;
+        actionRequests?: {
+          kind: string;
+          description?: string;
+          value?: unknown;
+        }[];
+        context?: {
+          [k: string]: unknown;
+        };
+        files?: {
+          hash: string;
+          caption?: string;
+          contentType?: string;
+        }[];
+      };
+    };
+    "conversations.list": {
+      input: {};
+      output: {
+        conversations: {
+          id: string;
+          title?: string;
+          description?: string;
+        }[];
+      };
+    };
+    "conversations.set-settings": {
+      input: {
+        conversationId: string;
+        title?:
+          | (
+              | {
+                  [k: string]: unknown;
+                }
+              | string
+            )
+          | null;
+        description?:
+          | (
+              | {
+                  [k: string]: unknown;
+                }
+              | string
+            )
+          | null;
+        agent?:
+          | (
+              | {
+                  [k: string]: unknown;
+                }
+              | string
+            )
+          | null;
+        agents?:
+          | (
+              | {
+                  [k: string]: unknown;
+                }
+              | string[]
+            )
+          | null;
+        context?: {
+          [k: string]: unknown;
+        } | null;
+        capabilities?:
+          | (
+              | {
+                  [k: string]: unknown;
+                }
+              | string[]
+            )
+          | null;
+        discoverCapabilities?:
+          | (
+              | {
+                  [k: string]: unknown;
+                }
+              | number
+            )
+          | null;
+        discoverAgents?:
+          | (
+              | {
+                  [k: string]: unknown;
+                }
+              | number
+            )
+          | null;
+      };
+      output: {
+        success: boolean;
       };
     };
   };
+  actionRequests: {};
   contextItems: {
     "builtin.capabilities": {
       schema: {
@@ -997,10 +1154,49 @@ export interface BitlerServer {
         kind: string;
       };
     };
-    "history.updated": {
-      input: {};
+    "todos.updated": {
+      input: {
+        ids: string[];
+      };
       output: {
-        id: string;
+        from?: {
+          parentId?: string | null;
+          contextId?: string | null;
+          projectId?: string | null;
+          ownerId?: string | null;
+          assigneeId?: string | null;
+          title: string;
+          description?: string | null;
+          deletedAt?: string | null;
+          completedAt?: string | null;
+          dueDate?: string | null;
+          dueTime?: string | null;
+          startDate?: string | null;
+          startTime?: string | null;
+          tags?: string[];
+          id: string;
+          createdAt: string;
+          updatedAt: string;
+        };
+        to?: {
+          parentId?: string | null;
+          contextId?: string | null;
+          projectId?: string | null;
+          ownerId?: string | null;
+          assigneeId?: string | null;
+          title: string;
+          description?: string | null;
+          deletedAt?: string | null;
+          completedAt?: string | null;
+          dueDate?: string | null;
+          dueTime?: string | null;
+          startDate?: string | null;
+          startTime?: string | null;
+          tags?: string[];
+          id: string;
+          createdAt: string;
+          updatedAt: string;
+        };
       };
     };
     "notification.removed": {
@@ -1048,6 +1244,50 @@ export interface BitlerServer {
         duration: number;
         action: "created" | "updated" | "removed";
       };
+    };
+    "conversations.updated": {
+      input: {
+        ids?: string[];
+      };
+      output:
+        | {
+            type: "sync";
+            payload: {
+              conversationId: string;
+              title?: string;
+              description?: string;
+              agent?: string;
+              messages: {
+                role: "user" | "assistant" | "system";
+                content: string;
+                id: string;
+                files?: {
+                  hash: string;
+                  caption?: string;
+                  contentType?: string;
+                }[];
+                loading?: boolean;
+              }[];
+              context?: {
+                [k: string]: unknown;
+              };
+              agents?: string[];
+              capabilities?: string[];
+              discoverCapabilities?: number;
+              discoverAgents?: number;
+            };
+          }
+        | {
+            type: "delta";
+            payload: {
+              conversationId: string;
+              delta?: unknown;
+              hash: {
+                from: string;
+                to: string;
+              };
+            };
+          };
     };
   };
 }

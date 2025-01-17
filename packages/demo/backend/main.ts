@@ -12,10 +12,13 @@ import { knowledgeBases } from '@bitlerjs/knowledge-bases';
 import { notifications } from '@bitlerjs/notifications';
 import { http } from '@bitlerjs/http';
 import { aws } from '@bitlerjs/aws';
+import { todos } from '@bitlerjs/todos';
+import { conversations } from '@bitlerjs/conversations';
 
 const config: Configuration = {
   extensions: [
     llm,
+    todos,
     aws,
     notifications,
     knowledgeBases,
@@ -27,6 +30,7 @@ const config: Configuration = {
     linear,
     signal,
     http,
+    conversations,
   ],
 };
 

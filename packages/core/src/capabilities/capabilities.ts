@@ -110,12 +110,14 @@ class Capabilities extends EventEmitter<CapabilitiesEvents> {
       input: [query],
     });
     const results = await Promise.all(
-      Array.from(this.#capabilities).map(async (capability) => {
-        await this.#getVector(capability);
-        const vector = await this.#getVector(capability);
-        const similarity = cos_sim(queryVector.value, vector.value);
-        return { capability, similarity };
-      }),
+      Array.from(this.#capabilities)
+        .filter((item) => !item.disableDiscovery)
+        .map(async (capability) => {
+          await this.#getVector(capability);
+          const vector = await this.#getVector(capability);
+          const similarity = cos_sim(queryVector.value, vector.value);
+          return { capability, similarity };
+        }),
     );
     results.sort((a, b) => b.similarity - a.similarity);
     return results.slice(0, limit);

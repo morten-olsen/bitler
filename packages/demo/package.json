@@ -18,7 +18,9 @@
   },
   "dependencies": {
     "@bitlerjs/aws": "workspace:*",
+    "@bitlerjs/todos": "workspace:*",
     "@bitlerjs/bootstrap": "workspace:*",
+    "@bitlerjs/conversations": "workspace:*",
     "@bitlerjs/cli": "workspace:*",
     "@bitlerjs/core": "workspace:*",
     "@bitlerjs/frontend": "workspace:*",

@@ -1,4 +1,5 @@
 import type { BitlerServer } from '../generated/types.js';
+import { Socket } from '../socket/socket.js';
 import type { ServerSchema } from '../types/server.js';
 
 type EventInput<
@@ -12,63 +13,56 @@ type EventOutput<
 > = TKind extends keyof TSchema['events'] ? TSchema['events'][TKind]['output'] : unknown;
 
 type EventsOptions = {
-  baseUrl: string;
+  socket: Socket;
 };
 
-const decoder = new TextDecoder();
+type Subscription = {
+  id: string;
+  kind: string;
+  input: unknown;
+};
 
 class Events<TSchema extends ServerSchema = BitlerServer> {
   #options: EventsOptions;
+  #subscriptions: Subscription[] = [];
+  #listeners: Record<string, (value: unknown) => void> = {};
 
   constructor(options: EventsOptions) {
     this.#options = options;
+    options.socket.on('message', this.#onMessage);
+    options.socket.on('connected', this.#onConnected);
   }
+
+  #onMessage = async (data: any) => {
+    if (data.type === 'event') {
+      const { value, id } = data.payload;
+      this.#listeners[id]?.(value);
+    }
+  };
+
+  #onConnected = async () => {
+    for (const { id, kind, input } of this.#subscriptions) {
+      await this.#options.socket.send({ type: 'subscribe', payload: { kind, input, id } });
+    }
+  };
 
   public subscribe = async <TKind extends keyof TSchema['capabilities']>(
     kind: TKind,
     input: EventInput<TSchema, TKind>,
     handler: (output: EventOutput<TSchema, TKind>) => void,
   ) => {
-    const response = await fetch(`${this.#options.baseUrl}/api/events/subscribe`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'keep-alive': 'true',
-      },
-      body: JSON.stringify({ kind, input }),
-    });
-    console.log('response', response);
-    const reader = response.body?.getReader();
-    if (!reader) {
-      throw new Error('No reader');
-    }
-    const abortController = new AbortController();
+    const id = Math.random().toString(36).slice(2);
+    await this.#options.socket.send({ type: 'subscribe', payload: { kind, input, id } });
 
-    const task = async () => {
-      while (true) {
-        if (abortController.signal.aborted) {
-          break;
-        }
-        const { value, done } = await reader.read();
-        const asString = value ? decoder.decode(value) : '';
-        console.log(asString);
-        const split = asString.split('\n').filter(Boolean);
-        for (const chunk of split) {
-          const content = JSON.parse(chunk);
-          handler(content);
-        }
-        if (done) {
-          break;
-        }
-      }
-      if (!reader.closed) {
-        reader.cancel();
-      }
-    };
-    task();
+    const fn = (value: unknown) => handler(value as EventOutput<TSchema, TKind>);
+    this.#listeners[id] = fn;
+    this.#subscriptions.push({ id, kind: kind as string, input });
 
     return {
-      unsubscribe: abortController.abort,
+      unsubscribe: () => {
+        this.#options.socket.send({ type: 'unsubscribe', payload: { id } });
+        delete this.#listeners[id];
+      },
     };
   };
 }

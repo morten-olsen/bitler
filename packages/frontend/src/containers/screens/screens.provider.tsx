@@ -35,8 +35,22 @@ const ScreensProvider = ({ children }: ScreensProviderProps) => {
     setScreens((current) => current.filter((screen) => screen.id !== id));
   }, []);
 
+  const setTitle = useCallback((id: string, title: string) => {
+    setScreens((current) =>
+      current.map((screen) => {
+        if (screen.id === id) {
+          return {
+            ...screen,
+            title,
+          };
+        }
+        return screen;
+      }),
+    );
+  }, []);
+
   return (
-    <ScreensContext.Provider value={{ screens, selected, setSelected, show, close }}>
+    <ScreensContext.Provider value={{ screens, selected, setSelected, setTitle, show, close }}>
       {children}
     </ScreensContext.Provider>
   );

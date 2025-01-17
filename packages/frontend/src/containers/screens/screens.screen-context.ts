@@ -3,6 +3,7 @@ import { createContext, useContext } from 'react';
 type ScreenValue = {
   active: boolean;
   id: string;
+  setTitle: (title: string) => void;
 };
 
 const ScreenContext = createContext<ScreenValue | undefined>(undefined);
@@ -18,4 +19,12 @@ const useScreenActive = () => {
   return context.active;
 };
 
-export { ScreenContext, useScreenActive };
+const useSetScreenTitle = () => {
+  const context = useContext(ScreenContext);
+  if (!context) {
+    throw new Error('useSetScreenTitle must be used within a ScreenProvider');
+  }
+  return context.setTitle;
+};
+
+export { ScreenContext, useScreenActive, useSetScreenTitle };

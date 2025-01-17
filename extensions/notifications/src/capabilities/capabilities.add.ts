@@ -8,6 +8,7 @@ const addNotificationCapability = createCapability({
   name: 'Add',
   group: 'Notification',
   description: 'Add a notification',
+  disableDiscovery: true,
   input: z.object({
     id: z.string().optional(),
     title: z.string(),

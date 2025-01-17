@@ -1,6 +1,7 @@
 import { Capabilities } from './capabilites/capabilities.js';
 import { Events } from './events/events.js';
 import { BitlerServer } from './generated/types.js';
+import { Socket } from './socket/socket.js';
 import { ServerSchema } from './types/server.js';
 
 type ClientOptions = {
@@ -8,12 +9,14 @@ type ClientOptions = {
 };
 
 class Client<TSchema extends ServerSchema = BitlerServer> {
+  #socket: Socket;
   #capabilities: Capabilities<TSchema>;
   #events: Events<TSchema>;
 
   constructor(options: ClientOptions) {
-    this.#capabilities = new Capabilities({ baseUrl: options.baseUrl });
-    this.#events = new Events({ baseUrl: options.baseUrl });
+    this.#socket = new Socket({ baseUrl: options.baseUrl });
+    this.#capabilities = new Capabilities({ socket: this.#socket });
+    this.#events = new Events({ socket: this.#socket });
   }
 
   public get capabilities() {
@@ -23,6 +26,10 @@ class Client<TSchema extends ServerSchema = BitlerServer> {
   public get events() {
     return this.#events;
   }
+
+  public close = () => {
+    this.#socket.close();
+  };
 }
 
 export * from './capabilites/capabilities.js';

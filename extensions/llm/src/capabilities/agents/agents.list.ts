@@ -8,6 +8,7 @@ const agentsList = createCapability({
   group: 'Agents',
   description: 'List all the agents that the exists in the system',
   input: z.object({}),
+  disableDiscovery: true,
   output: z.object({
     agents: z.array(
       z.object({

@@ -27,12 +27,11 @@ export const Default: Story = () => {
       filter={(query, item) => item.name.toLowerCase().includes(query)}
       selected={selected}
       onSelectedChange={setSelected}
-    >
-      {(item) => (
-        <>
+      renderOption={(item) => (
+        <div>
           <div>{item.name}</div>
-        </>
+        </div>
       )}
-    </Tagbar>
+    />
   );
 };

@@ -8,6 +8,12 @@ type EventHandlerOptions<TInput extends ZodSchema, TOutput extends ZodSchema> = 
   event: z.infer<TOutput>;
 };
 
+type EventHandlerSetupOptions<TInput extends ZodSchema, TOutput extends ZodSchema> = {
+  container: Container;
+  input: z.infer<TInput>;
+  listener: (event: z.infer<TOutput>) => Promise<void>;
+};
+
 type Event<TInput extends ZodSchema, TOutput extends ZodSchema> = {
   kind: string;
   name: string;
@@ -16,6 +22,7 @@ type Event<TInput extends ZodSchema, TOutput extends ZodSchema> = {
   input: TInput;
   output: TOutput;
   filter?: (options: EventHandlerOptions<TInput, TOutput>) => Promise<boolean>;
+  setup?: (options: EventHandlerSetupOptions<TInput, TOutput>) => Promise<void>;
 };
 
 const createEvent = <TInput extends ZodSchema, TOutput extends ZodSchema>(

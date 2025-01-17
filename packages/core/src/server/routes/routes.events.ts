@@ -1,10 +1,20 @@
 import { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import { z } from 'zod';
 import { httpErrors } from '@fastify/sensible';
+import fastifyWebsocket from '@fastify/websocket';
 
 import { Event, Events } from '../../events/events.js';
+import { WebSocketClient } from '../websocket/websocket.client.js';
 
 const eventsPlugin: FastifyPluginAsyncZod = async (app) => {
+  await app.register(fastifyWebsocket);
+
+  app.get('/ws', { websocket: true }, (socket, req) => {
+    new WebSocketClient({
+      socket,
+      container: req.container,
+    });
+  });
   app.route({
     method: 'post',
     url: '/subscribe',
@@ -30,6 +40,10 @@ const eventsPlugin: FastifyPluginAsyncZod = async (app) => {
         new Map([
           ['Content-Type', 'application/octet-stream'],
           ['Cache-Control', 'no-cache'],
+          // CORS headers
+          ['Access-Control-Allow-Origin', '*'],
+          ['Access-Control-Allow-Methods', 'POST'],
+          ['Access-Control-Allow-Headers', 'Content-Type'],
         ]),
       );
 
@@ -55,6 +69,14 @@ const eventsPlugin: FastifyPluginAsyncZod = async (app) => {
       };
 
       eventsService.on('emitted', handler);
+      await event.setup?.({
+        container: request.container,
+        input: parsedInput,
+        listener: async (value) => {
+          send(value);
+        },
+      });
+
       reply.raw.on('close', () => {
         eventsService.off('emitted', handler);
       });

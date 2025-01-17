@@ -2,15 +2,26 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { Autocomplete, AutocompleteItem, Chip } from '@nextui-org/react';
 
 type TagbarProps<T> = {
+  label?: string;
   selected?: string[];
   items: T[];
   getKey: (item: T) => string;
   filter?: (query: string, item: T) => boolean;
   onSelectedChange?: (items: string[]) => void;
-  children: (item: T) => React.ReactNode;
+  renderOption: (item: T) => React.ReactNode;
+  renderSelection?: (item: T) => React.ReactNode;
 };
 
-function Tagbar<T extends object>({ selected, onSelectedChange, filter, items, getKey, children }: TagbarProps<T>) {
+function Tagbar<T extends object>({
+  label,
+  selected,
+  onSelectedChange,
+  filter,
+  items,
+  getKey,
+  renderOption,
+  renderSelection,
+}: TagbarProps<T>) {
   const [inputValue, setInputValue] = useState('');
 
   const selectedItems = useMemo(() => {
@@ -48,34 +59,34 @@ function Tagbar<T extends object>({ selected, onSelectedChange, filter, items, g
   );
 
   return (
-    <div
-      className="flex flex-wrap gap-1"
-      onPointerDown={(evt) => evt.stopPropagation()}
-      onMouseDown={(evt) => evt.stopPropagation()}
-      onClick={(evt) => evt.stopPropagation()}
-    >
-      {selectedItems.map((item) => (
-        <Chip
-          className="h-12 rounded-lg"
-          key={getKey(item)}
-          onClose={() => {
-            onSelectedChange?.((selected || []).filter((key) => key !== getKey(item)));
-          }}
-        >
-          {children(item)}
-        </Chip>
-      ))}
+    <div className="flex flex-col gap-2">
       <Autocomplete
-        className="max-w-xs"
         value={inputValue}
+        label={label}
         onValueChange={(value) => setInputValue(value)}
         items={filtered}
+        isVirtualized={false}
         onSelectionChange={(item) => {
           onSelect(item as any);
         }}
       >
-        {(item) => <AutocompleteItem key={getKey(item)}>{children(item)}</AutocompleteItem>}
+        {(item) => <AutocompleteItem key={getKey(item)}>{renderOption(item)}</AutocompleteItem>}
       </Autocomplete>
+      {selectedItems.length > 0 && (
+        <div className="flex gap-2 flex-wrap">
+          {selectedItems.map((item) => (
+            <Chip
+              className="h-12 rounded-lg"
+              key={getKey(item)}
+              onClose={() => {
+                onSelectedChange?.((selected || []).filter((key) => key !== getKey(item)));
+              }}
+            >
+              {(renderSelection || renderOption)(item)}
+            </Chip>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

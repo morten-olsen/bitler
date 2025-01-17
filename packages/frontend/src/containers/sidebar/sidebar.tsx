@@ -1,24 +1,31 @@
 import React from 'react';
-import { Database, Library, ListVideo, MessagesSquare, Plus, Signpost } from 'lucide-react';
+import { Bot, ListVideo, MessagesSquare, Plus, Signpost } from 'lucide-react';
 import { useOpenScreen } from '../screens/screens.hooks.js';
-import { Dialog } from '../dialog/dialog.js';
 import { Timers } from '../timers/timers.js';
 import { Capabilities } from '../capabilites/capabilites.js';
 import { Listbox, ListboxItem, ListboxSection } from '@nextui-org/react';
 import { nanoid } from 'nanoid';
+import { Conversation } from '../conversation/conversation.js';
 import { Conversations } from '../conversations/conversations.js';
+import { Notifications } from './sidebar.notifications.js';
 
 const Sidebar = () => {
   const openScreen = useOpenScreen();
   return (
-    <div className="h-full flex flex-col hidden md:flex border-default-100 border-r-1 px-4 pt-10 pb-4">
+    <div className="h-full flex flex-col hidden md:flex border-default-100 border-r-1 px-4 pt-10 pb-4 gap-4">
+      <div className="flex items-center justify-between">
+        <div className="text-2xl font-bold flex items-center gap-2">
+          <Bot className="stroke-default-500 rotate-12" size={30} /> Bitler
+        </div>
+        <Notifications />
+      </div>
       <Listbox>
         <ListboxSection title="Conversations" showDivider>
           <ListboxItem
             description="Start a new conversation"
             startContent={<Plus />}
             onPress={() =>
-              openScreen(Dialog, {
+              openScreen(Conversation, {
                 title: 'New conversation',
                 focus: true,
                 props: {
@@ -34,15 +41,13 @@ const Sidebar = () => {
             description="Find the expert you need"
             startContent={<Signpost />}
             onPress={() =>
-              openScreen(Dialog, {
+              openScreen(Conversation, {
                 title: 'Receptionist',
                 focus: true,
                 props: {
+                  id: 'test',
                   userIntro:
                     "Hi there! I'm your digital assistant. I can connect you with specialized experts for different topics. Please describe what you need help with, and I'll create a new conversation with the right expert.",
-                  initialAgentConfig: {
-                    agent: 'builtin.receptionist',
-                  },
                 },
               })
             }
@@ -53,7 +58,6 @@ const Sidebar = () => {
             startContent={<MessagesSquare />}
             onPress={() =>
               openScreen(Conversations, {
-                id: 'conversations',
                 title: 'Conversations',
                 focus: true,
                 props: {},
@@ -75,8 +79,6 @@ const Sidebar = () => {
               })
             }
           />
-          <ListboxItem title="Knowledge bases" description="Manage your knowledge bases" startContent={<Library />} />
-          <ListboxItem title="Databases" description="Manage your databases" startContent={<Database />} />
         </ListboxSection>
       </Listbox>
       <div className="flex-1" />

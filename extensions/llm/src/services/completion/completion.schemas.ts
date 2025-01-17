@@ -17,11 +17,42 @@ const completionOptionsSchema = z.object({
   agents: z.array(z.string()).optional(),
   context: z.record(z.unknown()).optional(),
   maxTokens: z.number().optional(),
-  conversationId: z.string().optional(),
   prompt: z.string(),
   dialog: z.array(completionDialogSchema).optional(),
 });
 
 type CompletionOptions = z.infer<typeof completionOptionsSchema>;
 
-export { completionDialogSchema, type CompletionDialog, completionOptionsSchema, type CompletionOptions };
+const completionResultSchema = z.object({
+  response: z.unknown(),
+  actionRequests: z
+    .array(
+      z.object({
+        kind: z.string(),
+        description: z.string().optional(),
+        value: z.unknown(),
+      }),
+    )
+    .optional(),
+  context: z.record(z.unknown()).optional(),
+  files: z
+    .array(
+      z.object({
+        hash: z.string(),
+        caption: z.string().optional(),
+        contentType: z.string().optional(),
+      }),
+    )
+    .optional(),
+});
+
+type CompletionResult = z.infer<typeof completionResultSchema>;
+
+export {
+  completionDialogSchema,
+  type CompletionDialog,
+  completionOptionsSchema,
+  type CompletionOptions,
+  completionResultSchema,
+  type CompletionResult,
+};

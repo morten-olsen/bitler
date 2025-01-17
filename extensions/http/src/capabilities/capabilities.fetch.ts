@@ -5,6 +5,7 @@ const fetchHttpCapability = createCapability({
   name: 'Fetch',
   group: 'HTTP',
   description: 'Fetches data from a URL',
+  disableDiscovery: true,
   input: z.object({
     method: z.enum(['GET', 'POST', 'PUT', 'DELETE']),
     url: z.string().url(),

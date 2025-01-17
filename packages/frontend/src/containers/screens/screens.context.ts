@@ -1,10 +1,13 @@
 import { ComponentType, ReactNode, createContext } from 'react';
 
-type ScreenShowOptions<TProps> = {
+type ScreenState<TProps> = {
+  props: TProps;
+  title: string;
+};
+
+type ScreenShowOptions<TProps> = ScreenState<TProps> & {
   id?: string;
   focus?: boolean;
-  title: string;
-  props: TProps;
 };
 
 type Screen = {
@@ -18,8 +21,9 @@ type ScreenContextValues = {
   setSelected: (id: string) => void;
   close: (id: string) => void;
   show: <TProps>(component: ComponentType<TProps>, options: ScreenShowOptions<TProps>) => void;
+  setTitle: (id: string, title: string) => void;
 };
 
 const ScreensContext = createContext<ScreenContextValues | undefined>(undefined);
 
-export { ScreensContext, type Screen, type ScreenShowOptions };
+export { ScreensContext, type Screen, type ScreenShowOptions, type ScreenState, type ScreenContextValues };

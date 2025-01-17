@@ -25,14 +25,18 @@ const play = createCapability({
     if (!player) {
       throw new Error(`Room does not have a media player: ${input.room}`);
     }
-    haService.callService({
-      domain: 'music_assistant',
-      service: 'play_media',
-      serviceData: {
-        entity_id: player,
-        media_id: input.spotifyUris,
-      },
-    });
+    haService
+      .callService({
+        domain: 'music_assistant',
+        service: 'play_media',
+        serviceData: {
+          entity_id: player,
+          media_id: input.spotifyUris,
+        },
+      })
+      .catch((error) => {
+        console.error('Error playing music', error);
+      });
     return {
       success: true,
     };

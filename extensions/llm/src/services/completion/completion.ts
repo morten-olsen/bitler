@@ -17,11 +17,9 @@ import {
 import { Agent } from '../agents/agents.schemas.js';
 import { Agents } from '../agents/agents.js';
 import { Models } from '../../models/models.js';
-import { historySetCapability } from '../../capabilities/history/history.set.js';
 import { agentSession } from '../../session/agent.js';
-import { historyAddMessagesCapability } from '../../capabilities/history/history.add-messages.js';
 
-import { CompletionDialog, CompletionOptions } from './completion.schemas.js';
+import { CompletionDialog, CompletionOptions, CompletionResult } from './completion.schemas.js';
 
 const sanitizeString = (str: string) => {
   return str.replace(/[^a-zA-Z0-9_-]/g, '_');
@@ -151,13 +149,7 @@ class Completion {
       actionRequests?: ActionRequestInstance;
       session?: Session;
     },
-  ): Promise<{
-    response: TSchema extends ZodSchema ? z.infer<TSchema> : string;
-    requestId?: string;
-    responseId?: string;
-    context: Record<string, unknown>;
-    actionRequests: { kind: string; value: unknown; description?: string }[];
-  }> => {
+  ): Promise<CompletionResult> => {
     const modelService = this.#container.get(Models);
     const contextService = this.#container.get(Contexts);
     const actionRequestService = this.#container.get(ActionRequests);
@@ -230,48 +222,9 @@ class Completion {
     };
 
     const response = await getResponse();
-    let requestId: string | undefined;
-    let responseId: string | undefined;
-
-    if (options.conversationId) {
-      const capabilitiesService = this.#container.get(Capabilities);
-      await capabilitiesService.run({
-        capability: historySetCapability,
-        session,
-        input: {
-          id: options.conversationId,
-          systemPrompt: options.systemPrompt || null,
-          agent: options.agent || null,
-          discoverAgents: options.discoverAgents || 0,
-          discoverCapabilies: options.discoverCapabilities || 0,
-          capabilities: capabilities.flatMap((capability) => (capability ? [capability.kind] : [])),
-          agents: agents.flatMap((agent) => (agent ? [agent.kind] : [])),
-        },
-      });
-      const addResult = await capabilitiesService.run({
-        capability: historyAddMessagesCapability,
-        session,
-        input: [
-          {
-            conversationId: options.conversationId,
-            role: 'user',
-            content: options.prompt,
-          },
-          {
-            conversationId: options.conversationId,
-            role: 'assistant',
-            content: response,
-          },
-        ],
-      });
-      requestId = addResult.ids[0];
-      responseId = addResult.ids[1];
-    }
 
     return {
       response: response as any,
-      requestId,
-      responseId,
       context: context.toJSON(),
       actionRequests: actionRequests.toJSON(),
     };

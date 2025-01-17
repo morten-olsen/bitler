@@ -29,7 +29,6 @@ const s3GetObjectsCapability = createCapability({
       region: 'eu-west-1',
       profile: input.awsProfile,
     });
-    console.log('input', input);
     const objects = await Promise.all(
       input.objects.map(async ({ bucket, key }) => {
         try {

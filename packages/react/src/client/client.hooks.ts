@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { CapabilityInput, DefaultServer, ServerSchema } from '@bitlerjs/client';
+import { CapabilityInput, CapabilityOutput, DefaultServer, ServerSchema } from '@bitlerjs/client';
 import { EventInput, EventOutput } from '@bitlerjs/client/dist/events/events.js';
 import { useEffect, useState } from 'react';
 
@@ -66,7 +66,7 @@ const useEventEffect = <
 
   useEffect(() => {
     setError(undefined);
-    let unsubscribe = () => {};
+    let unsubscribe = () => { };
     const run = async () => {
       try {
         const subscription = await events.subscribe(kind, input, handler);
@@ -97,7 +97,7 @@ const useRunCapabilityQuery = <
     queryKey: options.queryKey,
     queryFn: async () => {
       const { capabilities } = client;
-      return capabilities.run<TKind>(kind, input);
+      return capabilities.run<TKind>(kind, input) as CapabilityOutput<TServer, TKind>;
     },
   });
 };

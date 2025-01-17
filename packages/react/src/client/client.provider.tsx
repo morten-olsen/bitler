@@ -1,4 +1,4 @@
-import React, { type ReactNode, useMemo } from 'react';
+import React, { type ReactNode, useEffect, useMemo } from 'react';
 import { ClientContext } from './client.context.js';
 import { useQuery } from '@tanstack/react-query';
 import { Client } from '@bitlerjs/client';
@@ -26,6 +26,13 @@ const ClientProvider = ({ baseUrl, children }: ClientProviderProps) => {
       console.error(error);
     },
   });
+
+  useEffect(
+    () => () => {
+      client.close();
+    },
+    [client],
+  );
 
   if (!setup.data) {
     return null;
