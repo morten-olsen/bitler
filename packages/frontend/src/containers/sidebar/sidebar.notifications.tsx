@@ -7,20 +7,20 @@ const Notifications = () => {
   const { notifications, isLoading, removeNotifications } = useNotifications();
   return (
     <Badge content={notifications.length} isInvisible={notifications.length === 0} size="md" color="secondary">
-      <Popover placement="right-start" showArrow>
+      <Popover placement="bottom-end" showArrow>
         <PopoverTrigger>
           <Button radius="full" size="sm" isLoading={isLoading} isIconOnly>
             <Bell size={18} />
           </Button>
         </PopoverTrigger>
         <PopoverContent>
-          <Listbox isVirtualized={false} selectionMode="none">
+          <Listbox isVirtualized={false} selectionMode="none" className="w-[300px]">
             {notifications.map((notification) => (
               <ListboxItem
                 key={notification.id}
                 title={notification.title}
                 description={notification.message}
-                endContent={
+                startContent={
                   <Button
                     color="danger"
                     variant="light"

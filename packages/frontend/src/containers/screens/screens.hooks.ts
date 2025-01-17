@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 
 import { ScreensContext } from './screens.context.js';
 
@@ -16,4 +16,17 @@ const useOpenScreen = () => {
   return show;
 };
 
-export { useScreensContext, useOpenScreen };
+const useNavigateEffect = (callback: () => void, deps: unknown[] = []) => {
+  const { emitter } = useScreensContext();
+  useEffect(() => {
+    const listener = () => {
+      callback();
+    };
+    emitter.on('navigate', listener);
+    return () => {
+      emitter.off('navigate', listener);
+    };
+  }, deps);
+};
+
+export { useScreensContext, useOpenScreen, useNavigateEffect };

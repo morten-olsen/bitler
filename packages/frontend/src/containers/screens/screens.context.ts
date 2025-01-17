@@ -1,3 +1,4 @@
+import EventEmitter from 'eventemitter3';
 import { ComponentType, ReactNode, createContext } from 'react';
 
 type ScreenState<TProps> = {
@@ -15,7 +16,12 @@ type Screen = {
   title: string;
   node: ReactNode;
 };
+
+type ScreenEvents = {
+  navigate: () => void;
+};
 type ScreenContextValues = {
+  emitter: EventEmitter<ScreenEvents>;
   screens: Screen[];
   selected?: string;
   setSelected: (id: string) => void;
@@ -26,4 +32,11 @@ type ScreenContextValues = {
 
 const ScreensContext = createContext<ScreenContextValues | undefined>(undefined);
 
-export { ScreensContext, type Screen, type ScreenShowOptions, type ScreenState, type ScreenContextValues };
+export {
+  ScreensContext,
+  type Screen,
+  type ScreenShowOptions,
+  type ScreenState,
+  type ScreenContextValues,
+  type ScreenEvents,
+};

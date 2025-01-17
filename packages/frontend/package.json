@@ -21,6 +21,7 @@
     "@react-aria/i18n": "^3.12.4",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
+    "eventemitter3": "^5.0.1",
     "framer-motion": "^11.15.0",
     "lucide-react": "^0.469.0",
     "nanoid": "^5.0.9",

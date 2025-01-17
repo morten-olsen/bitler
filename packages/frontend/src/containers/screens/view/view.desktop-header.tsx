@@ -3,7 +3,7 @@ import { useScreensContext } from '../screens.hooks';
 import { Tab, Tabs } from '@nextui-org/react';
 import { X } from 'lucide-react';
 
-const HeaderTabs = () => {
+const DesktopHeader = () => {
   const { screens, selected, setSelected, close } = useScreensContext();
 
   return (
@@ -31,4 +31,4 @@ const HeaderTabs = () => {
   );
 };
 
-export { HeaderTabs };
+export { DesktopHeader };

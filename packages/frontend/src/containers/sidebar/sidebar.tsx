@@ -12,7 +12,7 @@ import { Notifications } from './sidebar.notifications.js';
 const Sidebar = () => {
   const openScreen = useOpenScreen();
   return (
-    <div className="h-full flex flex-col hidden md:flex border-default-100 border-r-1 px-4 pt-10 pb-4 gap-4">
+    <div className="h-full flex flex-col border-default-100 border-r-1 px-4 pt-10 pb-4 gap-4">
       <div className="flex items-center justify-between">
         <div className="text-2xl font-bold flex items-center gap-2">
           <Bot className="stroke-default-500 rotate-12" size={30} /> Bitler
