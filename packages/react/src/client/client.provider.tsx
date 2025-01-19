@@ -1,4 +1,4 @@
-import React, { ComponentType, type ReactNode, useMemo } from 'react';
+import React, { ComponentType, type ReactNode, useEffect, useMemo } from 'react';
 import { ClientContext } from './client.context.js';
 import { useQuery } from '@tanstack/react-query';
 import { Client } from '@bitlerjs/client';
@@ -41,6 +41,12 @@ const ClientProvider = ({ baseUrl, token, children, loader, error: ErrorComponen
       console.error(error);
     },
   });
+
+  useEffect(() => {
+    return () => {
+      client.close();
+    };
+  }, [client]);
 
   if (setup.error && ErrorComponent) {
     console.log('ErrorComponent', ErrorComponent);

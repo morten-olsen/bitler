@@ -1,9 +1,14 @@
-import { Container } from '@bitlerjs/core';
+import { Container, Session } from '@bitlerjs/core';
 import { AuthOptions } from '../server.js';
 type WebSocketClientOptions = {
     container: Container;
     socket: WebSocket;
-    auth?: (options: AuthOptions) => Promise<void>;
+    session: Session;
+};
+type SetupOptions = {
+    container: Container;
+    socket: WebSocket;
+    auth?: (auth: AuthOptions) => Promise<void>;
 };
 declare class WebSocketClient {
     #private;
@@ -13,6 +18,7 @@ declare class WebSocketClient {
     unsubscribe: (id: string) => Promise<void>;
     subscribe: (kind: string, input: unknown, id: string) => Promise<void>;
     send(data: unknown): void;
+    static setup: (options: SetupOptions) => Promise<WebSocketClient>;
 }
 export { WebSocketClient };
 //# sourceMappingURL=websocket.client.d.ts.map

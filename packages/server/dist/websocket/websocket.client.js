@@ -2,16 +2,15 @@ import { Capabilities, Events, Session } from '@bitlerjs/core';
 class WebSocketClient {
     #options;
     subscriptions = {};
-    #session;
+    #session = new Session();
     constructor(options) {
         this.#options = options;
         options.socket.addEventListener('message', this.#onMessage);
         options.socket.addEventListener('close', this.#onClose);
-        this.send({ type: 'connected' });
     }
     #onMessage = async ({ data }) => {
         try {
-            const { socket, auth } = this.#options;
+            const { socket } = this.#options;
             const message = JSON.parse(data);
             const reply = (payload, success) => {
                 socket.send(JSON.stringify({
@@ -23,20 +22,6 @@ class WebSocketClient {
             };
             try {
                 switch (message.type) {
-                    case 'authenticate': {
-                        const { container } = this.#options;
-                        const session = new Session();
-                        await auth?.({
-                            session,
-                            container,
-                            request: { headers: { authorization: `Bearer ${message.payload.token}` } },
-                        });
-                        this.#session = session;
-                        reply({
-                            type: 'authenticated',
-                        }, true);
-                        break;
-                    }
                     case 'subscribe': {
                         if (!this.#session) {
                             throw new Error('Not authenticated');
@@ -117,6 +102,50 @@ class WebSocketClient {
     send(data) {
         this.#options.socket.send(JSON.stringify(data));
     }
+    static setup = (options) => new Promise((resolve, reject) => {
+        const timeout = setTimeout(() => {
+            options.socket.close();
+            reject(new Error('Timeout'));
+            options.socket.removeEventListener('message', authHandler);
+            options.socket.removeEventListener('message', authHandler);
+        }, 3000);
+        const disconnectHandler = () => {
+            clearTimeout(timeout);
+            options.socket.removeEventListener('message', authHandler);
+            reject(new Error('Disconnected'));
+        };
+        const authHandler = async (message) => {
+            try {
+                const { type, payload } = JSON.parse(message.data);
+                const session = new Session();
+                if (type !== 'authenticate') {
+                    throw new Error('Invalid message');
+                }
+                await options.auth?.({
+                    container: options.container,
+                    session,
+                    request: {
+                        headers: {
+                            authorization: `Bearer ${payload.token}`,
+                        },
+                    },
+                });
+                options.socket.send(JSON.stringify({ type: 'authenticated' }));
+                resolve(new WebSocketClient({ ...options, session }));
+            }
+            catch (error) {
+                reject(error);
+                options.socket.send(JSON.stringify({ type: 'error', payload: 'Invalid message' }));
+            }
+            finally {
+                clearTimeout(timeout);
+                options.socket.removeEventListener('message', authHandler);
+                options.socket.removeEventListener('close', disconnectHandler);
+            }
+        };
+        options.socket.addEventListener('message', authHandler);
+        options.socket.addEventListener('close', disconnectHandler);
+    });
 }
 export { WebSocketClient };
 //# sourceMappingURL=websocket.client.js.map

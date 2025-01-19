@@ -2,7 +2,13 @@ import { useCallback } from 'react';
 import { useEventEffect, useRunCapabilityMutation, useRunCapabilityQuery } from '../client/client.hooks.js';
 
 const useNotifications = () => {
-  const notifications = useRunCapabilityQuery('notification.list', {});
+  const notifications = useRunCapabilityQuery(
+    'notification.list',
+    {},
+    {
+      queryKey: ['notification.list'],
+    },
+  );
 
   const removeNotificationsMutation = useRunCapabilityMutation('notification.remove', {});
 

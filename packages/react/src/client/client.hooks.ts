@@ -38,7 +38,7 @@ const useRunCapabilityMutation = <
 ) => {
   const { client } = useClientContext<TServer>();
   return useMutation({
-    mutationKey: options.mutationKey,
+    ...(options.mutationKey && { mutationKey: options.mutationKey }),
     mutationFn: async (params: CapabilityInput<TServer, TKind>) => {
       const { capabilities } = client;
       return capabilities.run<TKind>(kind, params);
@@ -66,7 +66,7 @@ const useEventEffect = <
 
   useEffect(() => {
     setError(undefined);
-    let unsubscribe = () => { };
+    let unsubscribe = () => {};
     const run = async () => {
       try {
         const subscription = await events.subscribe(kind, input, handler);
@@ -94,7 +94,7 @@ const useRunCapabilityQuery = <
 ) => {
   const { client } = useClientContext<TServer>();
   return useQuery({
-    queryKey: options.queryKey,
+    ...(options.queryKey && { queryKey: options.queryKey }),
     queryFn: async () => {
       const { capabilities } = client;
       return capabilities.run<TKind>(kind, input) as CapabilityOutput<TServer, TKind>;

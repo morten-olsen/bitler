@@ -22,9 +22,11 @@ const promptCapability = createCapability({
       ...conversation.state,
       ...options,
     });
+    const messages = options.dialog || conversation.state.messages;
     const result = await conversation.complete({
       ...combinedOptions,
       ...options,
+      dialog: messages,
       session,
     });
     return result;

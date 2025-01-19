@@ -28,17 +28,16 @@ class Socket extends EventEmitter<SocketEvents> {
       }
       const { baseUrl } = this.#options;
       const socket = new WebSocket(`${baseUrl}/api/ws`);
+      const authListener = ({ data }: MessageEvent) => {
+        const message = JSON.parse(data);
+        if (message.type === 'authenticated') {
+          socket.removeEventListener('message', authListener);
+          resolve(socket);
+          this.emit('connected');
+        }
+      };
+      socket.addEventListener('message', authListener);
       socket.addEventListener('open', async () => {
-        const authListener = ({ data }: MessageEvent) => {
-          const message = JSON.parse(data);
-          if (message.payload?.type === 'authenticated') {
-            socket.removeEventListener('message', authListener);
-            resolve(socket);
-            this.emit('connected');
-            console.log('WebSocket connected');
-          }
-        };
-        socket.addEventListener('message', authListener);
         socket.send(JSON.stringify({ type: 'authenticate', payload: { token: this.#options.token } }));
       });
 
@@ -51,7 +50,6 @@ class Socket extends EventEmitter<SocketEvents> {
       });
 
       socket.addEventListener('error', (error) => {
-        console.error('WebSocket error', error);
         reject(error);
       });
 

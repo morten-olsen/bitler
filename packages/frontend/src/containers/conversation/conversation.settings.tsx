@@ -84,7 +84,7 @@ const ConversationSettings = (props: ConversationSettingsProps) => {
   const discoverAgentsValue = form.watch('discoverAgents');
 
   return (
-    <Drawer {...props} backdrop="blur">
+    <Drawer isOpen={props.isOpen} onOpenChange={props.onOpenChange} backdrop="blur">
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <DrawerContent>
           <DrawerBody>
