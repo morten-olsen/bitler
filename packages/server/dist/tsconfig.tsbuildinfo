@@ -1,0 +1,1 @@
+{"root":["../src/exports.ts","../src/ext.d.ts","../src/server.ts","../src/routes/routes.capabilities.ts","../src/routes/routes.events.ts","../src/routes/routes.files.ts","../src/routes/routes.schema.ts","../src/websocket/websocket.client.ts"],"version":"5.7.2"}
