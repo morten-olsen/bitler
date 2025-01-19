@@ -1,6 +1,6 @@
 import 'dotenv/config';
 
-import { builtIn, Container, Extensions, z } from '@bitlerjs/core';
+import { builtIn, Capabilities, Container, Extensions, z } from '@bitlerjs/core';
 import { homeassistant } from '@bitlerjs/homeassistant';
 import { timers } from '@bitlerjs/timers';
 import { music } from '@bitlerjs/music';
@@ -20,9 +20,12 @@ import { frontendBundleRoot } from '@bitlerjs/frontend';
 import { Server } from '@bitlerjs/server';
 
 import { AuthService } from '../auth/auth.service.js';
+import { createToken } from '../auth/auth.capabilities.js';
 
 const container = new Container();
 
+const capabilitiesService = container.get(Capabilities);
+capabilitiesService.register([createToken]);
 const extensionsService = container.get(Extensions);
 await extensionsService.register([
   builtIn,

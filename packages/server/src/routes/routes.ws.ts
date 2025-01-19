@@ -11,8 +11,8 @@ type Options = {
 const wsPlugin: FastifyPluginAsyncZod<Options> = async (app, options) => {
   await app.register(fastifyWebsocket);
 
-  app.get('/api/ws', { websocket: true }, (socket, req) => {
-    new WebSocketClient({
+  app.get('/api/ws', { websocket: true }, async (socket, req) => {
+    await WebSocketClient.setup({
       socket,
       container: req.container,
       auth: options.auth,

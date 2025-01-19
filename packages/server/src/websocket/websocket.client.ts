@@ -5,7 +5,7 @@ import { AuthOptions } from '../server.js';
 type WebSocketClientOptions = {
   container: Container;
   socket: WebSocket;
-  auth?: (options: AuthOptions) => Promise<void>;
+  session: Session;
 };
 
 type SubscribeMessage = {
@@ -43,23 +43,28 @@ type Authenticate = {
   };
 };
 
-type Message = SubscribeMessage | UnsubscribeMessage | RunCapability | Authenticate;
+type SetupOptions = {
+  container: Container;
+  socket: WebSocket;
+  auth?: (auth: AuthOptions) => Promise<void>;
+};
+
+type Message = SubscribeMessage | UnsubscribeMessage | RunCapability;
 
 class WebSocketClient {
   #options: WebSocketClientOptions;
   subscriptions: Record<string, () => void> = {};
-  #session?: Session;
+  #session: Session = new Session();
 
   constructor(options: WebSocketClientOptions) {
     this.#options = options;
     options.socket.addEventListener('message', this.#onMessage);
     options.socket.addEventListener('close', this.#onClose);
-    this.send({ type: 'connected' });
   }
 
   #onMessage = async ({ data }: MessageEvent) => {
     try {
-      const { socket, auth } = this.#options;
+      const { socket } = this.#options;
       const message = JSON.parse(data) as Message;
       const reply = (payload: unknown, success: boolean) => {
         socket.send(
@@ -73,23 +78,6 @@ class WebSocketClient {
       };
       try {
         switch (message.type) {
-          case 'authenticate': {
-            const { container } = this.#options;
-            const session = new Session();
-            await auth?.({
-              session,
-              container,
-              request: { headers: { authorization: `Bearer ${message.payload.token}` } } as any,
-            });
-            this.#session = session;
-            reply(
-              {
-                type: 'authenticated',
-              },
-              true,
-            );
-            break;
-          }
           case 'subscribe': {
             if (!this.#session) {
               throw new Error('Not authenticated');
@@ -177,6 +165,52 @@ class WebSocketClient {
   send(data: unknown) {
     this.#options.socket.send(JSON.stringify(data));
   }
+
+  public static setup = (options: SetupOptions) =>
+    new Promise<WebSocketClient>((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        options.socket.close();
+        reject(new Error('Timeout'));
+        options.socket.removeEventListener('message', authHandler);
+        options.socket.removeEventListener('message', authHandler);
+      }, 3000);
+
+      const disconnectHandler = () => {
+        clearTimeout(timeout);
+        options.socket.removeEventListener('message', authHandler);
+        reject(new Error('Disconnected'));
+      };
+      const authHandler = async (message: MessageEvent) => {
+        try {
+          const { type, payload } = JSON.parse(message.data) as Authenticate;
+          const session = new Session();
+          if (type !== 'authenticate') {
+            throw new Error('Invalid message');
+          }
+          await options.auth?.({
+            container: options.container,
+            session,
+            request: {
+              headers: {
+                authorization: `Bearer ${payload.token}`,
+              },
+            } as any,
+          });
+          options.socket.send(JSON.stringify({ type: 'authenticated' }));
+          resolve(new WebSocketClient({ ...options, session }));
+        } catch (error) {
+          reject(error);
+          options.socket.send(JSON.stringify({ type: 'error', payload: 'Invalid message' }));
+        } finally {
+          clearTimeout(timeout);
+          options.socket.removeEventListener('message', authHandler);
+          options.socket.removeEventListener('close', disconnectHandler);
+        }
+      };
+
+      options.socket.addEventListener('message', authHandler);
+      options.socket.addEventListener('close', disconnectHandler);
+    });
 }
 
 export { WebSocketClient };
