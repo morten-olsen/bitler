@@ -33,7 +33,7 @@ const useConversation = (id: string) => {
     'conversations.updated',
     { ids: [id] },
     (event) => {
-      console.log();
+      // TODO: WHY?
       if (event.payload.conversationId !== id) {
         console.log('Skipping event', id, event);
         return;

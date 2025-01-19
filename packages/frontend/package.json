@@ -2,10 +2,10 @@
   "name": "@bitlerjs/frontend",
   "version": "0.0.0",
   "type": "module",
-  "main": "dist/exports.js",
+  "main": "assets/exports.js",
   "scripts": {
-    "build": "tsc --build",
-    "dev": "tsc --build --watch",
+    "build": "vite build",
+    "dev": "vite",
     "lint": "eslint .",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
@@ -34,7 +34,6 @@
   },
   "devDependencies": {
     "@bitlerjs/configs": "workspace:*",
-    "@bitlerjs/frontend-config": "workspace:*",
     "@chromatic-com/storybook": "^3.2.3",
     "@storybook/addon-essentials": "^8.4.7",
     "@storybook/addon-interactions": "^8.4.7",

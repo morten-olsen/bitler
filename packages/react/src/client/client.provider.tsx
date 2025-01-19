@@ -1,4 +1,4 @@
-import React, { type ReactNode, useEffect, useMemo } from 'react';
+import React, { type ReactNode, useMemo } from 'react';
 import { ClientContext } from './client.context.js';
 import { useQuery } from '@tanstack/react-query';
 import { Client } from '@bitlerjs/client';
@@ -6,9 +6,10 @@ import { Client } from '@bitlerjs/client';
 type ClientProviderProps = {
   baseUrl: string;
   children: ReactNode;
+  loader?: ReactNode;
 };
 
-const ClientProvider = ({ baseUrl, children }: ClientProviderProps) => {
+const ClientProvider = ({ baseUrl, children, loader }: ClientProviderProps) => {
   const client = useMemo(() => new Client({ baseUrl }), [baseUrl]);
   const setup = useQuery({
     queryKey: ['setup', baseUrl],
@@ -27,15 +28,8 @@ const ClientProvider = ({ baseUrl, children }: ClientProviderProps) => {
     },
   });
 
-  useEffect(
-    () => () => {
-      client.close();
-    },
-    [client],
-  );
-
   if (!setup.data) {
-    return null;
+    return loader;
   }
 
   return <ClientContext.Provider value={{ client, ...setup.data }}>{children}</ClientContext.Provider>;

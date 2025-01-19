@@ -2,7 +2,6 @@ export * from './container/container.js';
 export * from './databases/databases.js';
 export * from './feature-extractor/feature-extractor.js';
 export * from './databases/databases.js';
-export * from './server/server.js';
 export * from './utils/ids.js';
 export * from './utils/eventemitter.js';
 export * from './extensions/extensions.js';
