@@ -6,6 +6,7 @@ import { ServerSchema } from './types/server.js';
 
 type ClientOptions = {
   baseUrl: string;
+  token: string;
 };
 
 class Client<TSchema extends ServerSchema = BitlerServer> {
@@ -14,7 +15,7 @@ class Client<TSchema extends ServerSchema = BitlerServer> {
   #events: Events<TSchema>;
 
   constructor(options: ClientOptions) {
-    this.#socket = new Socket({ baseUrl: options.baseUrl });
+    this.#socket = new Socket({ baseUrl: options.baseUrl, token: options.token });
     this.#capabilities = new Capabilities({ socket: this.#socket });
     this.#events = new Events({ socket: this.#socket });
   }

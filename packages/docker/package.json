@@ -4,22 +4,27 @@
   "version": "1.0.0",
   "type": "module",
   "files": [
-    "dist"
+    "dist",
+    "bin"
   ],
+  "bin": {
+    "bitler-docker": "bin/main.js"
+  },
   "scripts": {
-    "dev": "tsx --watch ./src/main.ts",
+    "dev": "tsx --watch ./src/main.ts start",
+    "generate-token": "tsx ./src/main.ts auth generate-token",
     "build": "tsc --build",
     "start": "dist/main.js"
   },
   "devDependencies": {
     "@bitlerjs/configs": "workspace:*",
+    "@types/jsonwebtoken": "^9.0.7",
     "nodemon": "^3.1.9",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2"
   },
   "dependencies": {
     "@bitlerjs/aws": "workspace:*",
-    "@bitlerjs/server": "workspace:*",
     "@bitlerjs/conversations": "workspace:*",
     "@bitlerjs/core": "workspace:*",
     "@bitlerjs/frontend": "workspace:*",
@@ -32,10 +37,13 @@
     "@bitlerjs/llm": "workspace:*",
     "@bitlerjs/music": "workspace:*",
     "@bitlerjs/notifications": "workspace:*",
+    "@bitlerjs/server": "workspace:*",
     "@bitlerjs/signal": "workspace:*",
     "@bitlerjs/timers": "workspace:*",
     "@bitlerjs/todos": "workspace:*",
     "@fastify/static": "^8.0.3",
-    "dotenv": "^16.4.7"
+    "commander": "^13.0.0",
+    "dotenv": "^16.4.7",
+    "jsonwebtoken": "^9.0.2"
   }
 }

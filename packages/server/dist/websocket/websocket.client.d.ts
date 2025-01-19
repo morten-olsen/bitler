@@ -1,7 +1,9 @@
 import { Container } from '@bitlerjs/core';
+import { AuthOptions } from '../server.js';
 type WebSocketClientOptions = {
     container: Container;
     socket: WebSocket;
+    auth?: (options: AuthOptions) => Promise<void>;
 };
 declare class WebSocketClient {
     #private;

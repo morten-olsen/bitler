@@ -2,6 +2,7 @@ import { EventEmitter } from 'eventemitter3';
 
 type SocketOptions = {
   baseUrl: string;
+  token: string;
 };
 
 type SocketEvents = {
@@ -26,11 +27,19 @@ class Socket extends EventEmitter<SocketEvents> {
         return;
       }
       const { baseUrl } = this.#options;
-      const socket = new WebSocket(`${baseUrl}/api/events/ws`);
-      socket.addEventListener('open', () => {
-        this.emit('connected');
-        console.log('WebSocket connected');
-        resolve(socket);
+      const socket = new WebSocket(`${baseUrl}/api/ws`);
+      socket.addEventListener('open', async () => {
+        const authListener = ({ data }: MessageEvent) => {
+          const message = JSON.parse(data);
+          if (message.payload?.type === 'authenticated') {
+            socket.removeEventListener('message', authListener);
+            resolve(socket);
+            this.emit('connected');
+            console.log('WebSocket connected');
+          }
+        };
+        socket.addEventListener('message', authListener);
+        socket.send(JSON.stringify({ type: 'authenticate', payload: { token: this.#options.token } }));
       });
 
       socket.addEventListener('close', () => {

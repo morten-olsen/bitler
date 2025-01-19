@@ -2,7 +2,7 @@ import { Capabilities, Events, Session } from '@bitlerjs/core';
 class WebSocketClient {
     #options;
     subscriptions = {};
-    #session = new Session();
+    #session;
     constructor(options) {
         this.#options = options;
         options.socket.addEventListener('message', this.#onMessage);
@@ -11,7 +11,7 @@ class WebSocketClient {
     }
     #onMessage = async ({ data }) => {
         try {
-            const { socket } = this.#options;
+            const { socket, auth } = this.#options;
             const message = JSON.parse(data);
             const reply = (payload, success) => {
                 socket.send(JSON.stringify({
@@ -23,17 +23,40 @@ class WebSocketClient {
             };
             try {
                 switch (message.type) {
+                    case 'authenticate': {
+                        const { container } = this.#options;
+                        const session = new Session();
+                        await auth?.({
+                            session,
+                            container,
+                            request: { headers: { authorization: `Bearer ${message.payload.token}` } },
+                        });
+                        this.#session = session;
+                        reply({
+                            type: 'authenticated',
+                        }, true);
+                        break;
+                    }
                     case 'subscribe': {
+                        if (!this.#session) {
+                            throw new Error('Not authenticated');
+                        }
                         await this.subscribe(message.payload.kind, message.payload.input, message.payload.id);
                         reply(null, true);
                         break;
                     }
                     case 'unsubscribe': {
+                        if (!this.#session) {
+                            throw new Error('Not authenticated');
+                        }
                         await this.unsubscribe(message.payload.id);
                         reply(null, true);
                         break;
                     }
                     case 'run-capability': {
+                        if (!this.#session) {
+                            throw new Error('Not authenticated');
+                        }
                         const result = await this.runCapability(message.payload.kind, message.payload.input);
                         reply(result, true);
                         break;

@@ -1,8 +1,11 @@
 import { Capabilities, Container, Events, Session } from '@bitlerjs/core';
 
+import { AuthOptions } from '../server.js';
+
 type WebSocketClientOptions = {
   container: Container;
   socket: WebSocket;
+  auth?: (options: AuthOptions) => Promise<void>;
 };
 
 type SubscribeMessage = {
@@ -32,12 +35,20 @@ type RunCapability = {
   };
 };
 
-type Message = SubscribeMessage | UnsubscribeMessage | RunCapability;
+type Authenticate = {
+  type: 'authenticate';
+  id?: string;
+  payload: {
+    token: string;
+  };
+};
+
+type Message = SubscribeMessage | UnsubscribeMessage | RunCapability | Authenticate;
 
 class WebSocketClient {
   #options: WebSocketClientOptions;
   subscriptions: Record<string, () => void> = {};
-  #session = new Session();
+  #session?: Session;
 
   constructor(options: WebSocketClientOptions) {
     this.#options = options;
@@ -48,7 +59,7 @@ class WebSocketClient {
 
   #onMessage = async ({ data }: MessageEvent) => {
     try {
-      const { socket } = this.#options;
+      const { socket, auth } = this.#options;
       const message = JSON.parse(data) as Message;
       const reply = (payload: unknown, success: boolean) => {
         socket.send(
@@ -62,17 +73,43 @@ class WebSocketClient {
       };
       try {
         switch (message.type) {
+          case 'authenticate': {
+            const { container } = this.#options;
+            const session = new Session();
+            await auth?.({
+              session,
+              container,
+              request: { headers: { authorization: `Bearer ${message.payload.token}` } } as any,
+            });
+            this.#session = session;
+            reply(
+              {
+                type: 'authenticated',
+              },
+              true,
+            );
+            break;
+          }
           case 'subscribe': {
+            if (!this.#session) {
+              throw new Error('Not authenticated');
+            }
             await this.subscribe(message.payload.kind, message.payload.input, message.payload.id);
             reply(null, true);
             break;
           }
           case 'unsubscribe': {
+            if (!this.#session) {
+              throw new Error('Not authenticated');
+            }
             await this.unsubscribe(message.payload.id);
             reply(null, true);
             break;
           }
           case 'run-capability': {
+            if (!this.#session) {
+              throw new Error('Not authenticated');
+            }
             const result = await this.runCapability(message.payload.kind, message.payload.input);
             reply(result, true);
             break;

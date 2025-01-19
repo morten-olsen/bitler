@@ -5,6 +5,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 
 type SessionData = {
   baseUrl: string;
+  token: string;
 };
 
 type LoginContextValue = {
@@ -43,6 +44,10 @@ const Login = ({ children }: LoginProps) => {
   const baseUrlValue = form.watch('baseUrl');
   const baseUrlError = errors.baseUrl?.message;
 
+  const tokenInput = form.register('token', { required: 'Token is required' });
+  const tokenValue = form.watch('token');
+  const tokenError = errors.token?.message;
+
   const onSubmit: SubmitHandler<SessionData> = useCallback((data) => {
     localStorage.setItem('sessionData', JSON.stringify(data));
     setSessionData(data);
@@ -53,7 +58,7 @@ const Login = ({ children }: LoginProps) => {
     setSessionData(undefined);
   }, []);
 
-  if (!sessionData) {
+  if (!sessionData || !sessionData.baseUrl || !sessionData.token) {
     return (
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <div className="flex flex items-center justify-center h-screen p-4">
@@ -75,7 +80,17 @@ const Login = ({ children }: LoginProps) => {
                 isInvalid={!!baseUrlError}
                 errorMessage={baseUrlError}
               />
-              <Input label="Access Token" placeholder="eyJhbGciOi..." />
+              <Input
+                label="Access Token"
+                placeholder="eyJhbGciOi..."
+                value={tokenValue || ''}
+                required
+                onValueChange={(e) => form.setValue('token', e)}
+                onBlur={tokenInput.onBlur}
+                onChange={tokenInput.onChange}
+                isInvalid={!!tokenError}
+                errorMessage={tokenError}
+              />
             </CardBody>
             <CardFooter className="justify-end">
               <Button variant="flat" startContent={<LogIn />} className="flex-1" color="primary" type="submit">

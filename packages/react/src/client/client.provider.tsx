@@ -9,6 +9,7 @@ type ClientErrorProps = {
 };
 type ClientProviderProps = {
   baseUrl: string;
+  token: string;
   children: ReactNode;
   loader?: ReactNode;
   error?: ComponentType<ClientErrorProps>;
@@ -21,8 +22,8 @@ const getErrorMessage = (error: unknown) => {
   return String(error);
 };
 
-const ClientProvider = ({ baseUrl, children, loader, error: ErrorComponent }: ClientProviderProps) => {
-  const client = useMemo(() => new Client({ baseUrl }), [baseUrl]);
+const ClientProvider = ({ baseUrl, token, children, loader, error: ErrorComponent }: ClientProviderProps) => {
+  const client = useMemo(() => new Client({ baseUrl, token }), [baseUrl]);
   const setup = useQuery({
     queryKey: ['setup', baseUrl],
     queryFn: async () => {

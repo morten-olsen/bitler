@@ -1,6 +1,6 @@
 import 'fastify';
 import type { FastifyZod } from 'fastify-zod';
-import type { Container } from '@bitlerjs/core';
+import type { Container, Session } from '@bitlerjs/core';
 
 /* eslint-disable @typescript-eslint/consistent-type-definitions */
 
@@ -13,5 +13,6 @@ declare module 'fastify' {
 
   interface FastifyRequest {
     container: Container;
+    session: Session;
   }
 }

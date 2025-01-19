@@ -18,9 +18,11 @@ const LoggedIn = () => {
   return (
     <BitlerProvider
       baseUrl={sessionData.baseUrl}
+      token={sessionData.token}
       loader={
         <div className="flex flex-col gap-8 items-center justify-center h-full">
           <Spinner size="lg" />
+          <div className="text-center">Connecting to {sessionData.baseUrl}</div>
           <Button onPress={logout} variant="flat" color="danger" size="lg">
             Logout
           </Button>
