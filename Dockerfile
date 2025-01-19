@@ -5,7 +5,7 @@ WORKDIR /app
 FROM base AS builder
 RUN npm add -g turbo
 COPY . .
-RUN turbo prune @bitlerjs/demo --docker
+RUN turbo prune @bitlerjs/docker --docker
 
 FROM base AS installer
 ARG NODE_AUTH_TOKEN
@@ -25,5 +25,5 @@ ENV NODE_ENV=production
 ENV HOST=0.0.0.0
 ENV DATA_DIR=/data
 COPY --from=installer /app /app
-WORKDIR /app/packages/demo
-CMD ["npx", "bitler-bootstrap"]
+WORKDIR /app/packages/docker
+CMD ["node", "dist/server.js"]

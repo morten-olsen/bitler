@@ -10,7 +10,7 @@ const Notifications = () => {
       <Popover placement="bottom-end" showArrow>
         <PopoverTrigger>
           <Button radius="full" size="sm" isLoading={isLoading} isIconOnly>
-            <Bell size={18} />
+            <Bell size={20} />
           </Button>
         </PopoverTrigger>
         <PopoverContent>

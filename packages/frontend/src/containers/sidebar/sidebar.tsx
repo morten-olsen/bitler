@@ -1,9 +1,9 @@
 import React from 'react';
-import { Bot, ListVideo, MessagesSquare, Plus, Signpost } from 'lucide-react';
+import { Bot, Cog, ListVideo, MessagesSquare, Plus, Signpost } from 'lucide-react';
 import { useOpenScreen } from '../screens/screens.hooks.js';
 import { Timers } from '../timers/timers.js';
 import { Capabilities } from '../capabilites/capabilites.js';
-import { Listbox, ListboxItem, ListboxSection } from '@nextui-org/react';
+import { Button, Listbox, ListboxItem, ListboxSection } from '@nextui-org/react';
 import { nanoid } from 'nanoid';
 import { Conversation } from '../conversation/conversation.js';
 import { Conversations } from '../conversations/conversations.js';
@@ -17,7 +17,9 @@ const Sidebar = () => {
         <div className="text-2xl font-bold flex items-center gap-2">
           <Bot className="stroke-default-500 rotate-12" size={30} /> Bitler
         </div>
-        <Notifications />
+        <div className="flex gap-2">
+          <Notifications />
+        </div>
       </div>
       <Listbox>
         <ListboxSection title="Conversations" showDivider>
@@ -83,6 +85,11 @@ const Sidebar = () => {
       </Listbox>
       <div className="flex-1" />
       <Timers />
+      <div className="flex justify-center gap-2">
+        <Button isIconOnly radius="full" size="sm">
+          <Cog size={20} />
+        </Button>
+      </div>
     </div>
   );
 };
