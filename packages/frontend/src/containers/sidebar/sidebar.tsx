@@ -8,6 +8,7 @@ import { nanoid } from 'nanoid';
 import { Conversation } from '../conversation/conversation.js';
 import { Conversations } from '../conversations/conversations.js';
 import { Notifications } from './sidebar.notifications.js';
+import { Settings } from './sidebar.settings.js';
 
 const Sidebar = () => {
   const openScreen = useOpenScreen();
@@ -17,7 +18,9 @@ const Sidebar = () => {
         <div className="text-2xl font-bold flex items-center gap-2">
           <Bot className="stroke-default-500 rotate-12" size={30} /> Bitler
         </div>
-        <Notifications />
+        <div className="flex gap-2">
+          <Notifications />
+        </div>
       </div>
       <Listbox>
         <ListboxSection title="Conversations" showDivider>
@@ -83,6 +86,9 @@ const Sidebar = () => {
       </Listbox>
       <div className="flex-1" />
       <Timers />
+      <div className="flex justify-center gap-2">
+        <Settings />
+      </div>
     </div>
   );
 };

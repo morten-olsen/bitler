@@ -30,6 +30,10 @@ class Client<TSchema extends ServerSchema = BitlerServer> {
   public close = () => {
     this.#socket.close();
   };
+
+  public ready = async () => {
+    await this.#socket.getSocket();
+  };
 }
 
 export * from './capabilites/capabilities.js';

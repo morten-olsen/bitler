@@ -5,13 +5,16 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 type BitlerProviderProps = {
   baseUrl: string;
   children: ReactNode;
+  loader?: ReactNode;
 };
 
-const BitlerProvider = ({ baseUrl, children }: BitlerProviderProps) => {
+const BitlerProvider = ({ baseUrl, children, loader }: BitlerProviderProps) => {
   const queryClient = useMemo(() => new QueryClient(), [baseUrl]);
   return (
     <QueryClientProvider client={queryClient}>
-      <ClientProvider baseUrl={baseUrl}>{children}</ClientProvider>
+      <ClientProvider loader={loader} baseUrl={baseUrl}>
+        {children}
+      </ClientProvider>
     </QueryClientProvider>
   );
 };

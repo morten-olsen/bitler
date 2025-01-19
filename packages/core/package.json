@@ -4,8 +4,7 @@
   "main": "dist/exports.js",
   "type": "module",
   "files": [
-    "dist",
-    "bin"
+    "dist"
   ],
   "scripts": {
     "build": "tsc --build",

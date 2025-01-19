@@ -21,7 +21,7 @@ class Socket extends EventEmitter<SocketEvents> {
   }
 
   #setup = () =>
-    new Promise<WebSocket>((resolve) => {
+    new Promise<WebSocket>((resolve, reject) => {
       if (this.#closed) {
         return;
       }
@@ -43,6 +43,7 @@ class Socket extends EventEmitter<SocketEvents> {
 
       socket.addEventListener('error', (error) => {
         console.error('WebSocket error', error);
+        reject(error);
       });
 
       socket.addEventListener('message', ({ data }) => {

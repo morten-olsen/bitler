@@ -2,10 +2,10 @@
   "name": "@bitlerjs/frontend",
   "version": "0.0.0",
   "type": "module",
-  "main": "dist/exports.js",
+  "main": "assets/exports.js",
   "scripts": {
-    "build": "tsc --build",
-    "dev": "tsc --build --watch",
+    "build": "vite build",
+    "dev": "vite",
     "lint": "eslint .",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
@@ -34,7 +34,6 @@
   },
   "devDependencies": {
     "@bitlerjs/configs": "workspace:*",
-    "@bitlerjs/frontend-config": "workspace:*",
     "@chromatic-com/storybook": "^3.2.3",
     "@storybook/addon-essentials": "^8.4.7",
     "@storybook/addon-interactions": "^8.4.7",
@@ -47,6 +46,7 @@
     "@storybook/test": "^8.4.7",
     "@storybook/theming": "^8.4.7",
     "@tailwindcss/typography": "^0.5.16",
+    "@types/node": "^22.10.7",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
     "@vitejs/plugin-react-swc": "^3.5.0",
@@ -57,6 +57,7 @@
     "storybook": "^8.4.7",
     "tailwindcss": "^3.4.17",
     "typescript": "~5.6.2",
-    "vite": "^6.0.5"
+    "vite": "^6.0.5",
+    "vite-plugin-pwa": "^0.21.1"
   }
 }
