@@ -6,18 +6,25 @@
   "files": [
     "dist"
   ],
+  "bin": {
+    "bitler": "bin/bin.js"
+  },
   "scripts": {
     "build": "tsc --build",
     "dev": "tsc --build --watch",
-    "generate:types": "bitler schema generate http://localhost:3000 ./src/generated/types.ts"
+    "generate:types": "tsx src/bin/bin.ts schema generate http://localhost:3000 ./src/generated/types.ts"
   },
   "devDependencies": {
     "@bitlerjs/configs": "workspace:*",
+    "commander": "^13.0.0",
     "openapi-typescript": "^7.4.4",
+    "tsx": "^4.19.2",
     "typescript": "^5.7.2"
   },
   "dependencies": {
+    "@sinclair/typebox": "^0.34.14",
     "eventemitter3": "^5.0.1",
+    "json-schema-to-typescript": "^15.0.4",
     "openapi-fetch": "^0.13.3"
   }
 }
