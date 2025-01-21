@@ -16,7 +16,8 @@ const getIssue = createCapability({
     issue: issueSchema,
   }),
   handler: async ({ container, context, input }) => {
-    const { api } = container.get(LinearService);
+    const linearService = container.get(LinearService);
+    const api = await linearService.getApi();
     const response = await api.issue(input.identifier);
     const issue = issueSchema.parse(response);
     const currentIssues = context.get(issuesContext);

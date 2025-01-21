@@ -155,15 +155,19 @@ class Completion {
     const actionRequestService = this.#container.get(ActionRequests);
 
     const actionRequests = options.actionRequests || actionRequestService.create();
-    const model = modelService.get(options.model);
+    const model = await modelService.get(options.model);
     const capabilities = await this.#getCapabilities(options);
     const agents = await this.#getAgents(options);
+
+    if (!model) {
+      throw new Error('Model not found');
+    }
 
     const contextSetups = capabilities.flatMap((capability) => (capability?.setup ? capability.setup : []));
     const session = new Session();
     session.set(agentSession, {
       agent: options.agent,
-      model: model.id,
+      model: model.kind,
       capabilities: capabilities.flatMap((capability) => (capability ? [capability.kind] : [])),
       agents: agents.flatMap((agent) => (agent ? [agent.kind] : [])),
     });
@@ -188,8 +192,8 @@ class Completion {
     const dialog = this.#getDialog(options, context);
 
     const client = new OpenAI({
-      baseURL: model.api,
-      apiKey: model.token,
+      baseURL: model.url,
+      apiKey: model.apiKey,
     });
 
     const getResponse = async () => {

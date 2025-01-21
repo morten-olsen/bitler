@@ -19,6 +19,8 @@
     "@nextui-org/use-theme": "^2.1.1",
     "@radix-ui/react-popover": "^1.1.4",
     "@react-aria/i18n": "^3.12.4",
+    "@stoplight/json-schema-viewer": "^4.16.4",
+    "@stoplight/mosaic": "^1.53.4",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "eventemitter3": "^5.0.1",

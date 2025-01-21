@@ -1,3 +1,4 @@
+import { Configs, Container } from '@bitlerjs/core';
 import {
   HassEntities,
   callService,
@@ -5,6 +6,8 @@ import {
   createLongLivedTokenAuth,
   subscribeEntities,
 } from 'home-assistant-js-websocket';
+
+import { homeAssistantConfig } from '../homeassistant.js';
 
 const createResolvable = <T>() => {
   let resolve: (value: T) => void;
@@ -31,17 +34,22 @@ type CallServiceOptions = {
 };
 
 class HomeassistantService {
+  #container: Container;
   #connectionPromise?: ReturnType<typeof createConnection>;
   #entities: HassEntities = {};
   #ready = createResolvable<void>();
 
+  constructor(container: Container) {
+    this.#container = container;
+  }
+
   #setup = async () => {
-    const url = process.env.HOMEASSISTANT_URL;
-    const token = process.env.HOMEASSISTANT_TOKEN;
-    if (!url || !token) {
-      throw new Error('Missing required environment variables');
+    const configsService = this.#container.get(Configs);
+    const config = await configsService.getValue(homeAssistantConfig);
+    if (!config || !config.enabled || !config.url || !config.token) {
+      throw new Error('Home Assistant is not configured');
     }
-    const auth = createLongLivedTokenAuth(url, token);
+    const auth = createLongLivedTokenAuth(config.url, config.token);
     const connection = await createConnection({ auth });
     subscribeEntities(connection, (entities) => {
       this.#entities = entities;

@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { createCapability } from '../capabilities/capabilities.js';
 import { Configs } from '../configs/configs.js';
 import { createEvent } from '../events/events.js';
+import { getJsonSchema } from '../exports.js';
 
 const listConfigsCapability = createCapability({
   kind: 'configs.list',
@@ -17,14 +18,25 @@ const listConfigsCapability = createCapability({
         name: z.string(),
         group: z.string().optional(),
         description: z.string(),
+        hasConfig: z.boolean(),
       }),
     ),
   }),
+  disableDiscovery: false,
   handler: async ({ container }) => {
     const configsService = container.get(Configs);
     const configs = configsService.list();
+    const configsWithValues = await Promise.all(
+      configs.map(async (config) => {
+        const value = await configsService.getValue(config);
+        return {
+          ...config,
+          hasConfig: value !== undefined,
+        };
+      }),
+    );
     return {
-      configs,
+      configs: configsWithValues,
     };
   },
 });
@@ -36,14 +48,64 @@ const setConfigCapability = createCapability({
   description: 'Set a config value',
   input: z.object({
     kind: z.string(),
-    name: z.string(),
     value: z.any(),
   }),
+  disableDiscovery: false,
   output: z.object({}),
   handler: async ({ container, input }) => {
     const configsService = container.get(Configs);
-    await configsService.setValue(input.kind as any, input.value);
+    const config = configsService.get(input.kind);
+    if (!config) {
+      throw new Error(`Config ${input.kind} not found`);
+    }
+    await configsService.setValue(config, input.value);
     return {};
+  },
+});
+
+const getConfigCapability = createCapability({
+  kind: 'configs.get',
+  name: 'Get',
+  group: 'Configs',
+  description: 'Set a config value',
+  input: z.object({
+    kind: z.string(),
+  }),
+  disableDiscovery: false,
+  output: z.object({
+    value: z.any(),
+  }),
+  handler: async ({ container, input }) => {
+    const configsService = container.get(Configs);
+    const config = configsService.get(input.kind);
+    if (!config) {
+      throw new Error(`Config ${input.kind} not found`);
+    }
+    const value = await configsService.getValue(config);
+    return { value };
+  },
+});
+
+const removeConfigCapability = createCapability({
+  kind: 'configs.remove',
+  name: 'Remove',
+  group: 'Configs',
+  description: 'Remove a config value',
+  input: z.object({
+    kind: z.string(),
+  }),
+  disableDiscovery: false,
+  output: z.object({
+    success: z.boolean(),
+  }),
+  handler: async ({ container, input }) => {
+    const configsService = container.get(Configs);
+    const config = configsService.get(input.kind);
+    if (!config) {
+      throw new Error(`Config ${input.kind} not found`);
+    }
+    await configsService.removeValue(config);
+    return { success: true };
   },
 });
 
@@ -67,14 +129,15 @@ const describeConfigsCapability = createCapability({
   }),
   handler: async ({ container, input }) => {
     const configsService = container.get(Configs);
-    const config = configsService.get(input.kind as any);
+    const config = configsService.get(input.kind);
     if (!config) {
       throw new Error(`Config ${input.kind} not found`);
     }
-    const value = configsService.getValue(input.kind as any);
+    const value = configsService.getValue(config);
     return {
       config: {
         ...config,
+        schema: getJsonSchema(config.schema),
         hasValue: value !== undefined,
       },
     };
@@ -94,4 +157,35 @@ const configsUpdatedEvent = createEvent({
   }),
 });
 
-export { listConfigsCapability, setConfigCapability, describeConfigsCapability, configsUpdatedEvent };
+const configValueChangedEvent = createEvent({
+  kind: 'config.value-changed',
+  name: 'Value changed',
+  group: 'Config',
+  description: 'Event that is emitted when a config value is changed',
+  input: z.object({
+    kinds: z.array(z.string()).optional(),
+  }),
+  output: z.object({
+    kind: z.string(),
+    value: z.object({
+      from: z.unknown(),
+      to: z.unknown(),
+    }),
+  }),
+  filter: async ({ input, event }) => {
+    if (!input.kinds) {
+      return true;
+    }
+    return input.kinds.includes(event.kind);
+  },
+});
+
+export {
+  listConfigsCapability,
+  setConfigCapability,
+  describeConfigsCapability,
+  configsUpdatedEvent,
+  configValueChangedEvent,
+  getConfigCapability,
+  removeConfigCapability,
+};

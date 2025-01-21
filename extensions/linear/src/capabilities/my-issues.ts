@@ -19,7 +19,8 @@ const myIssues = createCapability({
     }),
   ),
   handler: async ({ container, context }) => {
-    const { api } = container.get(LinearService);
+    const linearService = container.get(LinearService);
+    const api = await linearService.getApi();
     const currentUser = context.get(userContext);
     if (!currentUser) {
       throw new Error('No user context');

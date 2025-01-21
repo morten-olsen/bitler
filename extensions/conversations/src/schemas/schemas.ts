@@ -8,6 +8,7 @@ const conversationStateSchema = z.object({
   title: z.string().optional(),
   description: z.string().optional(),
   agent: completionShape.agent,
+  model: completionShape.model,
   messages: z.array(
     z.object({
       ...completionDialogSchema.shape,
@@ -28,6 +29,7 @@ type ConversationState = z.infer<typeof conversationStateSchema>;
 const conversationSettingsSchema = z.object({
   title: z.string().optional().nullable(),
   description: z.string().optional().nullable(),
+  model: completionShape.model.nullable(),
   agent: completionShape.agent.nullable(),
   agents: completionShape.agents.nullable(),
   context: completionShape.context.nullable(),

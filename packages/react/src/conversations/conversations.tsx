@@ -33,11 +33,6 @@ const useConversation = (id: string) => {
     'conversations.updated',
     { ids: [id] },
     (event) => {
-      // TODO: WHY?
-      if (event.payload.conversationId !== id) {
-        console.log('Skipping event', id, event);
-        return;
-      }
       if (event.type === 'sync') {
         setState(event.payload);
       } else if (event.type === 'delta') {

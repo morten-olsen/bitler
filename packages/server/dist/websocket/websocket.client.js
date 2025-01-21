@@ -52,8 +52,9 @@ class WebSocketClient {
                 }
             }
             catch (error) {
-                console.error('Invalid message', data, error);
-                socket.send(JSON.stringify({ type: 'error', payload: 'Invalid message' }));
+                reply({
+                    message: error instanceof Error ? error.message : String(error),
+                }, false);
                 return;
             }
         }
@@ -73,7 +74,7 @@ class WebSocketClient {
         if (!capability) {
             throw new Error(`Capability ${kind} not found`);
         }
-        return capabilitiesService.run({
+        return await capabilitiesService.run({
             capability,
             input,
             session: this.#session,
@@ -96,7 +97,7 @@ class WebSocketClient {
         const listener = (value) => {
             this.send({ type: 'event', payload: { kind, value, id } });
         };
-        const subscription = eventsService.subscribe(kind, input, listener);
+        const subscription = eventsService.subscribe(event, input, listener);
         this.subscriptions[id] = subscription.unsubscribe;
     };
     send(data) {

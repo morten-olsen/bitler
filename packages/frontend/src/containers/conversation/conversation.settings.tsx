@@ -13,7 +13,7 @@ import {
   Textarea,
   type useDisclosure,
 } from '@nextui-org/react';
-import { useAgents, useCapabilities, useConversationContext } from '@bitlerjs/react';
+import { useAgents, useCapabilities, useConversationContext, useModels } from '@bitlerjs/react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Tagbar } from '../../components/base/tagbar/tagbar';
 
@@ -26,6 +26,7 @@ const ConversationSettings = (props: ConversationSettingsProps) => {
     () => ({
       title: conversation.title,
       agent: conversation.agent,
+      model: conversation.model,
       description: conversation.description,
       capabilities: conversation.capabilities,
       agents: conversation.agents,
@@ -62,10 +63,12 @@ const ConversationSettings = (props: ConversationSettingsProps) => {
 
   const availableAgents = useAgents();
   const availableCapabilities = useCapabilities();
+  const availableModels = useModels();
 
   form.register('title');
   form.register('description');
   form.register('agent');
+  form.register('model');
   form.register('capabilities');
   form.register('agents');
   form.register('discoverCapabilities', {
@@ -78,6 +81,7 @@ const ConversationSettings = (props: ConversationSettingsProps) => {
   const titleValue = form.watch('title');
   const descriptionValue = form.watch('description');
   const agentValue = form.watch('agent');
+  const modelValue = form.watch('model');
   const capabilitiesValue = form.watch('capabilities');
   const agentsValue = form.watch('agents');
   const discoverCapabilitiesValue = form.watch('discoverCapabilities');
@@ -107,7 +111,28 @@ const ConversationSettings = (props: ConversationSettingsProps) => {
                 selectedKey={agentValue as string}
                 onSelectionChange={(value) => form.setValue('agent', value as string)}
               >
-                {(item) => <AutocompleteItem key={item.kind}>{item.name}</AutocompleteItem>}
+                {(item) => (
+                  <AutocompleteItem key={item.kind} textValue={item.name}>
+                    {item.name}
+                  </AutocompleteItem>
+                )}
+              </Autocomplete>
+              <Autocomplete
+                defaultItems={availableModels}
+                label="Models"
+                selectedKey={modelValue as string}
+                isVirtualized={false}
+                onSelectionChange={(value) => form.setValue('model', value as string)}
+              >
+                {(item) => (
+                  <AutocompleteItem
+                    key={item.kind}
+                    description={item.provider}
+                    className="truncate overflow-hidden"
+                    textValue={`${item.name} (${item.provider})`}
+                    title={item.name}
+                  />
+                )}
               </Autocomplete>
               <Tagbar
                 label="Add capabilities"

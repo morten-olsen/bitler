@@ -1,7 +1,6 @@
 import { z } from 'zod';
 
 import { Capabilities, createCapability } from '../capabilities/capabilities.js';
-import { createEvent } from '../events/events.js';
 import { getJsonSchema } from '../utils/zod.js';
 
 const listCapabilitiesCapability = createCapability({
@@ -97,22 +96,4 @@ const describeCapabilitiesCapability = createCapability({
   },
 });
 
-const capabilitiesUpdatedEvent = createEvent({
-  kind: 'capabilities.updated',
-  name: 'Updated',
-  group: 'Capabilities',
-  description: 'Emitted when a capability is updated',
-  input: z.object({}),
-  output: z.object({
-    capability: z.object({
-      kinds: z.array(z.string()),
-    }),
-  }),
-});
-
-export {
-  listCapabilitiesCapability,
-  describeCapabilitiesCapability,
-  capabilitiesUpdatedEvent,
-  findCapabilitiesCapability,
-};
+export { listCapabilitiesCapability, describeCapabilitiesCapability, findCapabilitiesCapability };

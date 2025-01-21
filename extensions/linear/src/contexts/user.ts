@@ -14,11 +14,12 @@ const userContext = createContextItem({
 
 const userContextSetup = createContextSetup({
   handler: async ({ container, context }) => {
-    const { getUser } = container.get(LinearService);
-    const userInfo = await getUser();
+    const linearService = container.get(LinearService);
+    const api = await linearService.getApi();
+    const user = await api.viewer;
     context.set(userContext, {
-      id: userInfo.id,
-      name: userInfo.name,
+      id: user.id,
+      name: user.name,
     });
   },
 });

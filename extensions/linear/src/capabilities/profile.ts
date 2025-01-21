@@ -14,8 +14,9 @@ const profile = createCapability({
     email: z.string(),
   }),
   handler: async ({ container }) => {
-    const { getUser } = container.get(LinearService);
-    const user = await getUser();
+    const linearService = container.get(LinearService);
+    const api = await linearService.getApi();
+    const user = await api.viewer;
     return user;
   },
 });

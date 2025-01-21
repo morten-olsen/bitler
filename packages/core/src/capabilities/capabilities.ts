@@ -9,6 +9,8 @@ import { Contexts } from '../contexts/contexts.js';
 import { ActionRequestInstance } from '../action-requests/action-requests.instance.js';
 import { ActionRequests } from '../action-requests/action-requests.js';
 import { Session } from '../session/session.js';
+import { Events } from '../events/events.js';
+import { capabilitiesUpdatedEvent } from '../built-in/events/capabilites.js';
 
 import { Capability } from './capabilities.capability.js';
 
@@ -65,6 +67,24 @@ class Capabilities extends EventEmitter<CapabilitiesEvents> {
       this.#capabilities.add(capability);
     });
     this.emit('registered', capabilities);
+    const eventsService = this.#container.get(Events);
+    eventsService.publish(capabilitiesUpdatedEvent, {
+      capability: {
+        kinds: capabilities.map((capability) => capability.kind),
+      },
+    });
+  };
+
+  public unregister = (kinds: string[]) => {
+    this.#capabilities = new Set(
+      Array.from(this.#capabilities).filter((capability) => !kinds.includes(capability.kind)),
+    );
+    const eventsService = this.#container.get(Events);
+    eventsService.publish(capabilitiesUpdatedEvent, {
+      capability: {
+        kinds,
+      },
+    });
   };
 
   public get = (kinds: string[]): Capability<ZodSchema, ZodSchema>[] => {

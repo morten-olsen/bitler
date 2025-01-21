@@ -46,6 +46,9 @@ type SchemaResponse = {
 const getSchemas = async (baseUrl: string) => {
   const response = await fetch(`${baseUrl}/api/schemas`);
   const schemas = await response.json();
+  if (!response.ok) {
+    throw new Error(schemas.message);
+  }
   return schemas as SchemaResponse;
 };
 

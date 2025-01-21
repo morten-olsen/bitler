@@ -46,7 +46,7 @@ class Capabilities<TSchema extends ServerSchema = BitlerServer> {
     if (data.success) {
       listener.resolve(data.payload);
     } else {
-      listener.reject(new Error(data.payload));
+      listener.reject(new Error(data.payload?.message || 'Unknown error'));
     }
   };
 

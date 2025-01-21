@@ -11,6 +11,10 @@ class ContextItems {
     });
   };
 
+  public unregister = (kinds: string[]): void => {
+    this.#items = new Set(Array.from(this.#items).filter((item) => !kinds.includes(item.kind)));
+  };
+
   public get = (kind: string): ContextItem<ZodSchema> => {
     return Array.from(this.#items).find((item) => item.kind === kind) as ContextItem<ZodSchema>;
   };

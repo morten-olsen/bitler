@@ -78,7 +78,6 @@ class Socket extends EventEmitter<SocketEvents> {
     const socket = await this.#socket;
     socket?.close();
     this.removeAllListeners();
-    console.log('WebSocket closing');
   };
 }
 

@@ -71,7 +71,7 @@ const Capabilities = () => {
                     key={capability.kind}
                     description={capability.description}
                     onPress={() =>
-                      open(Capability, {
+                      open('capability', {
                         title: `${capability.name} - ${group}`,
                         focus: true,
                         props: {

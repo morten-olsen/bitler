@@ -13,10 +13,11 @@ type SignalSocketOptions = {
 
 class SignalSocket {
   #options: SignalSocketOptions;
+  #socket: WebSocket;
 
   constructor(options: SignalSocketOptions) {
     this.#options = options;
-    this.#setup();
+    this.#socket = this.#setup();
   }
 
   public get id() {
@@ -88,6 +89,10 @@ class SignalSocket {
     socket.addEventListener('close', this.#onclose);
     socket.addEventListener('error', this.#onerror);
     return socket;
+  };
+
+  public destroy = () => {
+    this.#socket.close();
   };
 }
 

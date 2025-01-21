@@ -11,7 +11,7 @@ if (!root) {
   throw new Error('Root element not found');
 }
 createRoot(root).render(
-  <NextThemesProvider attribute="class" defaultTheme="dark" enableSystem>
+  <NextThemesProvider attribute="class" enableSystem>
     <NextUIProvider className="h-full">
       <Login>
         <LoggedIn />

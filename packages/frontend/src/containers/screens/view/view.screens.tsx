@@ -1,6 +1,7 @@
 import React, { ReactNode, useCallback } from 'react';
 import { useScreensContext } from '../screens.hooks';
 import { ScreenContext } from '../screens.screen-context';
+import { availableScreens } from '../screens.context';
 
 type ScreenProps = {
   id: string;
@@ -31,15 +32,18 @@ const ScreensItem = () => {
 
   return (
     <div className="flex-1 overflow-y-auto">
-      {screens.map((screen) => (
-        <div
-          key={screen.id}
-          className="h-full w-full overflow-y-auto"
-          style={{ display: screen.id === selected ? 'block' : 'none' }}
-        >
-          <Sceen id={screen.id} node={screen.node} />
-        </div>
-      ))}
+      {screens.map(({ id, component, props = {} }) => {
+        const Component = availableScreens[component];
+        return (
+          <div
+            key={id}
+            className="h-full w-full overflow-y-auto"
+            style={{ display: id === selected ? 'block' : 'none' }}
+          >
+            <Sceen id={id} node={<Component {...props} />} />
+          </div>
+        );
+      })}
     </div>
   );
 };

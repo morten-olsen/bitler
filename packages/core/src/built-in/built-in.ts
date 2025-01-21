@@ -4,15 +4,17 @@ import { createExtension } from '../extensions/extensions.js';
 
 import { describeActionRequestsCapability, listActionRequestsCapability } from './action-requests.js';
 import {
-  capabilitiesUpdatedEvent,
   describeCapabilitiesCapability,
   findCapabilitiesCapability,
   listCapabilitiesCapability,
 } from './capabilites.js';
 import {
   configsUpdatedEvent,
+  configValueChangedEvent,
   describeConfigsCapability,
+  getConfigCapability,
   listConfigsCapability,
+  removeConfigCapability,
   setConfigCapability,
 } from './configs.js';
 import {
@@ -21,6 +23,7 @@ import {
   listContextItemsCapability,
 } from './context-items.js';
 import { listEventsCapability } from './events.js';
+import { capabilitiesUpdatedEvent } from './events/capabilites.js';
 
 const builtIn = createExtension({
   setup: async ({ container }) => {
@@ -39,11 +42,18 @@ const builtIn = createExtension({
       listConfigsCapability,
       describeConfigsCapability,
       setConfigCapability,
+      getConfigCapability,
+      removeConfigCapability,
     ]);
 
     const eventsService = container.get(Events);
-    eventsService.register([configsUpdatedEvent, capabilitiesUpdatedEvent, contextItemsUpdatedEvent]);
+    eventsService.register([
+      configsUpdatedEvent,
+      capabilitiesUpdatedEvent,
+      contextItemsUpdatedEvent,
+      configValueChangedEvent,
+    ]);
   },
 });
 
-export { builtIn };
+export { builtIn, configValueChangedEvent };

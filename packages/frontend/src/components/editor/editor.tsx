@@ -10,7 +10,16 @@ const Editor = ({ className, ...props }: Props) => {
   return (
     <div ref={divRef} className={clsx(className, 'relative h-full')}>
       <div className="absolute inset-0">
-        <MonacoEditor theme="vs-dark" defaultLanguage="yaml" {...props} />
+        <MonacoEditor
+          theme="vs-light"
+          defaultLanguage="yaml"
+          {...props}
+          options={{
+            minimap: { enabled: false },
+            lineNumbers: 'off',
+            ...(props.options || {}),
+          }}
+        />
       </div>
     </div>
   );

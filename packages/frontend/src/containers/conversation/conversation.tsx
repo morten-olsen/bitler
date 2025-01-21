@@ -8,6 +8,7 @@ import { Page } from '../../components/layouts/page/page.js';
 import { ConversationMessage } from './conversation.message.js';
 import { ConversationSettings } from './conversation.settings.js';
 import { useSetScreenTitle } from '../screens/screens.screen-context.js';
+import { useAddToast } from '../toasts/toasts.hooks.js';
 
 type ConversationProps = {
   userIntro?: string;
@@ -20,6 +21,7 @@ const Conversation = ({ userIntro, id }: ConversationProps) => {
   const [input, setInput] = useState<string>('');
   const settingsDisclosure = useDisclosure();
   const setTitle = useSetScreenTitle();
+  const addToast = useAddToast();
 
   useEffect(() => setTitle(conversation?.title || 'Conversation'), [conversation.title, setTitle]);
 
@@ -34,6 +36,15 @@ const Conversation = ({ userIntro, id }: ConversationProps) => {
           contentAreaRef.current?.scrollTo({
             top: contentAreaRef.current.scrollHeight,
             behavior: 'smooth',
+          });
+        },
+        onError: (err) => {
+          console.error('Error', err);
+          addToast({
+            title: 'Could not send message',
+            type: 'error',
+            description: String(err),
+            timeout: 5000,
           });
         },
       },

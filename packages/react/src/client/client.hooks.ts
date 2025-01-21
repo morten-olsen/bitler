@@ -10,7 +10,12 @@ const useCapabilities = () => {
   return context.capabilities;
 };
 
-const useHasCapability = (kind: string) => {
+const useHasCapability = <
+  TServer extends ServerSchema = DefaultServer,
+  TKind extends keyof TServer['capabilities'] = keyof TServer['capabilities'],
+>(
+  kind: TKind,
+) => {
   const capabilities = useCapabilities();
   return capabilities.find((capability) => capability.kind === kind) !== undefined;
 };
@@ -34,11 +39,11 @@ const useRunCapabilityMutation = <
   TKind extends keyof TServer['capabilities'] = keyof TServer['capabilities'],
 >(
   kind: TKind,
-  options: UserRunCapabilityMutationOptions = {},
+  options: Parameters<typeof useMutation>[2] = {},
 ) => {
   const { client } = useClientContext<TServer>();
   return useMutation({
-    ...(options.mutationKey && { mutationKey: options.mutationKey }),
+    ...options,
     mutationFn: async (params: CapabilityInput<TServer, TKind>) => {
       const { capabilities } = client;
       return capabilities.run<TKind>(kind, params);
@@ -112,23 +117,6 @@ const useCapability = (kind: string) => {
   };
 };
 
-const createTypedHooks = <TServer extends ServerSchema = DefaultServer>() => {
-  return {
-    useCapabilities,
-    useAgents,
-    useModels,
-    useRunCapabilityMutation: <TKind extends keyof TServer['capabilities']>(
-      kind: TKind,
-      options: UserRunCapabilityMutationOptions = {},
-    ) => useRunCapabilityMutation<TServer, TKind>(kind, options),
-    useRunCapabilityQuery: <TKind extends keyof TServer['capabilities']>(
-      kind: TKind,
-      input: CapabilityInput<TServer, TKind>,
-      options: UserRunCapabilityQueryOptions = {},
-    ) => useRunCapabilityQuery<TServer, TKind>(kind, input, options),
-  };
-};
-
 export {
   useCapabilities,
   useAgents,
@@ -136,7 +124,6 @@ export {
   useRunCapabilityMutation,
   useEventEffect,
   useRunCapabilityQuery,
-  createTypedHooks,
   useHasCapability,
   useCapability,
 };

@@ -63,6 +63,7 @@ class Server {
       request.session = new Session();
     });
     await app.register(wsPlugin, { auth });
+    await app.register(schemasPlugin, { prefix: '/api/schemas' });
 
     await app.register(async (app) => {
       app.addHook('onRequest', async (request) => {
@@ -79,7 +80,6 @@ class Server {
       });
 
       await app.register(capabilitiesPlugin, { prefix: '/api/capabilities' });
-      await app.register(schemasPlugin, { prefix: '/api/schemas' });
       await app.register(filesPlugin, { prefix: '/api/files' });
     });
 

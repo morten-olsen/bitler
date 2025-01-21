@@ -22,6 +22,10 @@ type Subscription = {
   input: unknown;
 };
 
+type SubscribeOptions = {
+  signal?: AbortSignal;
+};
+
 class Events<TSchema extends ServerSchema = BitlerServer> {
   #options: EventsOptions;
   #subscriptions: Subscription[] = [];
@@ -46,10 +50,11 @@ class Events<TSchema extends ServerSchema = BitlerServer> {
     }
   };
 
-  public subscribe = async <TKind extends keyof TSchema['capabilities']>(
+  public subscribe = async <TKind extends keyof TSchema['events']>(
     kind: TKind,
     input: EventInput<TSchema, TKind>,
     handler: (output: EventOutput<TSchema, TKind>) => void,
+    options: SubscribeOptions = {},
   ) => {
     const id = Math.random().toString(36).slice(2);
     await this.#options.socket.send({ type: 'subscribe', payload: { kind, input, id } });
@@ -57,6 +62,11 @@ class Events<TSchema extends ServerSchema = BitlerServer> {
     const fn = (value: unknown) => handler(value as EventOutput<TSchema, TKind>);
     this.#listeners[id] = fn;
     this.#subscriptions.push({ id, kind: kind as string, input });
+
+    options.signal?.addEventListener('abort', () => {
+      this.#options.socket.send({ type: 'unsubscribe', payload: { id } });
+      delete this.#listeners[id];
+    });
 
     return {
       unsubscribe: () => {

@@ -18,12 +18,18 @@ import { conversations } from '@bitlerjs/conversations';
 import fastifyStatic from '@fastify/static';
 import { frontendBundleRoot } from '@bitlerjs/frontend';
 import { Server } from '@bitlerjs/server';
+import { openai } from '@bitlerjs/openai';
+import { ollama } from '@bitlerjs/ollama';
+import { gemini } from '@bitlerjs/gemini';
 
 import { AuthService } from '../auth/auth.service.js';
 import { createToken } from '../auth/auth.capabilities.js';
 
 const container = new Container();
 
+process.on('unhandledRejection', (error) => {
+  console.error(error);
+});
 const capabilitiesService = container.get(Capabilities);
 capabilitiesService.register([createToken]);
 const extensionsService = container.get(Extensions);
@@ -32,6 +38,9 @@ await extensionsService.register([
   llm,
   todos,
   aws,
+  openai,
+  ollama,
+  gemini,
   notifications,
   knowledgeBases,
   timers,
@@ -67,3 +76,5 @@ await app.listen({
   port: 3000,
   host: process.env.HOST,
 });
+
+console.log('Server started');

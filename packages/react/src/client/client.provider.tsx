@@ -1,6 +1,6 @@
 import React, { ComponentType, type ReactNode, useEffect, useMemo } from 'react';
 import { ClientContext } from './client.context.js';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { Client } from '@bitlerjs/client';
 type ClientErrorProps = {
   error: string;
@@ -24,6 +24,7 @@ const getErrorMessage = (error: unknown) => {
 
 const ClientProvider = ({ baseUrl, token, children, loader, error: ErrorComponent }: ClientProviderProps) => {
   const client = useMemo(() => new Client({ baseUrl, token }), [baseUrl]);
+  const queryClient = useQueryClient();
   const setup = useQuery({
     queryKey: ['setup', baseUrl],
     queryFn: async () => {
@@ -31,10 +32,11 @@ const ClientProvider = ({ baseUrl, token, children, loader, error: ErrorComponen
       const { capabilities } = client;
       const { capabilities: capabilitiesList } = await capabilities.run('capabilities.list', {});
       const { agents: agentList } = await capabilities.run('agents.list', {});
+      const { models: modelList } = await capabilities.run('models.list', {});
       return {
         capabilities: capabilitiesList,
         agents: agentList,
-        models: [],
+        models: modelList,
       };
     },
     onError: (error) => {
@@ -43,13 +45,41 @@ const ClientProvider = ({ baseUrl, token, children, loader, error: ErrorComponen
   });
 
   useEffect(() => {
+    const controller = new AbortController();
+    const run = async () => {
+      client.events.subscribe(
+        'capabilities.updated',
+        {},
+        () => {
+          queryClient.invalidateQueries({
+            queryKey: ['setup', baseUrl],
+          });
+        },
+        {
+          signal: controller.signal,
+        },
+      );
+      client.events.subscribe(
+        'models.updated',
+        {},
+        () => {
+          queryClient.invalidateQueries({
+            queryKey: ['setup', baseUrl],
+          });
+        },
+        {
+          signal: controller.signal,
+        },
+      );
+    };
+    run();
     return () => {
       client.close();
+      controller.abort();
     };
-  }, [client]);
+  }, [client, baseUrl]);
 
   if (setup.error && ErrorComponent) {
-    console.log('ErrorComponent', ErrorComponent);
     return <ErrorComponent error={getErrorMessage(setup.error)} loading={setup.isLoading} retry={setup.refetch} />;
   }
 

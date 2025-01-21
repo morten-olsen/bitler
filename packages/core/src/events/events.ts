@@ -37,32 +37,27 @@ class Events extends EventEmitter<EventsEvents> {
     this.emit('emitted', event, value);
   };
 
-  public subscribe = <TSchema extends ZodSchema>(
-    kind: string,
-    input: z.infer<TSchema>,
-    handler: (output: z.infer<TSchema>) => void,
+  public subscribe = <TInput extends ZodSchema, TOutput extends ZodSchema>(
+    event: Event<TInput, TOutput>,
+    input: z.infer<TInput>,
+    handler: (output: z.infer<TOutput>) => void,
   ) => {
-    const event = this.get(kind);
-    if (!event) {
-      throw new Error(`Event ${kind} not found`);
-    }
-
-    if (!this.#listeners[kind]) {
-      this.#listeners[kind] = [];
+    if (!this.#listeners[event.kind]) {
+      this.#listeners[event.kind] = [];
     }
 
     const fn = async (value: unknown) => {
       try {
-        if (event.filter && !event.filter({ input, event: value, container: this.#container })) {
+        if (event.filter && !(await event.filter({ input, event: value, container: this.#container }))) {
           return;
         }
-        handler(value as z.infer<TSchema>);
+        handler(value as z.infer<TOutput>);
       } catch (error) {
         console.error('Error processing message', error);
       }
     };
 
-    this.#listeners[kind].push(fn);
+    this.#listeners[event.kind].push(fn);
 
     event.setup?.({
       input,
@@ -72,7 +67,7 @@ class Events extends EventEmitter<EventsEvents> {
 
     return {
       unsubscribe: () => {
-        this.#listeners[kind] = this.#listeners[kind].filter((listener) => listener !== fn);
+        this.#listeners[event.kind] = this.#listeners[event.kind].filter((listener) => listener !== fn);
       },
     };
   };

@@ -65,6 +65,15 @@ class SignalService {
     return this.#setupPromise;
   };
 
+  public destroy = async () => {
+    if (!this.#setupPromise) {
+      return;
+    }
+
+    const sockets = await this.#setupPromise;
+    sockets.forEach((socket) => socket.destroy());
+  };
+
   public getAccounts = async () => {
     const accounts = await this.setup();
     return accounts.map((account) => account.id);

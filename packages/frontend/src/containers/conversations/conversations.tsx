@@ -5,7 +5,6 @@ import { Activity, Search } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
 import clsx from 'clsx';
 import { Page } from '../../components/layouts/page/page.js';
-import { Conversation } from '../conversation/conversation.js';
 
 type IconWrapperProps = {
   children: React.ReactNode;
@@ -55,7 +54,7 @@ const Conversations = () => {
                 key={conversation.id}
                 description={conversation.description}
                 onPress={() =>
-                  open(Conversation, {
+                  open('conversation', {
                     title: conversation.title || conversation.id,
                     focus: true,
                     props: {

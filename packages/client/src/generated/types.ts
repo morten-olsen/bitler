@@ -7,6 +7,12 @@
 
 export interface BitlerServer {
   capabilities: {
+    "docker.auth.createToken": {
+      input: {};
+      output: {
+        token: string;
+      };
+    };
     "action-requests.list": {
       input: {};
       output: {
@@ -115,6 +121,7 @@ export interface BitlerServer {
           name: string;
           group?: string;
           description: string;
+          hasConfig: boolean;
         }[];
       };
     };
@@ -136,10 +143,25 @@ export interface BitlerServer {
     "configs.set": {
       input: {
         kind: string;
-        name: string;
         value?: unknown;
       };
       output: {};
+    };
+    "configs.get": {
+      input: {
+        kind: string;
+      };
+      output: {
+        value?: unknown;
+      };
+    };
+    "configs.remove": {
+      input: {
+        kind: string;
+      };
+      output: {
+        success: boolean;
+      };
     };
     "agents.list": {
       input: {};
@@ -213,6 +235,16 @@ export interface BitlerServer {
       };
       output: {
         success: boolean;
+      };
+    };
+    "models.list": {
+      input: {};
+      output: {
+        models: {
+          kind: string;
+          name: string;
+          provider: string;
+        }[];
       };
     };
     find: {
@@ -311,41 +343,6 @@ export interface BitlerServer {
       output: {
         id: string;
         success: boolean;
-      };
-    };
-    "aws.s3.list-buckets": {
-      input: {
-        awsProfile?: string;
-      };
-      output: {
-        buckets: string[];
-      };
-    };
-    "aws.s3.list-objects": {
-      input: {
-        awsProfile?: string;
-        bucket: string;
-        prefix?: string;
-      };
-      output: {
-        bucket: string;
-        keys: string[];
-      };
-    };
-    "aws.s3.get-objects": {
-      input: {
-        awsProfile?: string;
-        objects: {
-          bucket: string;
-          key: string;
-        }[];
-      };
-      output: {
-        objects: {
-          bucket: string;
-          key: string;
-          content: string;
-        }[];
       };
     };
     "notification.add": {
@@ -581,6 +578,50 @@ export interface BitlerServer {
         success: boolean;
       };
     };
+    "homeassistant.setup": {
+      input: {
+        url: string;
+        token: string;
+      };
+      output: {
+        success: boolean;
+      };
+    };
+    "aws.s3.list-buckets": {
+      input: {
+        awsProfile?: string;
+      };
+      output: {
+        buckets: string[];
+      };
+    };
+    "aws.s3.list-objects": {
+      input: {
+        awsProfile?: string;
+        bucket: string;
+        prefix?: string;
+      };
+      output: {
+        bucket: string;
+        keys: string[];
+      };
+    };
+    "aws.s3.get-objects": {
+      input: {
+        awsProfile?: string;
+        objects: {
+          bucket: string;
+          key: string;
+        }[];
+      };
+      output: {
+        objects: {
+          bucket: string;
+          key: string;
+          content: string;
+        }[];
+      };
+    };
     "homeassistant.lights.get": {
       input: {
         /**
@@ -692,18 +733,6 @@ export interface BitlerServer {
         }[];
       };
     };
-    "spotify.search": {
-      input: {
-        query: string;
-        types: {
-          album: boolean;
-          artist: boolean;
-          playlist: boolean;
-          track: boolean;
-        };
-      };
-      output: unknown;
-    };
     "music.play": {
       input: {
         spotifyUris: string[];
@@ -798,84 +827,6 @@ export interface BitlerServer {
         success: boolean;
       };
     };
-    "linear.profile": {
-      input: {};
-      output: {
-        id: string;
-        name: string;
-        email: string;
-      };
-    };
-    "linear.my-issues": {
-      input: {};
-      output: {
-        id: string;
-        title: string;
-      }[];
-    };
-    "linear.get-issue": {
-      input: {
-        /**
-         * The ID of the issue to get, in the format AAA-123
-         */
-        identifier: string;
-      };
-      output: {
-        issue: {
-          id: string;
-          identifier: string;
-          priority?: number;
-          priorityLabel?: string;
-          title: string;
-          addedToCycleAt?: string;
-          branchName?: string;
-          createdAt: string;
-          completedAt?: string;
-          cancelledAt?: string;
-          estimate?: number;
-          labelIds: string[];
-          snoozedUntil?: string;
-          startedAt?: string;
-          updatedAt: string;
-          description?: string;
-        };
-      };
-    };
-    "signal.get-contacts": {
-      input: {};
-      output: {
-        contacts: {
-          name: string;
-          phone: string;
-        }[];
-      };
-    };
-    "signal.get-groups": {
-      input: {};
-      output: {
-        groups: {
-          name: string;
-          id: string;
-          internalId: string;
-        }[];
-      };
-    };
-    "signal.send": {
-      input: {
-        /**
-         * The recipient's phone number
-         */
-        recipient: string;
-        message: string;
-        /**
-         * Base64 encoded attachments ("<BASE64 ENCODED DATA>", "data:<MIME-TYPE>;base64<comma><BASE64 ENCODED DATA>", "data:<MIME-TYPE>;filename=<FILENAME>;base64<comma><BASE64 ENCODED DATA>")
-         */
-        attachments?: string[];
-      };
-      output: {
-        success: boolean;
-      };
-    };
     "http.fetch": {
       input: {
         method: "GET" | "POST" | "PUT" | "DELETE";
@@ -945,6 +896,7 @@ export interface BitlerServer {
         title?: string;
         description?: string;
         agent?: string;
+        model?: string;
         messages: {
           role: "user" | "assistant" | "system";
           content: string;
@@ -1025,6 +977,14 @@ export interface BitlerServer {
               | string
             )
           | null;
+        model?:
+          | (
+              | {
+                  [k: string]: unknown;
+                }
+              | string
+            )
+          | null;
         agent?:
           | (
               | {
@@ -1071,6 +1031,49 @@ export interface BitlerServer {
       };
       output: {
         success: boolean;
+      };
+    };
+    "linear.profile": {
+      input: {};
+      output: {
+        id: string;
+        name: string;
+        email: string;
+      };
+    };
+    "linear.my-issues": {
+      input: {};
+      output: {
+        id: string;
+        title: string;
+      }[];
+    };
+    "linear.get-issue": {
+      input: {
+        /**
+         * The ID of the issue to get, in the format AAA-123
+         */
+        identifier: string;
+      };
+      output: {
+        issue: {
+          id: string;
+          identifier: string;
+          priority?: number;
+          priorityLabel?: string;
+          title: string;
+          addedToCycleAt?: string;
+          branchName?: string;
+          createdAt: string;
+          completedAt?: string;
+          cancelledAt?: string;
+          estimate?: number;
+          labelIds: string[];
+          snoozedUntil?: string;
+          startedAt?: string;
+          updatedAt: string;
+          description?: string;
+        };
       };
     };
   };
@@ -1153,6 +1156,22 @@ export interface BitlerServer {
       output: {
         kind: string;
       };
+    };
+    "config.value-changed": {
+      input: {
+        kinds?: string[];
+      };
+      output: {
+        kind: string;
+        value: {
+          from?: unknown;
+          to?: unknown;
+        };
+      };
+    };
+    "models.updated": {
+      input: {};
+      output: {};
     };
     "todos.updated": {
       input: {
@@ -1257,6 +1276,7 @@ export interface BitlerServer {
               title?: string;
               description?: string;
               agent?: string;
+              model?: string;
               messages: {
                 role: "user" | "assistant" | "system";
                 content: string;

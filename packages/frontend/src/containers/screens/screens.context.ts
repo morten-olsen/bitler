@@ -1,5 +1,12 @@
 import EventEmitter from 'eventemitter3';
-import { ComponentType, ReactNode, createContext } from 'react';
+import { ComponentProps, ComponentType, createContext } from 'react';
+
+import { Conversation } from '../conversation/conversation.js';
+import { Conversations } from '../conversations/conversations.js';
+import { Capabilities } from '../capabilites/capabilites.js';
+import { Capability } from '../capability/capability.js';
+import { Configs } from '../configs/configs.js';
+import { Config } from '../config/config.js';
 
 type ScreenState<TProps> = {
   props: TProps;
@@ -14,7 +21,8 @@ type ScreenShowOptions<TProps> = ScreenState<TProps> & {
 type Screen = {
   id: string;
   title: string;
-  node: ReactNode;
+  component: keyof AvailableScreens;
+  props: any;
 };
 
 type ScreenEvents = {
@@ -26,14 +34,30 @@ type ScreenContextValues = {
   selected?: string;
   setSelected: (id: string) => void;
   close: (id: string) => void;
-  show: <TProps>(component: ComponentType<TProps>, options: ScreenShowOptions<TProps>) => void;
+  show: <TKey extends keyof AvailableScreens>(
+    component: TKey,
+    options: ScreenShowOptions<ComponentProps<AvailableScreens[TKey]>>,
+  ) => void;
   setTitle: (id: string, title: string) => void;
 };
+
+const availableScreens = {
+  conversation: Conversation,
+  conversations: Conversations,
+  capabilities: Capabilities,
+  capability: Capability,
+  configs: Configs,
+  config: Config,
+} satisfies Record<string, ComponentType<any>>;
+
+type AvailableScreens = typeof availableScreens;
 
 const ScreensContext = createContext<ScreenContextValues | undefined>(undefined);
 
 export {
   ScreensContext,
+  availableScreens,
+  type AvailableScreens,
   type Screen,
   type ScreenShowOptions,
   type ScreenState,

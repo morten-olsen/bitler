@@ -1,19 +1,27 @@
-import React, { ComponentType, ReactNode, useCallback, useMemo, useState } from 'react';
+import React, { ComponentProps, ComponentType, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { nanoid } from 'nanoid';
-import { Screen, ScreenEvents, ScreenShowOptions, ScreensContext } from './screens.context.js';
+import { AvailableScreens, Screen, ScreenEvents, ScreenShowOptions, ScreensContext } from './screens.context.js';
 import EventEmitter from 'eventemitter3';
 
 type ScreensProviderProps = {
   children: ReactNode;
 };
 
+const getScreensState = () => {
+  const screens = localStorage.getItem('_screens');
+  return screens ? JSON.parse(screens) : [];
+};
+
 const ScreensProvider = ({ children }: ScreensProviderProps) => {
-  const [screens, setScreens] = useState<Screen[]>([]);
-  const [selected, setSelected] = useState<string>();
+  const [screens, setScreens] = useState<Screen[]>(getScreensState);
+  const [selected, setSelected] = useState(localStorage.getItem('_selected_screen') || undefined);
   const emitter = useMemo(() => new EventEmitter<ScreenEvents>(), []);
 
   const show = useCallback(
-    (component: ComponentType<any>, options: ScreenShowOptions<any>) => {
+    <TKey extends keyof AvailableScreens>(
+      component: TKey,
+      options: ScreenShowOptions<ComponentProps<AvailableScreens[TKey]>>,
+    ) => {
       const id = options.id || nanoid();
       setScreens((current) => {
         const has = current.find((screen) => screen.id === id);
@@ -25,7 +33,8 @@ const ScreensProvider = ({ children }: ScreensProviderProps) => {
           {
             id,
             title: options.title,
-            node: React.createElement(component, options.props),
+            component,
+            props: options.props,
           },
         ];
       });
@@ -36,6 +45,18 @@ const ScreensProvider = ({ children }: ScreensProviderProps) => {
     },
     [emitter],
   );
+
+  useEffect(() => {
+    localStorage.setItem('_screens', JSON.stringify(screens));
+  }, [screens]);
+
+  useEffect(() => {
+    if (!selected) {
+      localStorage.removeItem('_selected_screen');
+    } else {
+      localStorage.setItem('_selected_screen', selected);
+    }
+  }, [selected]);
 
   const close = useCallback((id: string) => {
     setScreens((current) => current.filter((screen) => screen.id !== id));

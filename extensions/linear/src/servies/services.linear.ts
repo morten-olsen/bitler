@@ -1,28 +1,34 @@
-import { Container } from '@bitlerjs/core';
-import { LinearClient, User } from '@linear/sdk';
+import { Configs, Container } from '@bitlerjs/core';
+import { LinearClient } from '@linear/sdk';
+
+import { linearConfig } from '../configs/configs.js';
 
 class LinearService {
   #container: Container;
-  #api: LinearClient;
-  #userPromise?: Promise<User>;
+  #setupPromise?: Promise<LinearClient>;
 
   constructor(container: Container) {
     this.#container = container;
-    this.#api = new LinearClient({
-      apiKey: process.env.LINEAR_API_KEY,
-    });
   }
 
-  public get api() {
-    return this.#api;
-  }
+  #setup = async () => {
+    const configs = this.#container.get(Configs);
+    const config = await configs.getValue(linearConfig);
 
-  public getUser = async (): Promise<User> => {
-    if (!this.#userPromise) {
-      this.#userPromise = this.#api.viewer;
+    if (!config || !config.enabled) {
+      throw new Error('Linear extension is not enabled');
     }
 
-    return this.#userPromise;
+    return new LinearClient({
+      apiKey: config.apiKey,
+    });
+  };
+
+  public getApi = async () => {
+    if (!this.#setupPromise) {
+      this.#setupPromise = this.#setup();
+    }
+    return this.#setupPromise;
   };
 }
 

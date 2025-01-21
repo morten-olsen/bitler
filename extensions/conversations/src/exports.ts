@@ -1,4 +1,5 @@
-import { Capabilities, createExtension, Events } from '@bitlerjs/core';
+import { Capabilities, Configs, createExtension, Events } from '@bitlerjs/core';
+import { modelsConfig } from '@bitlerjs/llm';
 
 import { promptCapability } from './capabilities/capabilities.prompt.js';
 import { conversationSubscriptionEvent } from './events/events.updated.js';
@@ -10,18 +11,32 @@ import { setSettingsCapability } from './capabilities/capabilities.set-settings.
 
 const conversations = createExtension({
   setup: async ({ container }) => {
+    const configsService = container.get(Configs);
     const capabilitiesService = container.get(Capabilities);
-    capabilitiesService.register([
-      promptCapability,
-      syncConversationCapability,
-      removeMessagesCapability,
-      retryMessageCapability,
-      listConversationsCapability,
-      setSettingsCapability,
-    ]);
-
     const eventsService = container.get(Events);
     eventsService.register([conversationSubscriptionEvent]);
+
+    configsService.use(modelsConfig, (config) => {
+      if (!config) {
+        capabilitiesService.unregister([
+          promptCapability.kind,
+          syncConversationCapability.kind,
+          removeMessagesCapability.kind,
+          retryMessageCapability.kind,
+          listConversationsCapability.kind,
+          setSettingsCapability.kind,
+        ]);
+      } else {
+        capabilitiesService.register([
+          promptCapability,
+          syncConversationCapability,
+          removeMessagesCapability,
+          retryMessageCapability,
+          listConversationsCapability,
+          setSettingsCapability,
+        ]);
+      }
+    });
   },
 });
 
