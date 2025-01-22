@@ -55,6 +55,7 @@ class WebSocketClient {
                 reply({
                     message: error instanceof Error ? error.message : String(error),
                 }, false);
+                console.warn('Error processing message', error);
                 return;
             }
         }

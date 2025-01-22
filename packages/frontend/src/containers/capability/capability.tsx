@@ -1,5 +1,4 @@
 import { useCapability, useRunCapabilityQuery } from '@bitlerjs/react';
-import { JsonSchemaViewer } from '@stoplight/json-schema-viewer';
 import { Button, Divider } from '@nextui-org/react';
 import React, { useCallback, useState } from 'react';
 import YAML from 'yaml';
@@ -7,6 +6,8 @@ import { Editor } from '../../components/editor/editor.js';
 import { Page } from '../../components/layouts/page/page.js';
 import { Play } from 'lucide-react';
 import { useAddToast } from '../toasts/toasts.hooks.js';
+import { JsonSchema } from '../../components/json-schema/json-schema.js';
+import { JSONSchema4Type } from 'json-schema';
 
 type CapabilityProps = {
   kind: string;
@@ -52,17 +53,12 @@ const Capability = ({ kind }: CapabilityProps) => {
         <div className="h-full flex gap-8 p-8">
           <div className="flex-1 flex flex-col gap-4">
             <div className="flex-1 overflow-y-auto">
-              {!!details?.capability?.input && (
-                <JsonSchemaViewer key={`input-${kind}`} schema={details.capability.input} />
-              )}
+              {!!details?.capability?.input && <JsonSchema schema={details.capability.input as JSONSchema4Type} />}
             </div>
             <div className="flex-1">
-              {!!details?.capability?.output && (
-                <JsonSchemaViewer key={`output-${kind}`} schema={details.capability.output} />
-              )}
+              {!!details?.capability?.output && <JsonSchema schema={details.capability.output as JSONSchema4Type} />}
             </div>
           </div>
-          <Divider orientation="vertical" />
           <div className="flex-1 flex flex-col gap-4">
             <div className="flex-1">
               <Editor defaultLanguage="yaml" value={input} onChange={(e) => setInput(e || '')} />

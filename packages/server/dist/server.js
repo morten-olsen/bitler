@@ -38,6 +38,9 @@ class Server {
         await app.register(swaggerUi, {
             routePrefix: '/api/docs',
         });
+        app.get('/api/health', async () => {
+            return { status: 'ok' };
+        });
         app.addHook('onRequest', async (request) => {
             request.container = this.#container;
             request.session = new Session();
@@ -57,6 +60,9 @@ class Server {
                     request.log.error(error);
                     throw httpErrors.unauthorized('Unauthorized');
                 }
+            });
+            app.get('/api/whoami', async () => {
+                return {};
             });
             await app.register(capabilitiesPlugin, { prefix: '/api/capabilities' });
             await app.register(filesPlugin, { prefix: '/api/files' });

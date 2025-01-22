@@ -29,6 +29,7 @@
     "@bitlerjs/openai": "workspace:*",
     "@bitlerjs/gemini": "workspace:*",
     "@bitlerjs/ollama": "workspace:*",
+    "@bitlerjs/calendar": "workspace:*",
     "@bitlerjs/core": "workspace:*",
     "@bitlerjs/frontend": "workspace:*",
     "@bitlerjs/game": "workspace:*",

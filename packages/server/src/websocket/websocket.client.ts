@@ -113,6 +113,7 @@ class WebSocketClient {
           },
           false,
         );
+        console.warn('Error processing message', error);
         return;
       }
     } catch (error) {

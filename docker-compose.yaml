@@ -1,22 +1,30 @@
 name: bitler
 services:
   app:
-    image: ghcr.io/morten-olsen/bitler
+    image: ghcr.io/morten-olsen/bitler:main
     build:
       context: .
       args:
-        - NODE_AUTH_TOKEN=${NODE_AUTH_TOKEN:-none}
+        NODE_AUTH_TOKEN: ${NODE_AUTH_TOKEN:-none}
+        DOCKER_BUILDKIT: 1
+    depends_on:
+      - bitler-db
+    healthcheck:
+      test: 'wget --no-verbose --tries=1 --spider http://localhost:3000/api/health || exit 1'
+      interval: 60s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
     environment:
-      OPENAI_API_KEY: ${OPENAI_API_KEY}
-      HOMEASSISTANT_URL: ${HOMEASSISTANT_URL}
-      HOMEASSISTANT_TOKEN: ${HOMEASSISTANT_TOKEN}
-      LINEAR_API_KEY: ${LINEAR_API_KEY}
-      SIGNAL_HOST: ${SIGNAL_HOST}
-      SIGNAL_SECURE: ${SIGNAL_SECURE}
+      DB_TYPE: pg
+      DB_HOST: bitler-db
+      DB_USER: $PG_USER
+      DB_PASSWORD: $PG_PASSWORD
     ports:
       - 3000:3000
     networks:
       - loadbalancer
+      - bitler
     labels:
       - traefik.enable=true
       - traefik.http.routers.bitler.rule=Host(`bitler.$DOMAIN`)
@@ -27,8 +35,57 @@ services:
       - traefik.http.routers.bitler.entrypoints=websecure
       - traefik.http.services.bitler.loadbalancer.server.port=3000
     volumes:
-      - "$STORAGE/bitler2/data:/data"
+      - '$STORAGE/bitler3/data:/data'
+  bitler-db:
+    image: pgvector/pgvector:pg17
+    healthcheck:
+      test: [ 'CMD-SHELL', 'pg_isready', '-d', 'db_prod' ]
+      interval: 30s
+      timeout: 60s
+      retries: 5
+      start_period: 80s
+    environment:
+      POSTGRES_USER: $PG_USER
+      POSTGRES_PASSWORD: $PG_PASSWORD
+    volumes:
+      - $STORAGE/bitler/db-data:/var/lib/postgresql/data
+    networks:
+      - bitler
+  bitler-db-admin:
+    image: dpage/pgadmin4
+    restart: unless-stopped
+    container_name: bitler-db-admin
+    hostname: bitler-db-admin
+    healthcheck:
+      test: 'wget --no-verbose --tries=1 --spider http://localhost:80 || exit 1'
+      interval: 60s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@$DOMAIN
+      PGADMIN_DEFAULT_PASSWORD: $PG_PASSWORD
+    volumes:
+      - bitler-db-admin-data:/var/lib/pgadmin
+    networks:
+      - loadbalancer
+      - bitler
+    labels:
+      - traefik.enable=true
+      - traefik.http.routers.bitlerdbadmin.rule=Host(`bitler-db.$DOMAIN`)
+      - traefik.http.routers.bitlerdbadmin.tls=true
+      - traefik.http.routers.bitlerdbadmin.tls.domains[0].main=$DOMAIN
+      - traefik.http.routers.bitlerdbadmin.tls.domains[0].sans=*.$DOMAIN
+      - traefik.http.routers.bitlerdbadmin.tls.certresolver=letsencrypt
+      - traefik.http.routers.bitlerdbadmin.entrypoints=websecure
+      - traefik.http.services.bitlerdbadmin.loadbalancer.server.port=80
+    depends_on:
+      - bitler-db
+volumes:
+  bitler-db-admin-data:
 networks:
+  bitler:
+    name: bitler
   loadbalancer:
     name: loadbalancer
     external: true

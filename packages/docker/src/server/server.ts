@@ -21,6 +21,7 @@ import { Server } from '@bitlerjs/server';
 import { openai } from '@bitlerjs/openai';
 import { ollama } from '@bitlerjs/ollama';
 import { gemini } from '@bitlerjs/gemini';
+import { calendars } from '@bitlerjs/calendar';
 
 import { AuthService } from '../auth/auth.service.js';
 import { createToken } from '../auth/auth.capabilities.js';
@@ -39,6 +40,7 @@ await extensionsService.register([
   todos,
   aws,
   openai,
+  calendars,
   ollama,
   gemini,
   notifications,

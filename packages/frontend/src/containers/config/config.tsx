@@ -1,12 +1,13 @@
 import { useEventEffect, useRunCapabilityMutation, useRunCapabilityQuery } from '@bitlerjs/react';
 import { Button } from '@nextui-org/react';
 import React, { useCallback, useEffect, useState } from 'react';
-import { JsonSchemaViewer } from '@stoplight/json-schema-viewer';
 import YAML from 'yaml';
 import { Editor } from '../../components/editor/editor.js';
 import { Page } from '../../components/layouts/page/page.js';
 import { Play } from 'lucide-react';
 import { useAddToast } from '../toasts/toasts.hooks.js';
+import { JsonSchema } from '../../components/json-schema/json-schema.js';
+import { JSONSchema4Type } from 'json-schema';
 
 type CapabilityProps = {
   kind: string;
@@ -73,15 +74,22 @@ const Config = ({ kind }: CapabilityProps) => {
         <div className="h-full flex gap-4">
           <div className="flex-1 flex flex-col gap-4">
             <div className="flex-1">
-              {!!details?.config?.schema && <JsonSchemaViewer schema={details?.config.schema} />}
+              {!!details?.config?.schema && <JsonSchema schema={details?.config.schema as JSONSchema4Type} />}
             </div>
             <div className="flex-1">
-              <Editor height="100%" defaultLanguage="yaml" value={input} onChange={(e) => setInput(e || '')} />
-            </div>
-            <div className="flex gap-4 justify-end">
-              <Button color="primary" isIconOnly onPress={run} isLoading={setMutation.isLoading}>
-                <Play />
-              </Button>
+              <Editor
+                height="100%"
+                defaultLanguage="yaml"
+                value={input}
+                onChange={(e) => setInput(e || '')}
+                footer={
+                  <div className="flex w-full gap-4 justify-end">
+                    <Button color="primary" isIconOnly onPress={run} isLoading={setMutation.isLoading}>
+                      <Play />
+                    </Button>
+                  </div>
+                }
+              />
             </div>
           </div>
         </div>
