@@ -1,6 +1,8 @@
 import { Capabilities } from '../capabilities/capabilities.js';
 import { Events } from '../events/events.js';
+import { ContextItems } from '../contexts/contexts.js';
 import { createExtension } from '../extensions/extensions.js';
+import { currentTimeContext } from '../time/time.context.js';
 
 import { describeActionRequestsCapability, listActionRequestsCapability } from './action-requests.js';
 import {
@@ -28,6 +30,9 @@ import { capabilitiesUpdatedEvent } from './events/capabilites.js';
 const builtIn = createExtension({
   setup: async ({ container }) => {
     const capabilitiesService = container.get(Capabilities);
+    const contextItemsService = container.get(ContextItems);
+
+    contextItemsService.register([currentTimeContext]);
 
     capabilitiesService.register([
       listActionRequestsCapability,

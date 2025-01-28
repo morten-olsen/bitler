@@ -110,7 +110,7 @@ class Capabilities extends EventEmitter<CapabilitiesEvents> {
         session: options.session,
       }));
     const result = await options.capability.handler({
-      input: options.input,
+      input: options.capability.input.parse(options.input),
       container: this.#container,
       session: options.session,
       context,

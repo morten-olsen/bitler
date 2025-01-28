@@ -1,7 +1,6 @@
-import { createCapability, z } from '@bitlerjs/core';
+import { createCapability, currentTimeContextSetup, z } from '@bitlerjs/core';
 
 import { TimerService } from '../service/service.js';
-import { currentTimeContextSetup } from '../context/context.js';
 
 const removeTimer = createCapability({
   kind: 'timers.remove',
@@ -17,7 +16,6 @@ const removeTimer = createCapability({
   }),
   handler: async ({ container, input }) => {
     const service = container.get(TimerService);
-    const timer = service.get(input.id);
     await service.removeTimer(input.id);
     return { success: true };
   },

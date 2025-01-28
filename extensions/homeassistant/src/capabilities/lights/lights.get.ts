@@ -3,7 +3,8 @@ import { createCapability, z } from '@bitlerjs/core';
 import { HomeassistantService } from '../../services/services.ha.js';
 import { HomeAssistantContext, roomsContextSetup } from '../../context/rooms.js';
 
-const orNull = <T extends z.ZodType<any>>(type: T) => z.union([type, z.null()]);
+const orNull = <T extends z.ZodType>(type: T) => z.union([type, z.null()]);
+
 const lightSchema = z.object({
   brightness: orNull(z.number()).optional().describe('The brightness of the light between 0 and 255'),
   color_temp_kelvin: orNull(z.number()).optional(),
@@ -28,7 +29,7 @@ const get = createCapability({
     rooms: z.array(
       z.object({
         id: z.string(),
-        all: lightSchema,
+        all: lightSchema.optional(),
       }),
     ),
   }),
@@ -47,7 +48,7 @@ const get = createCapability({
       const allEntity = roomInfo.lightGroup ? ha.entities[roomInfo.lightGroup] : undefined;
       const room = {
         id: roomInfo.id,
-        all: allEntity?.attributes as any,
+        all: allEntity && lightSchema.parse(allEntity.attributes),
       };
       return [room];
     });

@@ -16,6 +16,7 @@ const createResolvable = <T>() => {
     resolve = res;
     reject = rej;
   });
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   return { promise, resolve: resolve!, reject: reject! };
 };
 
@@ -37,7 +38,7 @@ class HomeassistantService {
   #container: Container;
   #connectionPromise?: ReturnType<typeof createConnection>;
   #entities: HassEntities = {};
-  #ready = createResolvable<void>();
+  #ready = createResolvable<undefined>();
 
   constructor(container: Container) {
     this.#container = container;
@@ -53,7 +54,7 @@ class HomeassistantService {
     const connection = await createConnection({ auth });
     subscribeEntities(connection, (entities) => {
       this.#entities = entities;
-      this.#ready.resolve();
+      this.#ready.resolve(undefined);
     });
     return connection;
   };

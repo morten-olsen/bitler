@@ -7,7 +7,7 @@ const agentSchema = z.object({
   description: z.string().optional(),
   model: z.string().optional(),
   systemPrompt: z.string().optional(),
-  discoverTasks: z.number().optional(),
+  discoverCapabilities: z.number().optional(),
   discoverAgents: z.number().optional(),
   capabilities: z.array(z.string()).optional(),
   agents: z.array(z.string()).optional(),

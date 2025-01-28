@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@bitlerjs/aws": "workspace:*",
+    "@bitlerjs/typescript": "workspace:*",
     "@bitlerjs/conversations": "workspace:*",
     "@bitlerjs/openai": "workspace:*",
     "@bitlerjs/gemini": "workspace:*",

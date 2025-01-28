@@ -7,7 +7,7 @@ type ConfigItemValidateOptions<TSchema extends ZodSchema> = {
   container: Container;
 };
 
-type ConfigItem<TSchema extends ZodSchema> = {
+type ConfigItem<TSchema extends ZodSchema = ZodSchema> = {
   kind: string;
   name: string;
   group?: string;

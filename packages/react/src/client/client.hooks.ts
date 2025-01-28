@@ -30,10 +30,6 @@ const useModels = () => {
   return context.models;
 };
 
-type UserRunCapabilityMutationOptions = {
-  mutationKey?: string[];
-};
-
 const useRunCapabilityMutation = <
   TServer extends ServerSchema = DefaultServer,
   TKind extends keyof TServer['capabilities'] = keyof TServer['capabilities'],
@@ -62,7 +58,7 @@ const useEventEffect = <
   kind: TKind,
   input: EventInput<TServer, TKind>,
   handler: (output: EventOutput<TServer, TKind>) => void,
-  deps: any[] = [],
+  deps: unknown[] = [],
 ) => {
   const { client } = useClientContext<TServer>();
   const [error, setError] = useState<unknown>();
@@ -107,10 +103,10 @@ const useRunCapabilityQuery = <
   });
 };
 
-const useCapability = (kind: string) => {
+const useCapability = (kind: keyof DefaultServer['capabilities']) => {
   const capabilities = useCapabilities();
   const definition = capabilities.find((capability) => capability.kind === kind);
-  const run = useRunCapabilityMutation(kind as any);
+  const run = useRunCapabilityMutation(kind);
   return {
     ...run,
     ...definition,

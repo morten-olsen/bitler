@@ -1,5 +1,7 @@
 import { cos_sim } from '@huggingface/transformers';
-import { Container, EventEmitter, FeatureExtractor, Vector } from '@bitlerjs/core';
+import { Container, createId, Databases, EventEmitter, FeatureExtractor, Vector } from '@bitlerjs/core';
+
+import { agentsDBConfig } from '../../databases/databases.js';
 
 import { Agent } from './agents.schemas.js';
 
@@ -55,6 +57,64 @@ class Agents extends EventEmitter<AgentsEvents> {
     return kinds.map((kind) => {
       return array.find((agent) => agent.kind === kind);
     });
+  };
+
+  public loadAgents = async () => {
+    const dbs = this.#container.get(Databases);
+    const db = await dbs.get(agentsDBConfig);
+
+    const agents = await db('agents');
+    const agentCapabilities = await db('agentCapabilities');
+    const agentAgents = await db('agentAgents');
+
+    this.register(
+      agents.map((agent) => ({
+        ...agent,
+        capabilities: agentCapabilities
+          .filter((capability) => capability.agentKind === agent.kind)
+          .map((capability) => capability.capabilityKind),
+        agents: agentAgents.filter((a) => a.agentKind === agent.kind).map((a) => a.agentAgentKind),
+      })),
+    );
+  };
+
+  public setCustomAgent = async (agent: Agent) => {
+    const dbs = this.#container.get(Databases);
+    const db = await dbs.get(agentsDBConfig);
+    await db.transaction(async (trx) => {
+      await trx('agents')
+        .insert({
+          kind: agent.kind,
+          name: agent.name,
+          group: agent.group,
+          description: agent.description,
+          discoverCapabilities: agent.discoverCapabilities,
+          discoverAgents: agent.discoverAgents,
+        })
+        .onConflict(['kind'])
+        .merge();
+      await db('agentCapabilities').where('agentKind', agent.kind).delete();
+      await db('agentAgents').where('agentKind', agent.kind).delete();
+      if (agent.capabilities?.length) {
+        await db('agentCapabilities').insert(
+          agent.capabilities.map((capability) => ({
+            agentKind: agent.kind,
+            capabilityKind: capability,
+          })),
+        );
+      }
+      if (agent.agents?.length) {
+        await db('agentAgents').insert(
+          agent.agents.map((agentAgent) => ({
+            agentKind: agent.kind,
+            agentAgentKind: agentAgent,
+          })),
+        );
+      }
+    });
+
+    this.unregister([agent.kind]);
+    this.register([agent]);
   };
 
   public find = async (query: string, limit = 5) => {

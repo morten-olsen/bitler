@@ -19,11 +19,11 @@ type CapabilityHandler<TInput extends ZodSchema, TOutput extends ZodSchema> = (
   options: CapabilityHandlerOptions<TInput>,
 ) => Promise<z.infer<TOutput>>;
 
-type Capability<TInput extends ZodSchema, TOutput extends ZodSchema> = {
+type Capability<TInput extends ZodSchema = ZodSchema, TOutput extends ZodSchema = ZodSchema> = {
   kind: string;
   name: string;
   group: string;
-  configs?: ConfigItem<any>[];
+  configs?: ConfigItem[];
   description: string;
   agentDescription?: string;
   setup?: ContextSetup[];

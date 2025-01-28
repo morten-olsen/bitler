@@ -12,6 +12,7 @@ const wsPlugin: FastifyPluginAsyncZod<Options> = async (app, options) => {
   await app.register(fastifyWebsocket);
 
   app.get('/api/ws', { websocket: true }, async (socket, req) => {
+    console.log('ws');
     await WebSocketClient.setup({
       socket,
       container: req.container,

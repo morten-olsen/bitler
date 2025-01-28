@@ -16,9 +16,11 @@ type ConversationCompleteOptions = {
 const removeNullValues = <T extends Record<string, unknown>>(
   obj: T,
 ): {
+  [K in keyof T]: NonNullable<T[K]>;
+} => {
+  return Object.fromEntries(Object.entries(obj).filter(([, value]) => value !== null)) as {
     [K in keyof T]: NonNullable<T[K]>;
-  } => {
-  return Object.fromEntries(Object.entries(obj).filter(([, value]) => value !== null)) as any;
+  };
 };
 
 class Conversation {

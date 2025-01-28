@@ -12,6 +12,7 @@
   },
   "devDependencies": {
     "@bitlerjs/configs": "workspace:*",
+    "@types/micromatch": "^4.0.9",
     "@types/node": "^22.10.3",
     "typescript": "^5.7.2"
   },
@@ -31,6 +32,7 @@
     "fastify-type-provider-zod": "^4.0.2",
     "knex": "^3.1.0",
     "knex-pglite": "^0.11.0",
+    "micromatch": "^4.0.8",
     "nanoid": "^5.0.9",
     "openai": "^4.77.0",
     "pg": "^8.13.1",

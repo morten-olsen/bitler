@@ -1,4 +1,4 @@
-import React, { ComponentProps, ComponentType, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { ComponentProps, ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { nanoid } from 'nanoid';
 import { AvailableScreens, Screen, ScreenEvents, ScreenShowOptions, ScreensContext } from './screens.context.js';
 import EventEmitter from 'eventemitter3';

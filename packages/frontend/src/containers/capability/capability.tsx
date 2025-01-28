@@ -1,5 +1,5 @@
-import { useCapability, useRunCapabilityQuery } from '@bitlerjs/react';
-import { Button, Divider } from '@nextui-org/react';
+import { DefaultServer, useCapability, useRunCapabilityQuery } from '@bitlerjs/react';
+import { Button } from '@nextui-org/react';
 import React, { useCallback, useState } from 'react';
 import YAML from 'yaml';
 import { Editor } from '../../components/editor/editor.js';
@@ -10,7 +10,7 @@ import { JsonSchema } from '../../components/json-schema/json-schema.js';
 import { JSONSchema4Type } from 'json-schema';
 
 type CapabilityProps = {
-  kind: string;
+  kind: keyof DefaultServer['capabilities'];
 };
 
 const Capability = ({ kind }: CapabilityProps) => {
@@ -31,7 +31,7 @@ const Capability = ({ kind }: CapabilityProps) => {
       onError: (err) => {
         console.error('Error', err);
         addToast({
-          title: 'Could not update config',
+          title: 'Error while running capability',
           type: 'error',
           description: String(err),
           timeout: 5000,
@@ -39,7 +39,7 @@ const Capability = ({ kind }: CapabilityProps) => {
       },
       onSuccess: () => {
         addToast({
-          title: 'Config updated',
+          title: 'Success',
           type: 'success',
           timeout: 3000,
         });

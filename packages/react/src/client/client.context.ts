@@ -15,7 +15,7 @@ const useClientContext = <TServerSchema extends ServerSchema = DefaultServer>():
   if (!context) {
     throw new Error('useClientContext must be used within a ClientProvider');
   }
-  return context as any as ClientContextValue<TServerSchema>;
+  return context as unknown as ClientContextValue<TServerSchema>;
 };
 
 export { ClientContext, useClientContext };

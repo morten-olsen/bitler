@@ -1,7 +1,6 @@
-import { createCapability, z } from '@bitlerjs/core';
+import { createCapability, currentTimeContextSetup, z } from '@bitlerjs/core';
 
 import { TimerService, timerSchema } from '../service/service.js';
-import { currentTimeContextSetup } from '../context/context.js';
 
 const listTimers = createCapability({
   kind: 'timers.list',

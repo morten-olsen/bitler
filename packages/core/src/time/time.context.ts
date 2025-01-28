@@ -1,4 +1,6 @@
-import { createContextItem, createContextSetup, z } from '@bitlerjs/core';
+import { z } from 'zod';
+
+import { createContextItem, createContextSetup } from '../contexts/contexts.js';
 
 const currentTimeContext = createContextItem({
   kind: `timers.current-time`,

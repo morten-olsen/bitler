@@ -35,6 +35,7 @@ const completionResultSchema = z.object({
     )
     .optional(),
   context: z.record(z.unknown()).optional(),
+  usedCapabilities: z.array(z.string()),
   files: z
     .array(
       z.object({

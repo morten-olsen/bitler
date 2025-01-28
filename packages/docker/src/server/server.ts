@@ -22,6 +22,7 @@ import { openai } from '@bitlerjs/openai';
 import { ollama } from '@bitlerjs/ollama';
 import { gemini } from '@bitlerjs/gemini';
 import { calendars } from '@bitlerjs/calendar';
+import { typescript } from '@bitlerjs/typescript';
 
 import { AuthService } from '../auth/auth.service.js';
 import { createToken } from '../auth/auth.capabilities.js';
@@ -34,13 +35,14 @@ process.on('unhandledRejection', (error) => {
 const capabilitiesService = container.get(Capabilities);
 capabilitiesService.register([createToken]);
 const extensionsService = container.get(Extensions);
-await extensionsService.register([
+extensionsService.register([
   builtIn,
   llm,
   todos,
   aws,
   openai,
   calendars,
+  typescript,
   ollama,
   gemini,
   notifications,

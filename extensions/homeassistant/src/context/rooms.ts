@@ -31,8 +31,8 @@ const roomsContextSetup = createContextSetup({
     const roomRows = await db.select('*').from('rooms');
     const roomNameRows = await db.select('*').from('room_names');
 
-    const rooms = roomRows.map((room: any) => {
-      const names = roomNameRows.filter((name: any) => name.room_id === room.id).map((name) => name.name);
+    const rooms = roomRows.map((room) => {
+      const names = roomNameRows.filter((name) => name.room_id === room.id).map((name) => name.name);
       return {
         id: room.id,
         mediaPlayers: room.mediaPlayers,

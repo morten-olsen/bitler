@@ -40,16 +40,17 @@ const MobileHeader = () => {
               selectedKeys={selected ? [selected] : []}
               selectionMode="single"
               isVirtualized={false}
-              onSelectionChange={
-                ((keys: Set<string>) => {
-                  const key = keys.values().next().value;
-                  if (!key) {
-                    return;
-                  }
-                  setSelected(key);
-                  screenDisclosure.onClose();
-                }) as any
-              }
+              onSelectionChange={(keys) => {
+                if (!(keys instanceof Set)) {
+                  return;
+                }
+                const key = keys.values().next().value;
+                if (!key) {
+                  return;
+                }
+                setSelected(String(key));
+                screenDisclosure.onClose();
+              }}
             >
               {(screen) => (
                 <ListboxItem

@@ -29,6 +29,7 @@ type ConvertContext<TContext> = {
   context: TContext;
   actionRequests?: ActionRequestInstance;
   session: Session;
+  usedCapabilities: Set<string>;
 };
 
 class Completion {
@@ -38,7 +39,7 @@ class Completion {
     this.#container = container;
   }
 
-  #convertCapabilities = (capabilities: Capability<any, any>[], options: ConvertContext<Context>) => {
+  #convertCapabilities = (capabilities: Capability[], options: ConvertContext<Context>) => {
     const capabilityService = this.#container.get(Capabilities);
     return capabilities.map((capability) => ({
       type: 'function',
@@ -46,6 +47,7 @@ class Completion {
         name: sanitizeString(capability.kind),
         function: async (input: unknown) => {
           try {
+            options.usedCapabilities.add(capability.kind);
             const params = capability.input.parse(input);
             const result = await capabilityService.run({
               capability,
@@ -55,14 +57,14 @@ class Completion {
               session: options.session,
             });
             return result;
-          } catch (e: any) {
+          } catch (e: unknown) {
             console.error(e);
-            return `The call failed with error: ${e.message}`;
+            return `The call failed with error: ${e instanceof Error ? e.message : String(e)}`;
           }
         },
         parse: JSON.parse,
         description: capability.agentDescription || capability.description || capability.kind,
-        parameters: getJsonSchema(capability.input) as any,
+        parameters: getJsonSchema(capability.input),
       },
     }));
   };
@@ -79,6 +81,7 @@ class Completion {
             context: context.context,
             actionRequests: context.actionRequests,
             session: context.session,
+            usedCapabilities: context.usedCapabilities,
           });
           return result.response;
         },
@@ -88,7 +91,7 @@ class Completion {
           z.object({
             prompt: z.string(),
           }),
-        ) as any,
+        ),
       },
     }));
   };
@@ -148,8 +151,10 @@ class Completion {
       schema?: TSchema;
       actionRequests?: ActionRequestInstance;
       session?: Session;
+      usedCapabilities?: Set<string>;
     },
   ): Promise<CompletionResult> => {
+    const usedCapabilities = options.usedCapabilities || new Set<string>();
     const modelService = this.#container.get(Models);
     const contextService = this.#container.get(Contexts);
     const actionRequestService = this.#container.get(ActionRequests);
@@ -182,11 +187,13 @@ class Completion {
         context,
         actionRequests,
         session,
+        usedCapabilities,
       }),
       ...this.#convertAgents(excludeUndefined(agents), {
         context: options.context,
         actionRequests,
         session,
+        usedCapabilities,
       }),
     ];
     const dialog = this.#getDialog(options, context);
@@ -228,7 +235,8 @@ class Completion {
     const response = await getResponse();
 
     return {
-      response: response as any,
+      usedCapabilities: Array.from(usedCapabilities),
+      response,
       context: context.toJSON(),
       actionRequests: actionRequests.toJSON(),
     };

@@ -11,7 +11,7 @@ type UseKeyboardOptions = {
   action: () => void;
 };
 
-const useKeyboard = (options: UseKeyboardOptions, deps: any[] = []) => {
+const useKeyboard = (options: UseKeyboardOptions, deps: unknown[] = []) => {
   const { key, shiftKey = false, ctrlKey = false, altKey = false, metaKey = false, action } = options;
   const isActive = useScreenActive();
   useEffect(() => {
