@@ -13,9 +13,10 @@ import {
   Textarea,
   type useDisclosure,
 } from '@nextui-org/react';
-import { useAgents, useCapabilities, useConversationContext, useModels } from '@bitlerjs/react';
+import { useCapabilities, useConversationContext } from '@bitlerjs/react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { Tagbar } from '../../components/base/tagbar/tagbar';
+import { useAgents, useModels } from '../../hooks/bitler';
 
 type ConversationSettingsProps = ReturnType<typeof useDisclosure>;
 type SettingsType = Parameters<ReturnType<typeof useConversationContext>['setSettings']>[0];
@@ -61,9 +62,9 @@ const ConversationSettings = (props: ConversationSettingsProps) => {
 
   const reset = useCallback(() => form.reset(actualSettings), [actualSettings]);
 
-  const availableAgents = useAgents();
-  const availableCapabilities = useCapabilities();
-  const availableModels = useModels();
+  const { data: { agents: availableAgents = [] } = {} } = useAgents();
+  const { capabilities: availableCapabilities } = useCapabilities();
+  const { data: { models: availableModels = [] } = {} } = useModels();
 
   form.register('title');
   form.register('description');

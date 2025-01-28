@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import micromatch from 'micromatch';
 
-import { createSessionItem } from '../exports.js';
+import { createSessionItem } from '../session/session.js';
 
 const permissionsSchema = z.object({
   type: z.enum(['allow', 'deny']),

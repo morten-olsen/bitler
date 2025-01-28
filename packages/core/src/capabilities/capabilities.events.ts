@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { createEvent } from '../../events/events.js';
+import { createEvent } from '../events/events.js';
 
 const capabilitiesUpdatedEvent = createEvent({
   kind: 'capabilities.updated',

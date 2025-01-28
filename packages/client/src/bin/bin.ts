@@ -8,9 +8,9 @@ const buildSchemaCommand = schemaCommand.command('generate');
 buildSchemaCommand.argument('<input>', 'base URL of server');
 buildSchemaCommand.argument('<output>', 'output file');
 buildSchemaCommand.action(async (input, output) => {
-  const { buildTypes } = await import('./schemas/schemas.js');
+  const { buildTypesFromUrl } = await import('./schemas/schemas.js');
   const location = resolve(output);
-  const types = await buildTypes(input);
+  const types = await buildTypesFromUrl(input);
   const dir = dirname(location);
   await mkdir(dir, { recursive: true });
   await writeFile(location, types);

@@ -1,4 +1,3 @@
-import { DefaultServer, useCapability, useRunCapabilityQuery } from '@bitlerjs/react';
 import { Button } from '@nextui-org/react';
 import React, { useCallback, useState } from 'react';
 import YAML from 'yaml';
@@ -8,21 +7,20 @@ import { Play } from 'lucide-react';
 import { useAddToast } from '../toasts/toasts.hooks.js';
 import { JsonSchema } from '../../components/json-schema/json-schema.js';
 import { JSONSchema4Type } from 'json-schema';
+import { useCapabilityMutation, useCapabilityQuery } from '@bitlerjs/react';
 
 type CapabilityProps = {
-  kind: keyof DefaultServer['capabilities'];
+  kind: string;
 };
 
 const Capability = ({ kind }: CapabilityProps) => {
-  const capability = useCapability(kind);
+  const capability = useCapabilityMutation({ kind });
   const addToast = useAddToast();
-  const { data: details } = useRunCapabilityQuery(
-    'capabilities.describe',
-    { kind },
-    {
-      queryKey: ['capabilities.describe', kind],
-    },
-  );
+  const { data: details } = useCapabilityQuery({
+    kind: 'capabilities.describe',
+    input: { kind },
+    queryKey: ['capabilities.describe', kind],
+  });
   const [input, setInput] = useState('{}');
 
   const run = useCallback(async () => {
@@ -68,8 +66,8 @@ const Capability = ({ kind }: CapabilityProps) => {
                 color="primary"
                 startContent={<Play />}
                 onPress={run}
-                isLoading={capability.isLoading}
-                disabled={capability.isLoading}
+                isLoading={capability.isPending}
+                disabled={capability.isPending}
               >
                 Run
               </Button>

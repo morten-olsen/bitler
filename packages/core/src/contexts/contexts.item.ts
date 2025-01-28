@@ -1,6 +1,6 @@
-import { ZodSchema } from 'zod';
+import { ZodAny, ZodSchema } from 'zod';
 
-type ContextItem<TSchema extends ZodSchema> = {
+type ContextItem<TSchema extends ZodSchema = any> = {
   kind: string;
   name: string;
   description: string;

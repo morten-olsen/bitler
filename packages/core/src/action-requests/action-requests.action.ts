@@ -1,6 +1,6 @@
-import { ZodSchema } from 'zod';
+import { ZodAny, ZodSchema } from 'zod';
 
-type ActionRequest<TSchema extends ZodSchema> = {
+type ActionRequest<TSchema extends ZodSchema = ZodAny> = {
   kind: string;
   name: string;
   description: string;

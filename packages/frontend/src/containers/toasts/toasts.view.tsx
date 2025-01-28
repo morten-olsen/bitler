@@ -19,7 +19,6 @@ const getColor = (type: ToastType) => {
 };
 const ToastViev = () => {
   const toasts = useToasts();
-  console.log({ toasts });
 
   return (
     <div className="fixed right-0 top-0 p-4 flex flex-col gap-4">

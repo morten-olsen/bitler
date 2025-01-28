@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 import { createCapability } from '../capabilities/capabilities.js';
-import { Events } from '../events/events.js';
+import { Events } from './events.js';
 import { getJsonSchema } from '../utils/zod.js';
 
 const listEventsCapability = createCapability({

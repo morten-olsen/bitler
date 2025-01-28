@@ -7,19 +7,22 @@ import { runNotificationActionCapability } from './capabilities/capabilities.run
 import { notificationRemovedEvent } from './events/events.removed.js';
 import { notificationCreatedEvent } from './events/events.created.js';
 
+const capabilities = [
+  addNotificationCapability,
+  listNotificationCapability,
+  removeNotificationsCapability,
+  runNotificationActionCapability,
+];
+
+const events = [notificationRemovedEvent, notificationCreatedEvent];
 const notifications = createExtension({
   setup: async ({ container }) => {
     const capabilitiesService = container.get(Capabilities);
-    capabilitiesService.register([
-      addNotificationCapability,
-      listNotificationCapability,
-      removeNotificationsCapability,
-      runNotificationActionCapability,
-    ]);
+    capabilitiesService.register(Object.values(capabilities));
 
     const eventsService = container.get(Events);
-    eventsService.register([notificationRemovedEvent, notificationCreatedEvent]);
+    eventsService.register(Object.values(events));
   },
 });
 
-export { notifications, addNotificationCapability, removeNotificationsCapability };
+export { notifications, capabilities, events, addNotificationCapability, removeNotificationsCapability };

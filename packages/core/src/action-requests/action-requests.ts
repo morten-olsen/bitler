@@ -25,4 +25,5 @@ class ActionRequests {
 
 export * from './action-requests.action.js';
 export * from './action-requests.instance.js';
+export * from './action-requests.capabilities.js';
 export { ActionRequests };

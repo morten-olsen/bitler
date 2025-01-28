@@ -52,8 +52,7 @@ const getSchemas = async (baseUrl: string) => {
   return schemas as SchemaResponse;
 };
 
-const buildSchema = async (baseUrl: string) => {
-  const schemas = await getSchemas(baseUrl);
+const buildSchema = async (schemas: Awaited<ReturnType<typeof getSchemas>>) => {
   const schema = Type.Object({
     capabilities: Type.Object(
       Object.fromEntries(
@@ -101,8 +100,9 @@ const buildSchema = async (baseUrl: string) => {
   return schema;
 };
 
-const buildTypes = async (baseUrl: string) => {
-  const schemas = await buildSchema(baseUrl);
+const buildTypesFromUrl = async (baseUrl: string) => {
+  const serverSchemas = await getSchemas(baseUrl);
+  const schemas = await buildSchema(serverSchemas);
   const comiled = await compile(schemas, 'BitlerServer', {
     additionalProperties: false,
   });
@@ -110,4 +110,13 @@ const buildTypes = async (baseUrl: string) => {
   return comiled;
 };
 
-export { buildSchema, buildTypes };
+const buildTypesFromSchema = async (serverSchemas: Awaited<ReturnType<typeof getSchemas>>) => {
+  const schemas = await buildSchema(serverSchemas);
+  const comiled = await compile(schemas, 'BitlerServer', {
+    additionalProperties: false,
+  });
+
+  return comiled;
+};
+
+export { buildTypesFromSchema, buildTypesFromUrl };

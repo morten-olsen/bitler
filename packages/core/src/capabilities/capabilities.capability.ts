@@ -5,7 +5,7 @@ import { ContextSetup } from '../contexts/contexts.setup.js';
 import { Context } from '../contexts/contexts.context.js';
 import { ActionRequestInstance } from '../action-requests/action-requests.instance.js';
 import { Session } from '../session/session.js';
-import { ConfigItem } from '../exports.js';
+import { ConfigItem } from '../configs/configs.js';
 
 type CapabilityHandlerOptions<TInput extends ZodSchema> = {
   input: z.infer<TInput>;
@@ -19,7 +19,7 @@ type CapabilityHandler<TInput extends ZodSchema, TOutput extends ZodSchema> = (
   options: CapabilityHandlerOptions<TInput>,
 ) => Promise<z.infer<TOutput>>;
 
-type Capability<TInput extends ZodSchema = ZodSchema, TOutput extends ZodSchema = ZodSchema> = {
+type Capability<TInput extends ZodSchema = any, TOutput extends ZodSchema = any> = {
   kind: string;
   name: string;
   group: string;

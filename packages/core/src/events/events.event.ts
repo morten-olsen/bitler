@@ -1,6 +1,6 @@
 import { ZodSchema, z } from 'zod';
 
-import { Container } from '../exports.js';
+import { Container } from '../container/container.js';
 
 type EventHandlerOptions<TInput extends ZodSchema, TOutput extends ZodSchema> = {
   container: Container;
@@ -14,7 +14,7 @@ type EventHandlerSetupOptions<TInput extends ZodSchema, TOutput extends ZodSchem
   listener: (event: z.infer<TOutput>) => Promise<void>;
 };
 
-type Event<TInput extends ZodSchema, TOutput extends ZodSchema> = {
+type Event<TInput extends ZodSchema = any, TOutput extends ZodSchema = any> = {
   kind: string;
   name: string;
   group: string;

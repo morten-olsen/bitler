@@ -2,9 +2,9 @@ import { ZodSchema, z } from 'zod';
 
 import { Container } from '../container/container.js';
 import { Databases } from '../databases/databases.js';
-import { Events } from '../exports.js';
-import { configValueChangedEvent } from '../built-in/configs.js';
+import { Events } from '../events/events.js';
 
+import { configValueChangedEvent } from './configs.capabilities.js';
 import { ConfigItem } from './configs.item.js';
 import { dbConfig } from './configs.database.js';
 

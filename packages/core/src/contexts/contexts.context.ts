@@ -1,6 +1,6 @@
 import { ZodSchema, z } from 'zod';
 
-import { Container } from '../exports.js';
+import { Container } from '../container/container.js';
 
 import { ContextItem } from './contexts.item.js';
 import { ContextItems } from './contexts.items.js';

@@ -1,10 +1,10 @@
 import React from 'react';
 import { Button, Popover, PopoverContent, PopoverTrigger } from '@nextui-org/react';
 import { Cog, LogOut } from 'lucide-react';
-import { useLogout } from '../login/login';
+import { useBitler } from '@bitlerjs/react';
 
 const Settings = () => {
-  const logout = useLogout();
+  const { logout } = useBitler();
   return (
     <Popover placement="top" showArrow>
       <PopoverTrigger>

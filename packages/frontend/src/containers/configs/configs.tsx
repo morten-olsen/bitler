@@ -1,4 +1,3 @@
-import { useEventEffect, useRunCapabilityMutation, useRunCapabilityQuery } from '@bitlerjs/react';
 import { useOpenScreen } from '../screens/screens.hooks.js';
 import { Badge, Button, Input, Listbox, ListboxItem, ListboxSection } from '@nextui-org/react';
 import { Check, Cog, Search, Trash } from 'lucide-react';
@@ -6,6 +5,7 @@ import React, { useMemo, useState } from 'react';
 import clsx from 'clsx';
 import { Page } from '../../components/layouts/page/page.js';
 import { useAddToast } from '../toasts/toasts.hooks.js';
+import { useCapabilityMutation, useCapabilityQuery, useEventEffect } from '../../hooks/bitler.js';
 
 type IconWrapperProps = {
   children: React.ReactNode;
@@ -16,20 +16,28 @@ const IconWrapper = ({ children, className }: IconWrapperProps) => (
 );
 
 const Configs = () => {
-  const { data, refetch } = useRunCapabilityQuery('configs.list', {});
+  const { data, refetch } = useCapabilityQuery({
+    kind: 'configs.list',
+    queryKey: ['configs.list'],
+    input: {},
+  });
   useEventEffect(
-    'configs.updated',
-    {},
-    () => {
-      refetch();
+    {
+      kind: 'configs.updated',
+      input: {},
+      handler: () => {
+        refetch();
+      },
     },
     [],
   );
   useEventEffect(
-    'config.value-changed',
-    {},
-    () => {
-      refetch();
+    {
+      kind: 'config.value-changed',
+      input: {},
+      handler: () => {
+        refetch();
+      },
     },
     [],
   );
@@ -47,7 +55,8 @@ const Configs = () => {
     [configs, search],
   );
 
-  const removeMutation = useRunCapabilityMutation('configs.remove', {
+  const removeMutation = useCapabilityMutation({
+    kind: 'configs.remove',
     onError: () => {
       addToast({
         title: 'Error',
@@ -129,7 +138,7 @@ const Configs = () => {
                             variant="flat"
                             color="danger"
                             isIconOnly
-                            isLoading={removeMutation.variables?.kind === config.kind && removeMutation.isLoading}
+                            isLoading={removeMutation.variables?.kind === config.kind && removeMutation.isPending}
                             onPress={() => removeMutation.mutate({ kind: config.kind })}
                           >
                             <Trash size={14} />

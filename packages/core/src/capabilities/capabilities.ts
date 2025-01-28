@@ -10,8 +10,8 @@ import { ActionRequestInstance } from '../action-requests/action-requests.instan
 import { ActionRequests } from '../action-requests/action-requests.js';
 import { Session } from '../session/session.js';
 import { Events } from '../events/events.js';
-import { capabilitiesUpdatedEvent } from '../built-in/events/capabilites.js';
 
+import { capabilitiesUpdatedEvent } from './capabilities.events.js';
 import { Capability } from './capabilities.capability.js';
 
 type CapabilitiesEvents = {

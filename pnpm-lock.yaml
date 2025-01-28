@@ -418,6 +418,18 @@ importers:
       '@bitlerjs/configs':
         specifier: workspace:*
         version: link:../configs
+      '@bitlerjs/conversations':
+        specifier: workspace:*
+        version: link:../../extensions/conversations
+      '@bitlerjs/core':
+        specifier: workspace:*
+        version: link:../core
+      '@bitlerjs/llm':
+        specifier: workspace:*
+        version: link:../../extensions/llm
+      '@bitlerjs/notifications':
+        specifier: workspace:*
+        version: link:../../extensions/notifications
       commander:
         specifier: ^13.0.0
         version: 13.0.0
@@ -768,6 +780,28 @@ importers:
         version: 5.7.2
 
   packages/react:
+    dependencies:
+      '@bitlerjs/client':
+        specifier: workspace:*
+        version: link:../client
+      '@tanstack/react-query':
+        specifier: ^5.65.1
+        version: 5.65.1(react@18.3.1)
+    devDependencies:
+      '@bitlerjs/configs':
+        specifier: workspace:*
+        version: link:../configs
+      '@types/react':
+        specifier: ^18.3.18
+        version: 18.3.18
+      react:
+        specifier: ^18.3.1
+        version: 18.3.1
+      typescript:
+        specifier: ^5.7.2
+        version: 5.7.2
+
+  packages/react3:
     dependencies:
       '@bitlerjs/client':
         specifier: workspace:*
@@ -4373,6 +4407,9 @@ packages:
   '@tanstack/query-core@4.36.1':
     resolution: {integrity: sha512-DJSilV5+ytBP1FbFcEJovv4rnnm/CokuVvrBEtW/Va9DvuJ3HksbXUJEpI0aV1KtuL4ZoO9AVE6PyNLzF7tLeA==}
 
+  '@tanstack/query-core@5.65.0':
+    resolution: {integrity: sha512-Bnnq/1axf00r2grRT6gUyIkZRKzhHs+p4DijrCQ3wMlA3D3TTT71gtaSLtqnzGddj73/7X5JDGyjiSLdjvQN4w==}
+
   '@tanstack/react-query@4.36.1':
     resolution: {integrity: sha512-y7ySVHFyyQblPl3J3eQBWpXZkliroki3ARnBKsdJchlgt7yJLRDUcf4B8soufgiYt3pEQIkBWBx1N9/ZPIeUWw==}
     peerDependencies:
@@ -4384,6 +4421,11 @@ packages:
         optional: true
       react-native:
         optional: true
+
+  '@tanstack/react-query@5.65.1':
+    resolution: {integrity: sha512-BSpjo4RQdJ75Mw3pqM1AJYNhanNxJE3ct7RmCZUAv9cUJg/Qmonzc/Xy2kKXeQA1InuKATSuc6pOZciWOF8TYQ==}
+    peerDependencies:
+      react: ^18 || ^19
 
   '@tanstack/react-virtual@3.10.9':
     resolution: {integrity: sha512-OXO2uBjFqA4Ibr2O3y0YMnkrRWGVNqcvHQXmGvMu6IK8chZl3PrDxFXdGZ2iZkSrKh3/qUYoFqYe+Rx23RoU0g==}
@@ -13727,6 +13769,8 @@ snapshots:
 
   '@tanstack/query-core@4.36.1': {}
 
+  '@tanstack/query-core@5.65.0': {}
+
   '@tanstack/react-query@4.36.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:
       '@tanstack/query-core': 4.36.1
@@ -13734,6 +13778,11 @@ snapshots:
       use-sync-external-store: 1.4.0(react@18.3.1)
     optionalDependencies:
       react-dom: 18.3.1(react@18.3.1)
+
+  '@tanstack/react-query@5.65.1(react@18.3.1)':
+    dependencies:
+      '@tanstack/query-core': 5.65.0
+      react: 18.3.1
 
   '@tanstack/react-virtual@3.10.9(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
     dependencies:

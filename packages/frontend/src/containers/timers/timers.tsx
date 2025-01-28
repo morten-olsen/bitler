@@ -1,7 +1,7 @@
-import { useEventEffect, useRunCapabilityQuery } from '@bitlerjs/react';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Clock } from 'lucide-react';
 import { Badge } from '@nextui-org/react';
+import { useCapabilityQuery, useEventEffect } from '../../hooks/bitler';
 
 const timeUntil = (futureTime: Date): string => {
   const now = new Date();
@@ -22,27 +22,29 @@ const timeUntil = (futureTime: Date): string => {
 
 const Timers = () => {
   const [time, setTime] = useState(new Date());
-  const timers = useRunCapabilityQuery(
-    'timers.list',
-    {},
-    {
-      queryKey: ['timers.list'],
-    },
-  );
+  const timers = useCapabilityQuery({
+    kind: 'timers.list',
+    input: {},
+    queryKey: ['timers.list'],
+  });
   useEventEffect(
-    'timer.updated',
-    {},
-    () => {
-      timers.refetch();
+    {
+      kind: 'timer.updated',
+      input: {},
+      handler: () => {
+        timers.refetch();
+      },
     },
     [timers.refetch],
   );
 
   useEventEffect(
-    'timer.triggered',
-    {},
-    (timer) => {
-      alert(`Timer ${timer.id} triggered`);
+    {
+      kind: 'timer.triggered',
+      input: {},
+      handler: (timer) => {
+        alert(`Timer ${timer.id} triggered`);
+      },
     },
     [],
   );

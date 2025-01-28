@@ -1,16 +1,19 @@
 import { useCallback } from 'react';
-import { useEventEffect, useRunCapabilityMutation, useRunCapabilityQuery } from '../client/client.hooks.js';
+import { createTypedHooks } from '../client/client.js';
+import { DefaultServer } from '@bitlerjs/client';
+
+const { useCapabilityQuery, useCapabilityMutation, useEventEffect } = createTypedHooks<DefaultServer>();
 
 const useNotifications = () => {
-  const notifications = useRunCapabilityQuery(
-    'notification.list',
-    {},
-    {
-      queryKey: ['notification.list'],
-    },
-  );
+  const notifications = useCapabilityQuery({
+    kind: 'notification.list',
+    input: {},
+    queryKey: ['notification.list'],
+  });
 
-  const removeNotificationsMutation = useRunCapabilityMutation('notification.remove', {});
+  const removeNotificationsMutation = useCapabilityMutation({
+    kind: 'notification.remove',
+  });
 
   const removeNotifications = useCallback(
     (ids: string[]) => {
@@ -20,19 +23,23 @@ const useNotifications = () => {
   );
 
   useEventEffect(
-    'notification.created',
-    {},
-    () => {
-      notifications.refetch();
+    {
+      kind: 'notification.created',
+      input: {},
+      handler: () => {
+        notifications.refetch();
+      },
     },
     [notifications.refetch],
   );
 
   useEventEffect(
-    'notification.removed',
-    {},
-    () => {
-      notifications.refetch();
+    {
+      kind: 'notification.removed',
+      input: {},
+      handler: () => {
+        notifications.refetch();
+      },
     },
     [notifications.refetch],
   );

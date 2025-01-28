@@ -1,4 +1,4 @@
-import { Container } from '../exports.js';
+import { Container } from '../container/container.js';
 
 type ExtensionSetupOptions = {
   container: Container;

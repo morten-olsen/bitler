@@ -1,4 +1,3 @@
-import { useEventEffect, useRunCapabilityMutation, useRunCapabilityQuery } from '@bitlerjs/react';
 import { Button } from '@nextui-org/react';
 import React, { useCallback, useEffect, useState } from 'react';
 import YAML from 'yaml';
@@ -8,6 +7,7 @@ import { Play } from 'lucide-react';
 import { useAddToast } from '../toasts/toasts.hooks.js';
 import { JsonSchema } from '../../components/json-schema/json-schema.js';
 import { JSONSchema4Type } from 'json-schema';
+import { useCapabilityMutation, useCapabilityQuery, useEventEffect } from '../../hooks/bitler.js';
 
 type CapabilityProps = {
   kind: string;
@@ -15,24 +15,21 @@ type CapabilityProps = {
 
 const Config = ({ kind }: CapabilityProps) => {
   const addToast = useAddToast();
-  const { data, refetch } = useRunCapabilityQuery(
-    'configs.get',
-    { kind },
-    {
-      queryKey: ['configs.get', kind],
-    },
-  );
-  const { data: details } = useRunCapabilityQuery(
-    'configs.describe',
-    { kind },
-    {
-      queryKey: ['configs.describe', kind],
-    },
-  );
+  const { data, refetch } = useCapabilityQuery({
+    kind: 'configs.get',
+    input: { kind },
+    queryKey: ['configs.get', kind],
+  });
+  const { data: details } = useCapabilityQuery({
+    kind: 'configs.describe',
+    input: { kind },
+    queryKey: ['configs.describe', kind],
+  });
   const { value } = data || {};
   const [input, setInput] = useState(YAML.stringify(value || {}));
 
-  const setMutation = useRunCapabilityMutation('configs.set', {
+  const setMutation = useCapabilityMutation({
+    kind: 'configs.set',
     onError: (err) => {
       console.error('Error', err);
       addToast({
@@ -52,10 +49,12 @@ const Config = ({ kind }: CapabilityProps) => {
   });
 
   useEventEffect(
-    'configs.updated',
-    { kind },
-    () => {
-      refetch();
+    {
+      kind: 'configs.updated',
+      input: { kind },
+      handler: () => {
+        refetch();
+      },
     },
     [kind, refetch],
   );
@@ -84,7 +83,7 @@ const Config = ({ kind }: CapabilityProps) => {
                 onChange={(e) => setInput(e || '')}
                 footer={
                   <div className="flex w-full gap-4 justify-end">
-                    <Button color="primary" isIconOnly onPress={run} isLoading={setMutation.isLoading}>
+                    <Button color="primary" isIconOnly onPress={run} isLoading={setMutation.isPending}>
                       <Play />
                     </Button>
                   </div>

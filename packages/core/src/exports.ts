@@ -18,3 +18,4 @@ export { getJsonSchema } from './utils/zod.js';
 export * from './built-in/built-in.js';
 export * from './permissions/permissions.js';
 export * from './time/time.context.js';
+export * from './utils/schema.js';

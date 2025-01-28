@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 import { createCapability } from '../capabilities/capabilities.js';
-import { ContextItems } from '../contexts/contexts.items.js';
+import { ContextItems } from './contexts.items.js';
 import { getJsonSchema } from '../utils/zod.js';
 import { createEvent } from '../events/events.js';
 

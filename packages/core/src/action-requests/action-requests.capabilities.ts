@@ -1,7 +1,8 @@
 import { z } from 'zod';
 
 import { createCapability } from '../capabilities/capabilities.js';
-import { ActionRequests, getJsonSchema } from '../exports.js';
+import { ActionRequests } from '../action-requests/action-requests.js';
+import { getJsonSchema } from '../utils/zod.js';
 
 const listActionRequestsCapability = createCapability({
   kind: 'action-requests.list',

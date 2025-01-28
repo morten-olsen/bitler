@@ -7,12 +7,6 @@
 
 export interface BitlerServer {
   capabilities: {
-    "docker.auth.createToken": {
-      input: {};
-      output: {
-        token: string;
-      };
-    };
     "action-requests.list": {
       input: {};
       output: {
@@ -163,188 +157,6 @@ export interface BitlerServer {
         success: boolean;
       };
     };
-    "agents.list": {
-      input: {};
-      output: {
-        agents: {
-          kind: string;
-          name: string;
-          group?: string;
-          description?: string;
-        }[];
-      };
-    };
-    "dialog.prompt": {
-      input: {
-        agent?: string;
-        model?: string;
-        systemPrompt?: string;
-        discoverCapabilities?: number;
-        discoverAgents?: number;
-        capabilities?: string[];
-        agents?: string[];
-        context?: {
-          [k: string]: unknown;
-        };
-        maxTokens?: number;
-        prompt: string;
-        dialog?: {
-          role: "user" | "assistant" | "system";
-          content: string;
-        }[];
-      };
-      output: {
-        response?: unknown;
-        actionRequests?: {
-          kind: string;
-          description?: string;
-          value?: unknown;
-        }[];
-        context?: {
-          [k: string]: unknown;
-        };
-        files?: {
-          hash: string;
-          caption?: string;
-          contentType?: string;
-        }[];
-      };
-    };
-    "dialog.create-new": {
-      input: {
-        /**
-         * The title of the dialog
-         */
-        title: string;
-        /**
-         * The system prompt for the dialog
-         */
-        systemPrompt?: string;
-        /**
-         * The user prompt for the dialog
-         */
-        userPrompt?: string;
-        /**
-         * The capabilities that the agent will have access to
-         */
-        capabilities?: string[];
-        /**
-         * An intro shown to the user before the dialog starts
-         */
-        userIntro: string;
-      };
-      output: {
-        success: boolean;
-      };
-    };
-    "models.list": {
-      input: {};
-      output: {
-        models: {
-          kind: string;
-          name: string;
-          provider: string;
-        }[];
-      };
-    };
-    find: {
-      input: {
-        text?: string;
-        ids?: string[];
-        parents?: string[];
-        contexts?: string[];
-        projects?: string[];
-        offset?: number;
-        limit?: number;
-        updated?: {
-          before?: string;
-          after?: string;
-        };
-        created?: {
-          before?: string;
-          after?: string;
-        };
-        completed?: {
-          is?: boolean;
-          before?: string;
-          after?: string;
-        };
-        dueDate?: {
-          before?: string;
-          after?: string;
-        };
-        startDate?: {
-          before?: string;
-          after?: string;
-        };
-      };
-      output: {
-        hasMore: boolean;
-        todos: {
-          parentId?: string | null;
-          contextId?: string | null;
-          projectId?: string | null;
-          ownerId?: string | null;
-          assigneeId?: string | null;
-          title: string;
-          description?: string | null;
-          deletedAt?: string | null;
-          completedAt?: string | null;
-          dueDate?: string | null;
-          dueTime?: string | null;
-          startDate?: string | null;
-          startTime?: string | null;
-          tags?: string[];
-          id: string;
-          createdAt: string;
-          updatedAt: string;
-        }[];
-      };
-    };
-    "todos.set": {
-      input: {
-        parentId?: string | null;
-        contextId?: string | null;
-        projectId?: string | null;
-        ownerId?: string | null;
-        assigneeId?: string | null;
-        title: string;
-        description?: string | null;
-        deletedAt?: string | null;
-        completedAt?: string | null;
-        dueDate?: string | null;
-        dueTime?: string | null;
-        startDate?: string | null;
-        startTime?: string | null;
-        tags?: string[];
-        id: string;
-      };
-      output: {
-        success: boolean;
-      };
-    };
-    "todos.create": {
-      input: {
-        parentId?: string | null;
-        contextId?: string | null;
-        projectId?: string | null;
-        ownerId?: string | null;
-        assigneeId?: string | null;
-        title: string;
-        description?: string | null;
-        deletedAt?: string | null;
-        completedAt?: string | null;
-        dueDate?: string | null;
-        dueTime?: string | null;
-        startDate?: string | null;
-        startTime?: string | null;
-        tags?: string[];
-      };
-      output: {
-        id: string;
-        success: boolean;
-      };
-    };
     "notification.add": {
       input: {
         id?: string;
@@ -407,447 +219,123 @@ export interface BitlerServer {
         success: boolean;
       };
     };
-    "knowledge-base.list": {
+    "models.list": {
       input: {};
       output: {
-        knowledgeBases: {
-          id: string;
+        models: {
+          kind: string;
           name: string;
+          provider: string;
         }[];
       };
     };
-    "knowledge-base.create": {
-      input: {
-        name: string;
-      };
-      output: {
-        id: string;
-      };
-    };
-    "knowledge-base.add-document": {
-      input: {
-        knowledgeBaseId: string;
-        documents: {
-          documentId: string;
-          title: string;
-          content: string;
-        }[];
-      };
-      output: {
-        success: boolean;
-      };
-    };
-    "knowledge-base.search-documents": {
-      input: {
-        query: string;
-        limit?: number;
-        knowledgeBaseIds?: string[];
-      };
-      output: {
-        documents: {
-          id: string;
-          matches: {
-            distance: number;
-            chunkId: string;
-            start?: number;
-            end?: number;
-          }[];
-          title: string;
-          content: string;
-        }[];
-      };
-    };
-    "timers.add": {
-      input: {
-        /**
-         * Duration in seconds
-         */
-        duration: number;
-        /**
-         * Description of the timer
-         */
-        description?: string;
-      };
-      output: {
-        /**
-         * ID of the timer
-         */
-        id: string;
-      };
-    };
-    "timers.remove": {
-      input: {
-        /**
-         * ID of the timer
-         */
-        id: string;
-      };
-      output: {
-        /**
-         * True if the timer was removed
-         */
-        success: boolean;
-      };
-    };
-    "timers.list": {
+    "agents.list": {
       input: {};
       output: {
-        timers: {
-          /**
-           * ID of the timer
-           */
-          id: string;
-          /**
-           * Description of the timer
-           */
+        agents: {
+          kind: string;
+          name: string;
+          group?: string;
           description?: string;
-          /**
-           * Duration in seconds
-           */
-          duration: number;
-          /**
-           * Start time of the timer
-           */
-          start: string;
         }[];
       };
     };
-    "game.set-state": {
+    "dialog.prompt": {
       input: {
-        /**
-         * The JSON representation of the game state as a string.
-         */
-        json: string;
-      };
-      output: {
-        [k: string]: unknown;
-      };
-    };
-    "game.roll-dice": {
-      input: {
-        /**
-         * The number of sides on the dice.
-         */
-        sides: number;
-      };
-      /**
-       * The number rolled on the dice.
-       */
-      output: number;
-    };
-    "json-documents.add-document": {
-      input: {
-        source: string;
-        type: string;
-        data?: unknown;
-      };
-      output: {
-        id: string;
-      };
-    };
-    "json-documents.find-documents": {
-      input: {
-        sources?: string[];
-        types?: string[];
-        limit?: number;
-      };
-      output: {
-        id: string;
-        source: string;
-        type: string;
-        createdAt: string;
-        data?: unknown;
-      }[];
-    };
-    "json-documents.get-sources": {
-      input: {};
-      output: string[];
-    };
-    "json-documents.get-types": {
-      input: {};
-      output: string[];
-    };
-    "json-documents.remove-documents": {
-      input: {
-        ids: string[];
-        source?: string;
-        from?: string;
-        to?: string;
-      };
-      output: {
-        success: boolean;
-      };
-    };
-    "homeassistant.setup": {
-      input: {
-        url: string;
-        token: string;
-      };
-      output: {
-        success: boolean;
-      };
-    };
-    "aws.s3.list-buckets": {
-      input: {
-        awsProfile?: string;
-      };
-      output: {
-        buckets: string[];
-      };
-    };
-    "aws.s3.list-objects": {
-      input: {
-        awsProfile?: string;
-        bucket: string;
-        prefix?: string;
-      };
-      output: {
-        bucket: string;
-        keys: string[];
-      };
-    };
-    "aws.s3.get-objects": {
-      input: {
-        awsProfile?: string;
-        objects: {
-          bucket: string;
-          key: string;
-        }[];
-      };
-      output: {
-        objects: {
-          bucket: string;
-          key: string;
+        agent?: string;
+        model?: string;
+        systemPrompt?: string;
+        discoverCapabilities?: number;
+        discoverAgents?: number;
+        capabilities?: string[];
+        agents?: string[];
+        context?: {
+          [k: string]: unknown;
+        };
+        maxTokens?: number;
+        prompt: string;
+        dialog?: {
+          role: "user" | "assistant" | "system";
           content: string;
         }[];
       };
-    };
-    "homeassistant.lights.get": {
-      input: {
-        /**
-         * The room ids to turn off the lights in (allows multiple rooms)
-         */
-        rooms: string[];
-        /**
-         * The duration in seconds to transition to the new state
-         */
-        transition?: number;
-      };
       output: {
-        rooms: {
-          id: string;
-          all: {
-            /**
-             * The brightness of the light between 0 and 255
-             */
-            brightness?: number | null;
-            color_temp_kelvin?: number | null;
-            rgb_color?: number[] | null;
-            friendly_name: string;
-            lights?: string[] | null;
-            entity_id?: string[] | null;
-            icon?: string | null;
-          };
+        response?: unknown;
+        actionRequests?: {
+          kind: string;
+          description?: string;
+          value?: unknown;
+        }[];
+        context?: {
+          [k: string]: unknown;
+        };
+        usedCapabilities: string[];
+        files?: {
+          hash: string;
+          caption?: string;
+          contentType?: string;
         }[];
       };
     };
-    "homeassistant.lights.turn-on": {
+    "dialog.create-new": {
       input: {
         /**
-         * The room ids to turn on the lights in (allows multiple rooms)
+         * The title of the dialog
          */
-        rooms: string[];
+        title: string;
         /**
-         * Number indicating the percentage of full brightness, where 0 turns the light off, 1 is the minimum brightness, and 100 is the maximum brightness.
+         * The system prompt for the dialog
          */
-        brightness?: number;
+        systemPrompt?: string;
         /**
-         * Change brightness by a percentage.
+         * The user prompt for the dialog
          */
-        brightnessStep?: number;
+        userPrompt?: string;
         /**
-         * light temperature in kelvin
+         * The capabilities that the agent will have access to
          */
-        temperature?: number;
+        capabilities?: string[];
         /**
-         * The color in RGB format. A list of three integers between 0 and 255 representing the values of red, green, and blue
+         * An intro shown to the user before the dialog starts
          */
-        color?: {
-          r: number;
-          g: number;
-          b: number;
-        };
-        /**
-         * The duration in seconds to transition to the new state
-         */
-        transition?: number;
+        userIntro: string;
       };
       output: {
         success: boolean;
       };
     };
-    "homeassistant.lights.turn-off": {
+    "agents.set": {
       input: {
-        /**
-         * The room ids to turn off the lights in (allows multiple rooms)
-         */
-        rooms: string[];
-        /**
-         * The duration in seconds to transition to the new state
-         */
-        transition?: number;
+        kind: string;
+        name: string;
+        group?: string;
+        description?: string;
+        model?: string;
+        systemPrompt?: string;
+        discoverCapabilities?: number;
+        discoverAgents?: number;
+        capabilities?: string[];
+        agents?: string[];
       };
       output: {
         success: boolean;
       };
     };
-    "homeassistant.setup.set-config": {
+    "agents.describe": {
       input: {
-        rooms: {
-          id: string;
-          names: string[];
-          mediaPlayers?: string | null;
-          lightGroup?: string | null;
-          lights?: {
-            id: string;
-            name: string;
-          }[];
-        }[];
+        kind: string;
       };
       output: {
-        success: boolean;
-      };
-    };
-    "homeassistant.setup.get-config": {
-      input: {};
-      output: {
-        rooms: {
-          id: string;
-          names: string[];
-          mediaPlayers?: string | null;
-          lightGroup?: string | null;
-          lights?: {
-            id: string;
-            name: string;
-          }[];
-        }[];
-      };
-    };
-    "music.play": {
-      input: {
-        spotifyUris: string[];
-        /**
-         * Room ID
-         */
-        room: string;
-      };
-      output: {
-        success: boolean;
-      };
-    };
-    "music.pause": {
-      input: {
-        /**
-         * Room ID
-         */
-        room: string;
-      };
-      output: {
-        success: boolean;
-      };
-    };
-    "music.set-volume": {
-      input: {
-        /**
-         * Volume level (0-1)
-         */
-        volume: number;
-        /**
-         * Room ID
-         */
-        room: string;
-      };
-      output: {
-        success: boolean;
-      };
-    };
-    "music.status": {
-      input: {};
-      output: {
-        rooms: {
-          id: string;
-          player: {
-            id: string;
-            state: string;
-            volume_level?: number;
-            media_content_id?: string;
-            media_content_type?: string;
-            media_duration?: number;
-            media_title?: string;
-            media_artist?: string;
-            media_album_name?: string;
-            app_id?: string;
-            shuffle?: boolean;
-            repeat?: string;
-            entity_picture?: string;
-          };
-        }[];
-      };
-    };
-    "music.previous": {
-      input: {
-        /**
-         * Room ID
-         */
-        room: string;
-      };
-      output: {
-        success: boolean;
-      };
-    };
-    "music.next": {
-      input: {
-        /**
-         * Room ID
-         */
-        room: string;
-      };
-      output: {
-        success: boolean;
-      };
-    };
-    "music.resume": {
-      input: {
-        /**
-         * Room ID
-         */
-        room: string;
-      };
-      output: {
-        success: boolean;
-      };
-    };
-    "http.fetch": {
-      input: {
-        method: "GET" | "POST" | "PUT" | "DELETE";
-        url: string;
-        headers: {
-          [k: string]: string;
-        };
-        body?: {
-          contentType: string;
-          content: string;
-        };
-      };
-      output: {
-        response: {
-          statusCode: number;
-          statusText?: string;
-          headers: {
-            [k: string]: string;
-          };
-          body: string;
-        };
+        kind: string;
+        name: string;
+        group?: string;
+        description?: string;
+        model?: string;
+        systemPrompt?: string;
+        discoverCapabilities?: number;
+        discoverAgents?: number;
+        capabilities?: string[];
+        agents?: string[];
       };
     };
     "conversations.prompt": {
@@ -880,6 +368,7 @@ export interface BitlerServer {
         context?: {
           [k: string]: unknown;
         };
+        usedCapabilities: string[];
         files?: {
           hash: string;
           caption?: string;
@@ -941,6 +430,7 @@ export interface BitlerServer {
         context?: {
           [k: string]: unknown;
         };
+        usedCapabilities: string[];
         files?: {
           hash: string;
           caption?: string;
@@ -1033,49 +523,6 @@ export interface BitlerServer {
         success: boolean;
       };
     };
-    "linear.profile": {
-      input: {};
-      output: {
-        id: string;
-        name: string;
-        email: string;
-      };
-    };
-    "linear.my-issues": {
-      input: {};
-      output: {
-        id: string;
-        title: string;
-      }[];
-    };
-    "linear.get-issue": {
-      input: {
-        /**
-         * The ID of the issue to get, in the format AAA-123
-         */
-        identifier: string;
-      };
-      output: {
-        issue: {
-          id: string;
-          identifier: string;
-          priority?: number;
-          priorityLabel?: string;
-          title: string;
-          addedToCycleAt?: string;
-          branchName?: string;
-          createdAt: string;
-          completedAt?: string;
-          cancelledAt?: string;
-          estimate?: number;
-          labelIds: string[];
-          snoozedUntil?: string;
-          startedAt?: string;
-          updatedAt: string;
-          description?: string;
-        };
-      };
-    };
   };
   actionRequests: {};
   contextItems: {
@@ -1085,52 +532,6 @@ export interface BitlerServer {
         name: string;
         group: string;
         description: string;
-      }[];
-    };
-    "timers.current-time": {
-      schema: string;
-    };
-    "game.state": {
-      schema: {
-        [k: string]: unknown;
-      };
-    };
-    "homeassistant.rooms": {
-      schema: {
-        id: string;
-        names: string[];
-        mediaPlayers?: string | null;
-        lightGroup?: string | null;
-        lights?: {
-          id: string;
-          name: string;
-        }[];
-      }[];
-    };
-    "linear.user": {
-      schema: {
-        id: string;
-        name: string;
-      };
-    };
-    "linear.issues": {
-      schema: {
-        id: string;
-        identifier: string;
-        priority?: number;
-        priorityLabel?: string;
-        title: string;
-        addedToCycleAt?: string;
-        branchName?: string;
-        createdAt: string;
-        completedAt?: string;
-        cancelledAt?: string;
-        estimate?: number;
-        labelIds: string[];
-        snoozedUntil?: string;
-        startedAt?: string;
-        updatedAt: string;
-        description?: string;
       }[];
     };
   };
@@ -1169,55 +570,6 @@ export interface BitlerServer {
         };
       };
     };
-    "models.updated": {
-      input: {};
-      output: {};
-    };
-    "todos.updated": {
-      input: {
-        ids: string[];
-      };
-      output: {
-        from?: {
-          parentId?: string | null;
-          contextId?: string | null;
-          projectId?: string | null;
-          ownerId?: string | null;
-          assigneeId?: string | null;
-          title: string;
-          description?: string | null;
-          deletedAt?: string | null;
-          completedAt?: string | null;
-          dueDate?: string | null;
-          dueTime?: string | null;
-          startDate?: string | null;
-          startTime?: string | null;
-          tags?: string[];
-          id: string;
-          createdAt: string;
-          updatedAt: string;
-        };
-        to?: {
-          parentId?: string | null;
-          contextId?: string | null;
-          projectId?: string | null;
-          ownerId?: string | null;
-          assigneeId?: string | null;
-          title: string;
-          description?: string | null;
-          deletedAt?: string | null;
-          completedAt?: string | null;
-          dueDate?: string | null;
-          dueTime?: string | null;
-          startDate?: string | null;
-          startTime?: string | null;
-          tags?: string[];
-          id: string;
-          createdAt: string;
-          updatedAt: string;
-        };
-      };
-    };
     "notification.removed": {
       input: {
         ids?: string[];
@@ -1239,30 +591,9 @@ export interface BitlerServer {
         }[];
       };
     };
-    "timer.created": {
+    "models.updated": {
       input: {};
-      output: {
-        id: string;
-        description?: string;
-        duration: number;
-      };
-    };
-    "timer.triggered": {
-      input: {};
-      output: {
-        id: string;
-        description?: string;
-        duration: number;
-      };
-    };
-    "timer.updated": {
-      input: {};
-      output: {
-        id: string;
-        description?: string;
-        duration: number;
-        action: "created" | "updated" | "removed";
-      };
+      output: {};
     };
     "conversations.updated": {
       input: {

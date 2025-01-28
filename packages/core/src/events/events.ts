@@ -1,7 +1,7 @@
 import { ZodSchema, z } from 'zod';
 
 import { EventEmitter } from '../utils/eventemitter.js';
-import { Container } from '../exports.js';
+import { Container } from '../container/container.js';
 
 import { Event } from './events.event.js';
 

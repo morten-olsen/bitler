@@ -12,10 +12,14 @@
   "scripts": {
     "build": "tsc --build",
     "dev": "tsc --build --watch",
-    "generate:types": "tsx src/bin/bin.ts schema generate http://localhost:3000 ./src/generated/types.ts"
+    "generate:types": "tsx src/bin/generate-default-types.ts"
   },
   "devDependencies": {
     "@bitlerjs/configs": "workspace:*",
+    "@bitlerjs/core": "workspace:*",
+    "@bitlerjs/notifications": "workspace:*",
+    "@bitlerjs/llm": "workspace:*",
+    "@bitlerjs/conversations": "workspace:*",
     "commander": "^13.0.0",
     "openapi-typescript": "^7.4.4",
     "tsx": "^4.19.2",

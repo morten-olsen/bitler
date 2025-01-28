@@ -1,9 +1,10 @@
 import { z } from 'zod';
 
 import { createCapability } from '../capabilities/capabilities.js';
-import { Configs } from '../configs/configs.js';
 import { createEvent } from '../events/events.js';
-import { getJsonSchema } from '../exports.js';
+import { getJsonSchema } from '../utils/zod.js';
+
+import { Configs } from './configs.js';
 
 const listConfigsCapability = createCapability({
   kind: 'configs.list',

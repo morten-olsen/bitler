@@ -1,7 +1,8 @@
-import { DefaultServer } from '@bitlerjs/client';
 import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
-import { useEventEffect, useRunCapabilityMutation, useRunCapabilityQuery } from '../exports.js';
-import { Delta, patch } from 'jsondiffpatch';
+import { DefaultServer } from '@bitlerjs/client';
+import { createTypedHooks } from '../client/client.js';
+
+const { useCapabilityQuery, useCapabilityMutation, useEventEffect } = createTypedHooks<DefaultServer>();
 
 type ConversationState = DefaultServer['capabilities']['conversations.sync']['output'];
 type PromptInput = Omit<DefaultServer['capabilities']['conversations.prompt']['input'], 'conversationId'>;
@@ -17,10 +18,14 @@ const useConversation = (id: string) => {
     messages: [],
   });
 
-  const promptMutation = useRunCapabilityMutation('conversations.prompt');
-  const removeMessagesMutation = useRunCapabilityMutation('conversations.remove-messages');
-  const retryMessageMutation = useRunCapabilityMutation('conversations.retry-message');
-  const setSettingsMutation = useRunCapabilityMutation('conversations.set-settings');
+  const promptMutation = useCapabilityMutation({
+    kind: 'conversations.prompt',
+  });
+  const removeMessagesMutation = useCapabilityMutation({
+    kind: 'conversations.remove-messages',
+  });
+  const retryMessageMutation = useCapabilityMutation({ kind: 'conversations.retry-message' });
+  const setSettingsMutation = useCapabilityMutation({ kind: 'conversations.set-settings' });
 
   const prompt = useCallback(
     (input: PromptInput, options: PromptOptions = {}) => {
@@ -30,14 +35,14 @@ const useConversation = (id: string) => {
   );
 
   useEventEffect(
-    'conversations.updated',
-    { ids: [id] },
-    (event) => {
-      if (event.type === 'sync') {
-        setState(event.payload);
-      } else if (event.type === 'delta') {
-        setState((state) => patch(state, event.payload.delta as Delta) as ConversationState);
-      }
+    {
+      kind: 'conversations.updated',
+      input: { ids: [id] },
+      handler: (event) => {
+        if (event.type === 'sync') {
+          setState(event.payload);
+        }
+      },
     },
     [id],
   );
@@ -63,14 +68,14 @@ const useConversation = (id: string) => {
   const output = useMemo(
     () => ({
       ...state,
-      loading: promptMutation.isLoading,
-      setSettingsLoading: setSettingsMutation.isLoading,
+      loading: promptMutation.isPending,
+      setSettingsLoading: setSettingsMutation.isPending,
       prompt,
       removeMessages,
       retryMessage,
       setSettings,
     }),
-    [state, prompt, removeMessages, retryMessage, setSettings, promptMutation.isLoading],
+    [state, prompt, removeMessages, retryMessage, setSettings, promptMutation.isPending],
   );
 
   return output;
@@ -92,19 +97,24 @@ type ConversationProviderProps = {
 };
 
 const ConversationProvider = ({ children, context }: ConversationProviderProps) => {
-  return <ConversationContext.Provider value={context}>{children}</ConversationContext.Provider>;
+  return <ConversationContext.Provider value={context}> {children} </ConversationContext.Provider>;
 };
 
 const useConversations = () => {
-  const conversations = useRunCapabilityQuery(
-    'conversations.list',
-    {},
-    {
-      queryKey: ['conversations.list'],
-    },
-  );
+  const conversations = useCapabilityQuery({
+    kind: 'conversations.list',
+    input: {},
+    queryKey: ['conversations.list'],
+  });
 
-  useEventEffect('conversations.updated', {}, () => conversations.refetch(), []);
+  useEventEffect(
+    {
+      kind: 'conversations.updated',
+      input: {},
+      handler: () => conversations.refetch(),
+    },
+    [],
+  );
 
   return conversations;
 };

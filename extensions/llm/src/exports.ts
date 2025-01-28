@@ -12,6 +12,20 @@ import { modelsUpdatedEvent } from './models/models.events.js';
 import { setAgent } from './capabilities/agents/agents.set.js';
 import { describeAgent } from './capabilities/agents/agents.describe.js';
 
+const capabilities = [
+  listModels,
+  agentsList,
+  completionPromptDialog,
+  dialogCreateNewCapability,
+  listModels,
+  setAgent,
+  describeAgent,
+];
+
+const events = [modelsUpdatedEvent];
+const contexts = [capabilitiesContext];
+const configs = [modelsConfig];
+
 const llm = createExtension({
   setup: async ({ container }) => {
     const configsService = container.get(Configs);
@@ -57,5 +71,5 @@ export {
   CompletionDialog,
 } from './services/completion/completion.schemas.js';
 export { createAgent, Agents } from './services/agents/agents.js';
-export { llm, completionPromptDialog, modelsConfig };
+export { llm, completionPromptDialog, modelsConfig, capabilities, events, configs, contexts };
 export * from './models/models.js';

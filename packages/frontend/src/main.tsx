@@ -2,9 +2,9 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { NextUIProvider } from '@nextui-org/react';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
+import { App } from './app';
+import { ToastsProvider } from './containers/toasts/toasts.provider';
 import './style.css';
-import { Login } from './containers/login/login.js';
-import { LoggedIn } from './logged-in.js';
 
 const root = document.getElementById('root');
 if (!root) {
@@ -13,9 +13,9 @@ if (!root) {
 createRoot(root).render(
   <NextThemesProvider attribute="class" enableSystem>
     <NextUIProvider className="h-full">
-      <Login>
-        <LoggedIn />
-      </Login>
+      <ToastsProvider>
+        <App />
+      </ToastsProvider>
     </NextUIProvider>
   </NextThemesProvider>,
 );

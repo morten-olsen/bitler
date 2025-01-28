@@ -1,6 +1,5 @@
 import { useCapabilities } from '@bitlerjs/react';
 import { useOpenScreen } from '../screens/screens.hooks.js';
-import { Capability } from '../capability/capability.js';
 import { Input, Listbox, ListboxItem, ListboxSection } from '@nextui-org/react';
 import { Activity, Search } from 'lucide-react';
 import React, { useMemo, useState } from 'react';
@@ -16,7 +15,7 @@ const IconWrapper = ({ children, className }: IconWrapperProps) => (
 );
 
 const Capabilities = () => {
-  const capabilities = useCapabilities();
+  const { capabilities } = useCapabilities();
   const open = useOpenScreen();
   const [search, setSearch] = useState('');
 

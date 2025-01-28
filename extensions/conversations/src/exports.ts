@@ -9,6 +9,19 @@ import { retryMessageCapability } from './capabilities/capabilities.retry-messag
 import { listConversationsCapability } from './capabilities/capabilities.list.js';
 import { setSettingsCapability } from './capabilities/capabilities.set-settings.js';
 
+const capabilities = {
+  promptCapability,
+  syncConversationCapability,
+  removeMessagesCapability,
+  retryMessageCapability,
+  listConversationsCapability,
+  setSettingsCapability,
+};
+
+const events = {
+  conversationSubscriptionEvent,
+};
+
 const conversations = createExtension({
   setup: async ({ container }) => {
     const configsService = container.get(Configs);
@@ -40,4 +53,4 @@ const conversations = createExtension({
   },
 });
 
-export { conversations };
+export { conversations, capabilities, events };

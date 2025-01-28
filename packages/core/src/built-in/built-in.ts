@@ -1,15 +1,18 @@
+import {
+  describeCapabilitiesCapability,
+  findCapabilitiesCapability,
+  listCapabilitiesCapability,
+} from '../capabilities/capabilities.capabilities.js';
 import { Capabilities } from '../capabilities/capabilities.js';
 import { Events } from '../events/events.js';
 import { ContextItems } from '../contexts/contexts.js';
 import { createExtension } from '../extensions/extensions.js';
 import { currentTimeContext } from '../time/time.context.js';
-
-import { describeActionRequestsCapability, listActionRequestsCapability } from './action-requests.js';
 import {
-  describeCapabilitiesCapability,
-  findCapabilitiesCapability,
-  listCapabilitiesCapability,
-} from './capabilites.js';
+  describeActionRequestsCapability,
+  listActionRequestsCapability,
+} from '../action-requests/action-requests.capabilities.js';
+import { capabilitiesUpdatedEvent } from '../capabilities/capabilities.events.js';
 import {
   configsUpdatedEvent,
   configValueChangedEvent,
@@ -18,14 +21,37 @@ import {
   listConfigsCapability,
   removeConfigCapability,
   setConfigCapability,
-} from './configs.js';
+} from '../configs/configs.capabilities.js';
 import {
   contextItemsUpdatedEvent,
   describeContextItemsCapability,
   listContextItemsCapability,
-} from './context-items.js';
-import { listEventsCapability } from './events.js';
-import { capabilitiesUpdatedEvent } from './events/capabilites.js';
+} from '../contexts/contexts.capabilities.js';
+import { listEventsCapability } from '../events/events.capabilities.js';
+
+const capabilities = {
+  listActionRequests: listActionRequestsCapability,
+  describeActionRequest: describeActionRequestsCapability,
+  listContextItems: listContextItemsCapability,
+  describeContextItem: describeContextItemsCapability,
+  listEvents: listEventsCapability,
+  describeCapabilities: describeCapabilitiesCapability,
+  listCapabilities: listCapabilitiesCapability,
+  findCapability: findCapabilitiesCapability,
+  describeCapability: describeCapabilitiesCapability,
+  listConfigs: listConfigsCapability,
+  describeConfigs: describeConfigsCapability,
+  setConfigValue: setConfigCapability,
+  getConfigValue: getConfigCapability,
+  removeConfigValue: removeConfigCapability,
+};
+
+const events = {
+  configsUpdated: configsUpdatedEvent,
+  capabilitiesUpdated: capabilitiesUpdatedEvent,
+  contextItemsUpdated: contextItemsUpdatedEvent,
+  configValueChanged: configValueChangedEvent,
+};
 
 const builtIn = createExtension({
   setup: async ({ container }) => {
@@ -34,31 +60,11 @@ const builtIn = createExtension({
 
     contextItemsService.register([currentTimeContext]);
 
-    capabilitiesService.register([
-      listActionRequestsCapability,
-      describeActionRequestsCapability,
-      listContextItemsCapability,
-      describeContextItemsCapability,
-      listEventsCapability,
-      describeCapabilitiesCapability,
-      listCapabilitiesCapability,
-      findCapabilitiesCapability,
-      describeCapabilitiesCapability,
-      listConfigsCapability,
-      describeConfigsCapability,
-      setConfigCapability,
-      getConfigCapability,
-      removeConfigCapability,
-    ]);
+    capabilitiesService.register(Object.values(capabilities));
 
     const eventsService = container.get(Events);
-    eventsService.register([
-      configsUpdatedEvent,
-      capabilitiesUpdatedEvent,
-      contextItemsUpdatedEvent,
-      configValueChangedEvent,
-    ]);
+    eventsService.register(Object.values(events));
   },
 });
 
-export { builtIn, configValueChangedEvent };
+export { builtIn, capabilities, configValueChangedEvent, events };
